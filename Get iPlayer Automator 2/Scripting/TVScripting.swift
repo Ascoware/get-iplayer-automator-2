@@ -1,0 +1,18 @@
+public enum TVScripting: String {
+    case urlTrack = "URL track"
+    case application = "application"
+    case artwork = "artwork"
+    case browserWindow = "browser window"
+    case fileTrack = "file track"
+    case folderPlaylist = "folder playlist"
+    case item = "item"
+    case libraryPlaylist = "library playlist"
+    case playlistWindow = "playlist window"
+    case playlist = "playlist"
+    case sharedTrack = "shared track"
+    case source = "source"
+    case track = "track"
+    case userPlaylist = "user playlist"
+    case videoWindow = "video window"
+    case window = "window"
+}

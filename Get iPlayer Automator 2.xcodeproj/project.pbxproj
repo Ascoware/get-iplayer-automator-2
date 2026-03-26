@@ -1,0 +1,876 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 70;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7F0C17D02F744AC100E208A2 /* GetiPlayerAutomatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17C72F7449E900E208A2 /* GetiPlayerAutomatorApp.swift */; };
+		7F0C17D12F744AC900E208A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17C42F7449E900E208A2 /* AppDelegate.swift */; };
+		7F0C17D22F744ADD00E208A2 /* DownloadHistoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17762F7449E900E208A2 /* DownloadHistoryModel.swift */; };
+		7F0C17D32F744ADD00E208A2 /* MockDownloadHistoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C177A2F7449E900E208A2 /* MockDownloadHistoryModel.swift */; };
+		7F0C17D42F744ADD00E208A2 /* DownloadHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17782F7449E900E208A2 /* DownloadHistoryView.swift */; };
+		7F0C17D52F744ADD00E208A2 /* DownloadHistoryProviding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17772F7449E900E208A2 /* DownloadHistoryProviding.swift */; };
+		7F0C17D62F744ADD00E208A2 /* DownloadHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17792F7449E900E208A2 /* DownloadHistoryViewModel.swift */; };
+		7F0C17D72F744ADD00E208A2 /* DownloadHistoryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17752F7449E900E208A2 /* DownloadHistoryEntry.swift */; };
+		7F0C17D82F744AE700E208A2 /* DownloadQueueToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17822F7449E900E208A2 /* DownloadQueueToolbar.swift */; };
+		7F0C17D92F744AE700E208A2 /* DownloadQueueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17842F7449E900E208A2 /* DownloadQueueViewModel.swift */; };
+		7F0C17DA2F744AE700E208A2 /* DownloadQueueTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17812F7449E900E208A2 /* DownloadQueueTableView.swift */; };
+		7F0C17DB2F744AE700E208A2 /* ITVDownload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17862F7449E900E208A2 /* ITVDownload.swift */; };
+		7F0C17DC2F744AE700E208A2 /* DownloadQueueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17832F7449E900E208A2 /* DownloadQueueView.swift */; };
+		7F0C17DD2F744AE700E208A2 /* BBCDownload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C177C2F7449E900E208A2 /* BBCDownload.swift */; };
+		7F0C17DE2F744AE700E208A2 /* DownloadQueueProviding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17802F7449E900E208A2 /* DownloadQueueProviding.swift */; };
+		7F0C17DF2F744AE700E208A2 /* MockDownloadQueueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17872F7449E900E208A2 /* MockDownloadQueueViewModel.swift */; };
+		7F0C17E02F744AE700E208A2 /* DownloadStatusImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17852F7449E900E208A2 /* DownloadStatusImage.swift */; };
+		7F0C17E12F744AE700E208A2 /* DownloadMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C177E2F7449E900E208A2 /* DownloadMessageView.swift */; };
+		7F0C17E22F744AE700E208A2 /* DownloadProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C177F2F7449E900E208A2 /* DownloadProgressView.swift */; };
+		7F0C17E32F744AE700E208A2 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C177D2F7449E900E208A2 /* Download.swift */; };
+		7F0C17E42F744AF000E208A2 /* LogController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17892F7449E900E208A2 /* LogController.swift */; };
+		7F0C17E52F744AF000E208A2 /* LogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C178A2F7449E900E208A2 /* LogView.swift */; };
+		7F0C17E62F744AF000E208A2 /* ScrollingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C178B2F7449E900E208A2 /* ScrollingTextView.swift */; };
+		7F0C17E72F744AF800E208A2 /* Programme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C178D2F7449E900E208A2 /* Programme.swift */; };
+		7F0C17E82F744AF800E208A2 /* Series.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C178E2F7449E900E208A2 /* Series.swift */; };
+		7F0C17E92F744B0200E208A2 /* PVRModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17912F7449E900E208A2 /* PVRModel.swift */; };
+		7F0C17EA2F744B0200E208A2 /* PVRContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17902F7449E900E208A2 /* PVRContentView.swift */; };
+		7F0C17EB2F744B0200E208A2 /* SeriesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17942F7449E900E208A2 /* SeriesListView.swift */; };
+		7F0C17EC2F744B0200E208A2 /* PVRViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17932F7449E900E208A2 /* PVRViewModel.swift */; };
+		7F0C17ED2F744B0200E208A2 /* PVRToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17922F7449E900E208A2 /* PVRToolbar.swift */; };
+		7F0C17EE2F744B1D00E208A2 /* MicrosoftEdge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C179F2F7449E900E208A2 /* MicrosoftEdge.swift */; };
+		7F0C17EF2F744B1D00E208A2 /* GetCurrentWebpage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C179D2F7449E900E208A2 /* GetCurrentWebpage.swift */; };
+		7F0C17F02F744B1D00E208A2 /* TVScripting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17A82F7449E900E208A2 /* TVScripting.swift */; };
+		7F0C17F12F744B1D00E208A2 /* STVMetadataExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17A62F7449E900E208A2 /* STVMetadataExtractor.swift */; };
+		7F0C17F32F744B1D00E208A2 /* SBApplicationProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17A42F7449E900E208A2 /* SBApplicationProtocol.swift */; };
+		7F0C17F42F744B1D00E208A2 /* SBObjectProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17A52F7449E900E208A2 /* SBObjectProtocol.swift */; };
+		7F0C17F52F744B1D00E208A2 /* MicrosoftEdgeScripting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17A02F7449E900E208A2 /* MicrosoftEdgeScripting.swift */; };
+		7F0C17F62F744B1D00E208A2 /* Chrome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C179B2F7449E900E208A2 /* Chrome.swift */; };
+		7F0C17F72F744B1D00E208A2 /* TV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17A72F7449E900E208A2 /* TV.swift */; };
+		7F0C17F82F744B1D00E208A2 /* SafariScripting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17A32F7449E900E208A2 /* SafariScripting.swift */; };
+		7F0C17F92F744B1D00E208A2 /* ChromeScripting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C179C2F7449E900E208A2 /* ChromeScripting.swift */; };
+		7F0C17FA2F744B1D00E208A2 /* Safari.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17A22F7449E900E208A2 /* Safari.swift */; };
+		7F0C17FB2F744B3400E208A2 /* SearchSidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17B22F7449E900E208A2 /* SearchSidebarView.swift */; };
+		7F0C17FC2F744B3400E208A2 /* SearchContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17B12F7449E900E208A2 /* SearchContentViewModel.swift */; };
+		7F0C17FD2F744B3400E208A2 /* ProgrammeMetadataFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17AF2F7449E900E208A2 /* ProgrammeMetadataFetch.swift */; };
+		7F0C17FE2F744B3400E208A2 /* SearchContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17B02F7449E900E208A2 /* SearchContentView.swift */; };
+		7F0C17FF2F744B3400E208A2 /* SearchViewType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17B42F7449E900E208A2 /* SearchViewType.swift */; };
+		7F0C18002F744B3400E208A2 /* CachedProgramsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17AA2F7449E900E208A2 /* CachedProgramsViewModel.swift */; };
+		7F0C18012F744B3400E208A2 /* SearchWindowMenus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17B52F7449E900E208A2 /* SearchWindowMenus.swift */; };
+		7F0C18022F744B3400E208A2 /* SearchTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17B32F7449E900E208A2 /* SearchTableView.swift */; };
+		7F0C18032F744B3400E208A2 /* SearchWindowToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17B62F7449E900E208A2 /* SearchWindowToolbar.swift */; };
+		7F0C18042F744B3400E208A2 /* MockCachedProgramsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17AD2F7449E900E208A2 /* MockCachedProgramsViewModel.swift */; };
+		7F0C18052F744B3400E208A2 /* ProgramCacheProviding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17AE2F7449E900E208A2 /* ProgramCacheProviding.swift */; };
+		7F0C18062F744B3400E208A2 /* CacheUpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17AB2F7449E900E208A2 /* CacheUpdateService.swift */; };
+		7F0C18072F744B3400E208A2 /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17AC2F7449E900E208A2 /* GridView.swift */; };
+		7F0C18082F744B4100E208A2 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17BB2F7449E900E208A2 /* GeneralSettingsView.swift */; };
+		7F0C18092F744B4100E208A2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17BD2F7449E900E208A2 /* SettingsView.swift */; };
+		7F0C180A2F744B4100E208A2 /* Preference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17BC2F7449E900E208A2 /* Preference.swift */; };
+		7F0C180B2F744B4100E208A2 /* ChannelsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17B92F7449E900E208A2 /* ChannelsSettingsView.swift */; };
+		7F0C180C2F744B4100E208A2 /* FormatSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17BA2F7449E900E208A2 /* FormatSettingsView.swift */; };
+		7F0C180D2F744B4100E208A2 /* AdvancedSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17B82F7449E900E208A2 /* AdvancedSettingsView.swift */; };
+		7F0C180E2F744B4100E208A2 /* TokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17BE2F7449E900E208A2 /* TokenView.swift */; };
+		7F0C180F2F744B4A00E208A2 /* GetiPlayerArguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17C12F7449E900E208A2 /* GetiPlayerArguments.swift */; };
+		7F0C18102F744B4A00E208A2 /* HTTPProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17C22F7449E900E208A2 /* HTTPProxy.swift */; };
+		7F0C18112F744B4A00E208A2 /* FileManager+DirectoryLocations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17C02F7449E900E208A2 /* FileManager+DirectoryLocations.swift */; };
+		7F0C18142F744BA800E208A2 /* Sweep in Frameworks */ = {isa = PBXBuildFile; productRef = 7F0C18132F744BA800E208A2 /* Sweep */; };
+		7F0C18172F744BCF00E208A2 /* Subprocess in Frameworks */ = {isa = PBXBuildFile; productRef = 7F0C18162F744BCF00E208A2 /* Subprocess */; };
+		7F2668EB2AAAE00A00049C93 /* DefaultsWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 7F2668EA2AAAE00A00049C93 /* DefaultsWrapper */; };
+		7F8EDD012A85AA5F0076F176 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 7F8EDD002A85AA5F0076F176 /* SwiftyJSON */; };
+		7F8EDD042A85AAA60076F176 /* CocoaLumberjackSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7F8EDD032A85AAA60076F176 /* CocoaLumberjackSwift */; };
+		7F8EDD072A85AAFE0076F176 /* Kanna in Frameworks */ = {isa = PBXBuildFile; productRef = 7F8EDD062A85AAFE0076F176 /* Kanna */; };
+		7F8EDD0A2A85AB1C0076F176 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 7F8EDD092A85AB1C0076F176 /* Sparkle */; };
+		7FA2EFBA2A7CB8660049CE14 /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FA2EFB92A7CB8660049CE14 /* ScriptingBridge.framework */; };
+		7FA7B1C72A78CF6E00A8B6CF /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 7FA7B1C62A78CF6E00A8B6CF /* Collections */; };
+		7FA7B1C92A78CF6E00A8B6CF /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 7FA7B1C82A78CF6E00A8B6CF /* OrderedCollections */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7FA2EFCA2A7EDB620049CE14 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		7F0C17752F7449E900E208A2 /* DownloadHistoryEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadHistoryEntry.swift; sourceTree = "<group>"; };
+		7F0C17762F7449E900E208A2 /* DownloadHistoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadHistoryModel.swift; sourceTree = "<group>"; };
+		7F0C17772F7449E900E208A2 /* DownloadHistoryProviding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadHistoryProviding.swift; sourceTree = "<group>"; };
+		7F0C17782F7449E900E208A2 /* DownloadHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadHistoryView.swift; sourceTree = "<group>"; };
+		7F0C17792F7449E900E208A2 /* DownloadHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadHistoryViewModel.swift; sourceTree = "<group>"; };
+		7F0C177A2F7449E900E208A2 /* MockDownloadHistoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDownloadHistoryModel.swift; sourceTree = "<group>"; };
+		7F0C177C2F7449E900E208A2 /* BBCDownload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBCDownload.swift; sourceTree = "<group>"; };
+		7F0C177D2F7449E900E208A2 /* Download.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Download.swift; sourceTree = "<group>"; };
+		7F0C177E2F7449E900E208A2 /* DownloadMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadMessageView.swift; sourceTree = "<group>"; };
+		7F0C177F2F7449E900E208A2 /* DownloadProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadProgressView.swift; sourceTree = "<group>"; };
+		7F0C17802F7449E900E208A2 /* DownloadQueueProviding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadQueueProviding.swift; sourceTree = "<group>"; };
+		7F0C17812F7449E900E208A2 /* DownloadQueueTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadQueueTableView.swift; sourceTree = "<group>"; };
+		7F0C17822F7449E900E208A2 /* DownloadQueueToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadQueueToolbar.swift; sourceTree = "<group>"; };
+		7F0C17832F7449E900E208A2 /* DownloadQueueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadQueueView.swift; sourceTree = "<group>"; };
+		7F0C17842F7449E900E208A2 /* DownloadQueueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadQueueViewModel.swift; sourceTree = "<group>"; };
+		7F0C17852F7449E900E208A2 /* DownloadStatusImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadStatusImage.swift; sourceTree = "<group>"; };
+		7F0C17862F7449E900E208A2 /* ITVDownload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ITVDownload.swift; sourceTree = "<group>"; };
+		7F0C17872F7449E900E208A2 /* MockDownloadQueueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDownloadQueueViewModel.swift; sourceTree = "<group>"; };
+		7F0C17892F7449E900E208A2 /* LogController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogController.swift; sourceTree = "<group>"; };
+		7F0C178A2F7449E900E208A2 /* LogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView.swift; sourceTree = "<group>"; };
+		7F0C178B2F7449E900E208A2 /* ScrollingTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollingTextView.swift; sourceTree = "<group>"; };
+		7F0C178D2F7449E900E208A2 /* Programme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Programme.swift; sourceTree = "<group>"; };
+		7F0C178E2F7449E900E208A2 /* Series.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Series.swift; sourceTree = "<group>"; };
+		7F0C17902F7449E900E208A2 /* PVRContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PVRContentView.swift; sourceTree = "<group>"; };
+		7F0C17912F7449E900E208A2 /* PVRModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PVRModel.swift; sourceTree = "<group>"; };
+		7F0C17922F7449E900E208A2 /* PVRToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PVRToolbar.swift; sourceTree = "<group>"; };
+		7F0C17932F7449E900E208A2 /* PVRViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PVRViewModel.swift; sourceTree = "<group>"; };
+		7F0C17942F7449E900E208A2 /* SeriesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesListView.swift; sourceTree = "<group>"; };
+		7F0C17962F7449E900E208A2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7F0C17972F7449E900E208A2 /* Credits.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = Credits.html; sourceTree = "<group>"; };
+		7F0C17982F7449E900E208A2 /* GetiPlayerAutomator.sdef */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetiPlayerAutomator.sdef; sourceTree = "<group>"; };
+		7F0C17992F7449E900E208A2 /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		7F0C179B2F7449E900E208A2 /* Chrome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chrome.swift; sourceTree = "<group>"; };
+		7F0C179C2F7449E900E208A2 /* ChromeScripting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChromeScripting.swift; sourceTree = "<group>"; };
+		7F0C179D2F7449E900E208A2 /* GetCurrentWebpage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentWebpage.swift; sourceTree = "<group>"; };
+		7F0C179E2F7449E900E208A2 /* iTunes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iTunes.h; sourceTree = "<group>"; };
+		7F0C179F2F7449E900E208A2 /* MicrosoftEdge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosoftEdge.swift; sourceTree = "<group>"; };
+		7F0C17A02F7449E900E208A2 /* MicrosoftEdgeScripting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosoftEdgeScripting.swift; sourceTree = "<group>"; };
+		7F0C17A12F7449E900E208A2 /* NewSTVMetadataExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSTVMetadataExtractor.swift; sourceTree = "<group>"; };
+		7F0C17A22F7449E900E208A2 /* Safari.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Safari.swift; sourceTree = "<group>"; };
+		7F0C17A32F7449E900E208A2 /* SafariScripting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariScripting.swift; sourceTree = "<group>"; };
+		7F0C17A42F7449E900E208A2 /* SBApplicationProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SBApplicationProtocol.swift; sourceTree = "<group>"; };
+		7F0C17A52F7449E900E208A2 /* SBObjectProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SBObjectProtocol.swift; sourceTree = "<group>"; };
+		7F0C17A62F7449E900E208A2 /* STVMetadataExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STVMetadataExtractor.swift; sourceTree = "<group>"; };
+		7F0C17A72F7449E900E208A2 /* TV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TV.swift; sourceTree = "<group>"; };
+		7F0C17A82F7449E900E208A2 /* TVScripting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVScripting.swift; sourceTree = "<group>"; };
+		7F0C17AA2F7449E900E208A2 /* CachedProgramsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedProgramsViewModel.swift; sourceTree = "<group>"; };
+		7F0C17AB2F7449E900E208A2 /* CacheUpdateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheUpdateService.swift; sourceTree = "<group>"; };
+		7F0C17AC2F7449E900E208A2 /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
+		7F0C17AD2F7449E900E208A2 /* MockCachedProgramsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCachedProgramsViewModel.swift; sourceTree = "<group>"; };
+		7F0C17AE2F7449E900E208A2 /* ProgramCacheProviding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramCacheProviding.swift; sourceTree = "<group>"; };
+		7F0C17AF2F7449E900E208A2 /* ProgrammeMetadataFetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammeMetadataFetch.swift; sourceTree = "<group>"; };
+		7F0C17B02F7449E900E208A2 /* SearchContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContentView.swift; sourceTree = "<group>"; };
+		7F0C17B12F7449E900E208A2 /* SearchContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContentViewModel.swift; sourceTree = "<group>"; };
+		7F0C17B22F7449E900E208A2 /* SearchSidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSidebarView.swift; sourceTree = "<group>"; };
+		7F0C17B32F7449E900E208A2 /* SearchTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableView.swift; sourceTree = "<group>"; };
+		7F0C17B42F7449E900E208A2 /* SearchViewType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewType.swift; sourceTree = "<group>"; };
+		7F0C17B52F7449E900E208A2 /* SearchWindowMenus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchWindowMenus.swift; sourceTree = "<group>"; };
+		7F0C17B62F7449E900E208A2 /* SearchWindowToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchWindowToolbar.swift; sourceTree = "<group>"; };
+		7F0C17B82F7449E900E208A2 /* AdvancedSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsView.swift; sourceTree = "<group>"; };
+		7F0C17B92F7449E900E208A2 /* ChannelsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsSettingsView.swift; sourceTree = "<group>"; };
+		7F0C17BA2F7449E900E208A2 /* FormatSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatSettingsView.swift; sourceTree = "<group>"; };
+		7F0C17BB2F7449E900E208A2 /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
+		7F0C17BC2F7449E900E208A2 /* Preference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preference.swift; sourceTree = "<group>"; };
+		7F0C17BD2F7449E900E208A2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		7F0C17BE2F7449E900E208A2 /* TokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenView.swift; sourceTree = "<group>"; };
+		7F0C17C02F7449E900E208A2 /* FileManager+DirectoryLocations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+DirectoryLocations.swift"; sourceTree = "<group>"; };
+		7F0C17C12F7449E900E208A2 /* GetiPlayerArguments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetiPlayerArguments.swift; sourceTree = "<group>"; };
+		7F0C17C22F7449E900E208A2 /* HTTPProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPProxy.swift; sourceTree = "<group>"; };
+		7F0C17C42F7449E900E208A2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		7F0C17C52F7449E900E208A2 /* Get_iPlayer_Automator_2.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Get_iPlayer_Automator_2.entitlements; sourceTree = "<group>"; };
+		7F0C17C62F7449E900E208A2 /* GetiPlayerAutomator-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GetiPlayerAutomator-Bridging-Header.h"; sourceTree = "<group>"; };
+		7F0C17C72F7449E900E208A2 /* GetiPlayerAutomatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetiPlayerAutomatorApp.swift; sourceTree = "<group>"; };
+		7F1E9D2A2A5D0427002C71A6 /* Get iPlayer Automator 2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Get iPlayer Automator 2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7FA2EFB92A7CB8660049CE14 /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = System/Library/Frameworks/ScriptingBridge.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		7F0C17CC2F744A1F00E208A2 /* Binaries */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (get_iplayer, "yt-dlp_macos", ); path = Binaries; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7F1E9D272A5D0427002C71A6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F2668EB2AAAE00A00049C93 /* DefaultsWrapper in Frameworks */,
+				7F0C18172F744BCF00E208A2 /* Subprocess in Frameworks */,
+				7F8EDD0A2A85AB1C0076F176 /* Sparkle in Frameworks */,
+				7F8EDD072A85AAFE0076F176 /* Kanna in Frameworks */,
+				7FA7B1C92A78CF6E00A8B6CF /* OrderedCollections in Frameworks */,
+				7FA7B1C72A78CF6E00A8B6CF /* Collections in Frameworks */,
+				7F8EDD042A85AAA60076F176 /* CocoaLumberjackSwift in Frameworks */,
+				7F0C18142F744BA800E208A2 /* Sweep in Frameworks */,
+				7F8EDD012A85AA5F0076F176 /* SwiftyJSON in Frameworks */,
+				7FA2EFBA2A7CB8660049CE14 /* ScriptingBridge.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7F0C177B2F7449E900E208A2 /* DownloadHistory */ = {
+			isa = PBXGroup;
+			children = (
+				7F0C17752F7449E900E208A2 /* DownloadHistoryEntry.swift */,
+				7F0C17762F7449E900E208A2 /* DownloadHistoryModel.swift */,
+				7F0C17772F7449E900E208A2 /* DownloadHistoryProviding.swift */,
+				7F0C17782F7449E900E208A2 /* DownloadHistoryView.swift */,
+				7F0C17792F7449E900E208A2 /* DownloadHistoryViewModel.swift */,
+				7F0C177A2F7449E900E208A2 /* MockDownloadHistoryModel.swift */,
+			);
+			path = DownloadHistory;
+			sourceTree = "<group>";
+		};
+		7F0C17882F7449E900E208A2 /* Downloads */ = {
+			isa = PBXGroup;
+			children = (
+				7F0C177C2F7449E900E208A2 /* BBCDownload.swift */,
+				7F0C177D2F7449E900E208A2 /* Download.swift */,
+				7F0C177E2F7449E900E208A2 /* DownloadMessageView.swift */,
+				7F0C177F2F7449E900E208A2 /* DownloadProgressView.swift */,
+				7F0C17802F7449E900E208A2 /* DownloadQueueProviding.swift */,
+				7F0C17812F7449E900E208A2 /* DownloadQueueTableView.swift */,
+				7F0C17822F7449E900E208A2 /* DownloadQueueToolbar.swift */,
+				7F0C17832F7449E900E208A2 /* DownloadQueueView.swift */,
+				7F0C17842F7449E900E208A2 /* DownloadQueueViewModel.swift */,
+				7F0C17852F7449E900E208A2 /* DownloadStatusImage.swift */,
+				7F0C17862F7449E900E208A2 /* ITVDownload.swift */,
+				7F0C17872F7449E900E208A2 /* MockDownloadQueueViewModel.swift */,
+			);
+			path = Downloads;
+			sourceTree = "<group>";
+		};
+		7F0C178C2F7449E900E208A2 /* LogViewer */ = {
+			isa = PBXGroup;
+			children = (
+				7F0C17892F7449E900E208A2 /* LogController.swift */,
+				7F0C178A2F7449E900E208A2 /* LogView.swift */,
+				7F0C178B2F7449E900E208A2 /* ScrollingTextView.swift */,
+			);
+			path = LogViewer;
+			sourceTree = "<group>";
+		};
+		7F0C178F2F7449E900E208A2 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				7F0C178D2F7449E900E208A2 /* Programme.swift */,
+				7F0C178E2F7449E900E208A2 /* Series.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		7F0C17952F7449E900E208A2 /* PVR */ = {
+			isa = PBXGroup;
+			children = (
+				7F0C17902F7449E900E208A2 /* PVRContentView.swift */,
+				7F0C17912F7449E900E208A2 /* PVRModel.swift */,
+				7F0C17922F7449E900E208A2 /* PVRToolbar.swift */,
+				7F0C17932F7449E900E208A2 /* PVRViewModel.swift */,
+				7F0C17942F7449E900E208A2 /* SeriesListView.swift */,
+			);
+			path = PVR;
+			sourceTree = "<group>";
+		};
+		7F0C179A2F7449E900E208A2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				7F0C17962F7449E900E208A2 /* Assets.xcassets */,
+				7F0C17972F7449E900E208A2 /* Credits.html */,
+				7F0C17982F7449E900E208A2 /* GetiPlayerAutomator.sdef */,
+				7F0C17992F7449E900E208A2 /* LICENSE.txt */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		7F0C17A92F7449E900E208A2 /* Scripting */ = {
+			isa = PBXGroup;
+			children = (
+				7F0C179B2F7449E900E208A2 /* Chrome.swift */,
+				7F0C179C2F7449E900E208A2 /* ChromeScripting.swift */,
+				7F0C179D2F7449E900E208A2 /* GetCurrentWebpage.swift */,
+				7F0C179E2F7449E900E208A2 /* iTunes.h */,
+				7F0C179F2F7449E900E208A2 /* MicrosoftEdge.swift */,
+				7F0C17A02F7449E900E208A2 /* MicrosoftEdgeScripting.swift */,
+				7F0C17A12F7449E900E208A2 /* NewSTVMetadataExtractor.swift */,
+				7F0C17A22F7449E900E208A2 /* Safari.swift */,
+				7F0C17A32F7449E900E208A2 /* SafariScripting.swift */,
+				7F0C17A42F7449E900E208A2 /* SBApplicationProtocol.swift */,
+				7F0C17A52F7449E900E208A2 /* SBObjectProtocol.swift */,
+				7F0C17A62F7449E900E208A2 /* STVMetadataExtractor.swift */,
+				7F0C17A72F7449E900E208A2 /* TV.swift */,
+				7F0C17A82F7449E900E208A2 /* TVScripting.swift */,
+			);
+			path = Scripting;
+			sourceTree = "<group>";
+		};
+		7F0C17B72F7449E900E208A2 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				7F0C17AA2F7449E900E208A2 /* CachedProgramsViewModel.swift */,
+				7F0C17AB2F7449E900E208A2 /* CacheUpdateService.swift */,
+				7F0C17AC2F7449E900E208A2 /* GridView.swift */,
+				7F0C17AD2F7449E900E208A2 /* MockCachedProgramsViewModel.swift */,
+				7F0C17AE2F7449E900E208A2 /* ProgramCacheProviding.swift */,
+				7F0C17AF2F7449E900E208A2 /* ProgrammeMetadataFetch.swift */,
+				7F0C17B02F7449E900E208A2 /* SearchContentView.swift */,
+				7F0C17B12F7449E900E208A2 /* SearchContentViewModel.swift */,
+				7F0C17B22F7449E900E208A2 /* SearchSidebarView.swift */,
+				7F0C17B32F7449E900E208A2 /* SearchTableView.swift */,
+				7F0C17B42F7449E900E208A2 /* SearchViewType.swift */,
+				7F0C17B52F7449E900E208A2 /* SearchWindowMenus.swift */,
+				7F0C17B62F7449E900E208A2 /* SearchWindowToolbar.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		7F0C17BF2F7449E900E208A2 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				7F0C17B82F7449E900E208A2 /* AdvancedSettingsView.swift */,
+				7F0C17B92F7449E900E208A2 /* ChannelsSettingsView.swift */,
+				7F0C17BA2F7449E900E208A2 /* FormatSettingsView.swift */,
+				7F0C17BB2F7449E900E208A2 /* GeneralSettingsView.swift */,
+				7F0C17BC2F7449E900E208A2 /* Preference.swift */,
+				7F0C17BD2F7449E900E208A2 /* SettingsView.swift */,
+				7F0C17BE2F7449E900E208A2 /* TokenView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		7F0C17C32F7449E900E208A2 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				7F0C17C02F7449E900E208A2 /* FileManager+DirectoryLocations.swift */,
+				7F0C17C12F7449E900E208A2 /* GetiPlayerArguments.swift */,
+				7F0C17C22F7449E900E208A2 /* HTTPProxy.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		7F0C17C82F7449E900E208A2 /* Get iPlayer Automator 2 */ = {
+			isa = PBXGroup;
+			children = (
+				7F0C177B2F7449E900E208A2 /* DownloadHistory */,
+				7F0C17882F7449E900E208A2 /* Downloads */,
+				7F0C178C2F7449E900E208A2 /* LogViewer */,
+				7F0C178F2F7449E900E208A2 /* Models */,
+				7F0C17952F7449E900E208A2 /* PVR */,
+				7F0C179A2F7449E900E208A2 /* Resources */,
+				7F0C17A92F7449E900E208A2 /* Scripting */,
+				7F0C17B72F7449E900E208A2 /* Search */,
+				7F0C17BF2F7449E900E208A2 /* Settings */,
+				7F0C17C32F7449E900E208A2 /* Utilities */,
+				7F0C17C42F7449E900E208A2 /* AppDelegate.swift */,
+				7F0C17C52F7449E900E208A2 /* Get_iPlayer_Automator_2.entitlements */,
+				7F0C17C62F7449E900E208A2 /* GetiPlayerAutomator-Bridging-Header.h */,
+				7F0C17C72F7449E900E208A2 /* GetiPlayerAutomatorApp.swift */,
+			);
+			path = "Get iPlayer Automator 2";
+			sourceTree = "<group>";
+		};
+		7F1E9D212A5D0427002C71A6 = {
+			isa = PBXGroup;
+			children = (
+				7F0C17C82F7449E900E208A2 /* Get iPlayer Automator 2 */,
+				7F0C17CC2F744A1F00E208A2 /* Binaries */,
+				7F1E9D2B2A5D0427002C71A6 /* Products */,
+				7FA2EFB82A7CB8650049CE14 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		7F1E9D2B2A5D0427002C71A6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7F1E9D2A2A5D0427002C71A6 /* Get iPlayer Automator 2.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7FA2EFB82A7CB8650049CE14 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7FA2EFB92A7CB8660049CE14 /* ScriptingBridge.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7F1E9D292A5D0427002C71A6 /* Get iPlayer Automator 2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7F1E9D392A5D0428002C71A6 /* Build configuration list for PBXNativeTarget "Get iPlayer Automator 2" */;
+			buildPhases = (
+				7F1E9D262A5D0427002C71A6 /* Sources */,
+				7F1E9D272A5D0427002C71A6 /* Frameworks */,
+				7FA2EFCA2A7EDB620049CE14 /* CopyFiles */,
+				7F312EC72A7EDD4000ABDB8E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				7F0C17CC2F744A1F00E208A2 /* Binaries */,
+			);
+			name = "Get iPlayer Automator 2";
+			packageProductDependencies = (
+				7FA7B1C62A78CF6E00A8B6CF /* Collections */,
+				7FA7B1C82A78CF6E00A8B6CF /* OrderedCollections */,
+				7F8EDD002A85AA5F0076F176 /* SwiftyJSON */,
+				7F8EDD032A85AAA60076F176 /* CocoaLumberjackSwift */,
+				7F8EDD062A85AAFE0076F176 /* Kanna */,
+				7F8EDD092A85AB1C0076F176 /* Sparkle */,
+				7F2668EA2AAAE00A00049C93 /* DefaultsWrapper */,
+				7F0C18132F744BA800E208A2 /* Sweep */,
+				7F0C18162F744BCF00E208A2 /* Subprocess */,
+			);
+			productName = "Get iPlayer Automator 2";
+			productReference = 7F1E9D2A2A5D0427002C71A6 /* Get iPlayer Automator 2.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7F1E9D222A5D0427002C71A6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1430;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					7F1E9D292A5D0427002C71A6 = {
+						CreatedOnToolsVersion = 14.3;
+					};
+				};
+			};
+			buildConfigurationList = 7F1E9D252A5D0427002C71A6 /* Build configuration list for PBXProject "Get iPlayer Automator 2" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 7F1E9D212A5D0427002C71A6;
+			packageReferences = (
+				7FA7B1C52A78CF6E00A8B6CF /* XCRemoteSwiftPackageReference "swift-collections" */,
+				7F8EDCFF2A85AA5F0076F176 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+				7F8EDD022A85AAA60076F176 /* XCRemoteSwiftPackageReference "CocoaLumberjack" */,
+				7F8EDD052A85AAFE0076F176 /* XCRemoteSwiftPackageReference "Kanna" */,
+				7F8EDD082A85AB1C0076F176 /* XCRemoteSwiftPackageReference "Sparkle" */,
+				7F2668E92AAAE00A00049C93 /* XCRemoteSwiftPackageReference "DefaultsWrapper" */,
+				7F0C18122F744BA800E208A2 /* XCRemoteSwiftPackageReference "Sweep" */,
+				7F0C18152F744BCF00E208A2 /* XCRemoteSwiftPackageReference "swift-subprocess" */,
+			);
+			productRefGroup = 7F1E9D2B2A5D0427002C71A6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7F1E9D292A5D0427002C71A6 /* Get iPlayer Automator 2 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7F312EC72A7EDD4000ABDB8E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7F1E9D262A5D0427002C71A6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F0C17D12F744AC900E208A2 /* AppDelegate.swift in Sources */,
+				7F0C17EE2F744B1D00E208A2 /* MicrosoftEdge.swift in Sources */,
+				7F0C17EF2F744B1D00E208A2 /* GetCurrentWebpage.swift in Sources */,
+				7F0C17F02F744B1D00E208A2 /* TVScripting.swift in Sources */,
+				7F0C17F12F744B1D00E208A2 /* STVMetadataExtractor.swift in Sources */,
+				7F0C18082F744B4100E208A2 /* GeneralSettingsView.swift in Sources */,
+				7F0C18092F744B4100E208A2 /* SettingsView.swift in Sources */,
+				7F0C180A2F744B4100E208A2 /* Preference.swift in Sources */,
+				7F0C180B2F744B4100E208A2 /* ChannelsSettingsView.swift in Sources */,
+				7F0C180C2F744B4100E208A2 /* FormatSettingsView.swift in Sources */,
+				7F0C180D2F744B4100E208A2 /* AdvancedSettingsView.swift in Sources */,
+				7F0C180E2F744B4100E208A2 /* TokenView.swift in Sources */,
+				7F0C17F32F744B1D00E208A2 /* SBApplicationProtocol.swift in Sources */,
+				7F0C17F42F744B1D00E208A2 /* SBObjectProtocol.swift in Sources */,
+				7F0C17F52F744B1D00E208A2 /* MicrosoftEdgeScripting.swift in Sources */,
+				7F0C17F62F744B1D00E208A2 /* Chrome.swift in Sources */,
+				7F0C17F72F744B1D00E208A2 /* TV.swift in Sources */,
+				7F0C180F2F744B4A00E208A2 /* GetiPlayerArguments.swift in Sources */,
+				7F0C18102F744B4A00E208A2 /* HTTPProxy.swift in Sources */,
+				7F0C18112F744B4A00E208A2 /* FileManager+DirectoryLocations.swift in Sources */,
+				7F0C17F82F744B1D00E208A2 /* SafariScripting.swift in Sources */,
+				7F0C17F92F744B1D00E208A2 /* ChromeScripting.swift in Sources */,
+				7F0C17FA2F744B1D00E208A2 /* Safari.swift in Sources */,
+				7F0C17E42F744AF000E208A2 /* LogController.swift in Sources */,
+				7F0C17E52F744AF000E208A2 /* LogView.swift in Sources */,
+				7F0C17E62F744AF000E208A2 /* ScrollingTextView.swift in Sources */,
+				7F0C17D22F744ADD00E208A2 /* DownloadHistoryModel.swift in Sources */,
+				7F0C17D32F744ADD00E208A2 /* MockDownloadHistoryModel.swift in Sources */,
+				7F0C17D42F744ADD00E208A2 /* DownloadHistoryView.swift in Sources */,
+				7F0C17D82F744AE700E208A2 /* DownloadQueueToolbar.swift in Sources */,
+				7F0C17D92F744AE700E208A2 /* DownloadQueueViewModel.swift in Sources */,
+				7F0C17DA2F744AE700E208A2 /* DownloadQueueTableView.swift in Sources */,
+				7F0C17DB2F744AE700E208A2 /* ITVDownload.swift in Sources */,
+				7F0C17DC2F744AE700E208A2 /* DownloadQueueView.swift in Sources */,
+				7F0C17DD2F744AE700E208A2 /* BBCDownload.swift in Sources */,
+				7F0C17DE2F744AE700E208A2 /* DownloadQueueProviding.swift in Sources */,
+				7F0C17E72F744AF800E208A2 /* Programme.swift in Sources */,
+				7F0C17E82F744AF800E208A2 /* Series.swift in Sources */,
+				7F0C17DF2F744AE700E208A2 /* MockDownloadQueueViewModel.swift in Sources */,
+				7F0C17E02F744AE700E208A2 /* DownloadStatusImage.swift in Sources */,
+				7F0C17E12F744AE700E208A2 /* DownloadMessageView.swift in Sources */,
+				7F0C17E22F744AE700E208A2 /* DownloadProgressView.swift in Sources */,
+				7F0C17E32F744AE700E208A2 /* Download.swift in Sources */,
+				7F0C17E92F744B0200E208A2 /* PVRModel.swift in Sources */,
+				7F0C17EA2F744B0200E208A2 /* PVRContentView.swift in Sources */,
+				7F0C17EB2F744B0200E208A2 /* SeriesListView.swift in Sources */,
+				7F0C17EC2F744B0200E208A2 /* PVRViewModel.swift in Sources */,
+				7F0C17FB2F744B3400E208A2 /* SearchSidebarView.swift in Sources */,
+				7F0C17FC2F744B3400E208A2 /* SearchContentViewModel.swift in Sources */,
+				7F0C17FD2F744B3400E208A2 /* ProgrammeMetadataFetch.swift in Sources */,
+				7F0C17FE2F744B3400E208A2 /* SearchContentView.swift in Sources */,
+				7F0C17FF2F744B3400E208A2 /* SearchViewType.swift in Sources */,
+				7F0C18002F744B3400E208A2 /* CachedProgramsViewModel.swift in Sources */,
+				7F0C18012F744B3400E208A2 /* SearchWindowMenus.swift in Sources */,
+				7F0C18022F744B3400E208A2 /* SearchTableView.swift in Sources */,
+				7F0C18032F744B3400E208A2 /* SearchWindowToolbar.swift in Sources */,
+				7F0C18042F744B3400E208A2 /* MockCachedProgramsViewModel.swift in Sources */,
+				7F0C18052F744B3400E208A2 /* ProgramCacheProviding.swift in Sources */,
+				7F0C18062F744B3400E208A2 /* CacheUpdateService.swift in Sources */,
+				7F0C18072F744B3400E208A2 /* GridView.swift in Sources */,
+				7F0C17ED2F744B0200E208A2 /* PVRToolbar.swift in Sources */,
+				7F0C17D52F744ADD00E208A2 /* DownloadHistoryProviding.swift in Sources */,
+				7F0C17D62F744ADD00E208A2 /* DownloadHistoryViewModel.swift in Sources */,
+				7F0C17D72F744ADD00E208A2 /* DownloadHistoryEntry.swift in Sources */,
+				7F0C17D02F744AC100E208A2 /* GetiPlayerAutomatorApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		7F1E9D372A5D0428002C71A6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		7F1E9D382A5D0428002C71A6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		7F1E9D3A2A5D0428002C71A6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = "Get iPlayer Automator 2/Get_iPlayer_Automator_2.entitlements";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = L8BMU8WLEC;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.video";
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "Get iPlayer Automator can scan the current browser tab for shows to download, and also automatically add downloaded content to Music or TV.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.6;
+				MARKETING_VERSION = 2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ascoware.Get-iPlayer-Automator-2";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "${SRCROOT}/Get iPlayer Automator 2/GetiPlayerAutomator-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		7F1E9D3B2A5D0428002C71A6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = "Get iPlayer Automator 2/Get_iPlayer_Automator_2.entitlements";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = L8BMU8WLEC;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.video";
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "Get iPlayer Automator can scan the current browser tab for shows to download, and also automatically add downloaded content to Music or TV.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.6;
+				MARKETING_VERSION = 2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ascoware.Get-iPlayer-Automator-2";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "${SRCROOT}/Get iPlayer Automator 2/GetiPlayerAutomator-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7F1E9D252A5D0427002C71A6 /* Build configuration list for PBXProject "Get iPlayer Automator 2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7F1E9D372A5D0428002C71A6 /* Debug */,
+				7F1E9D382A5D0428002C71A6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7F1E9D392A5D0428002C71A6 /* Build configuration list for PBXNativeTarget "Get iPlayer Automator 2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7F1E9D3A2A5D0428002C71A6 /* Debug */,
+				7F1E9D3B2A5D0428002C71A6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7F0C18122F744BA800E208A2 /* XCRemoteSwiftPackageReference "Sweep" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/JohnSundell/Sweep";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.0;
+			};
+		};
+		7F0C18152F744BCF00E208A2 /* XCRemoteSwiftPackageReference "swift-subprocess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/swiftlang/swift-subprocess";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.0;
+			};
+		};
+		7F2668E92AAAE00A00049C93 /* XCRemoteSwiftPackageReference "DefaultsWrapper" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Pyroh/DefaultsWrapper";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.2.4;
+			};
+		};
+		7F8EDCFF2A85AA5F0076F176 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+		7F8EDD022A85AAA60076F176 /* XCRemoteSwiftPackageReference "CocoaLumberjack" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/CocoaLumberjack/CocoaLumberjack/";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+		7F8EDD052A85AAFE0076F176 /* XCRemoteSwiftPackageReference "Kanna" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/tid-kijyun/Kanna";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+		7F8EDD082A85AB1C0076F176 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+		7FA7B1C52A78CF6E00A8B6CF /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7F0C18132F744BA800E208A2 /* Sweep */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7F0C18122F744BA800E208A2 /* XCRemoteSwiftPackageReference "Sweep" */;
+			productName = Sweep;
+		};
+		7F0C18162F744BCF00E208A2 /* Subprocess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7F0C18152F744BCF00E208A2 /* XCRemoteSwiftPackageReference "swift-subprocess" */;
+			productName = Subprocess;
+		};
+		7F2668EA2AAAE00A00049C93 /* DefaultsWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7F2668E92AAAE00A00049C93 /* XCRemoteSwiftPackageReference "DefaultsWrapper" */;
+			productName = DefaultsWrapper;
+		};
+		7F8EDD002A85AA5F0076F176 /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7F8EDCFF2A85AA5F0076F176 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+		7F8EDD032A85AAA60076F176 /* CocoaLumberjackSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7F8EDD022A85AAA60076F176 /* XCRemoteSwiftPackageReference "CocoaLumberjack" */;
+			productName = CocoaLumberjackSwift;
+		};
+		7F8EDD062A85AAFE0076F176 /* Kanna */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7F8EDD052A85AAFE0076F176 /* XCRemoteSwiftPackageReference "Kanna" */;
+			productName = Kanna;
+		};
+		7F8EDD092A85AB1C0076F176 /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7F8EDD082A85AB1C0076F176 /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
+		};
+		7FA7B1C62A78CF6E00A8B6CF /* Collections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7FA7B1C52A78CF6E00A8B6CF /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = Collections;
+		};
+		7FA7B1C82A78CF6E00A8B6CF /* OrderedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7FA7B1C52A78CF6E00A8B6CF /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = OrderedCollections;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 7F1E9D222A5D0427002C71A6 /* Project object */;
+}

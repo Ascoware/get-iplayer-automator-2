@@ -1,0 +1,135 @@
+//
+//  GeneralSettingsView.swift
+//  Get iPlayer Automator 2
+//
+//  Created by Scott Kovatch on 8/1/23.
+//
+
+import SwiftUI
+import UniformTypeIdentifiers
+
+//struct PrefsGroupBoxStyle: GroupBoxStyle {
+//    func makeBody(configuration: Configuration) -> some View {
+//        VStack(alignment: .leading) {
+//            configuration.label
+//            configuration.content
+//        }
+//        .padding()
+//    }
+//}
+
+struct GeneralSettingsView: View {
+
+    @Default(\.downloadPath) var downloadPath
+    @State private var showingFolderPicker = false
+
+    @Default(\.proxyHost) var proxyHost
+    @Default(\.alwaysUseProxy) var alwaysUseProxy
+    @Default(\.autoRetryOnFailure) var autoRetryOnFailure
+    @Default(\.autoRetryDelayMinutes) var autoRetryDelayMinutes
+    @Default(\.addToTV) var addToTV
+    @Default(\.defaultBrowser) var defaultBrowser
+    @Default(\.cacheBBCTV) var cacheBBCTV
+    @Default(\.cacheITV) var cacheITV
+    @Default(\.cacheBBCRadio) var cacheBBCRadio
+    @Default(\.cacheRefreshHours) var cacheRefreshHours
+    @Default(\.verbose) var verbose
+    @Default(\.addSeriesLinkAtStartup) var addSeriesLinkAtStartup
+    @Default(\.downloadSubtitles) var downloadSubtitles
+    @Default(\.embedSubtitles) var embedSubtitles
+    @Default(\.useKodiNaming) var useKodiNaming
+    @Default(\.deleteOldSeriesLink) var deleteOldSeriesLink
+    @Default(\.deleteOldSeriesLinkDuration) var deleteOldSeriesLinkDuration
+    @Default(\.getSignedVideo) var getSignedVideo
+    @Default(\.getADVideo) var getADVideo
+    @Default(\.tagDownloadsWithMetadata) var tagDownloadsWithMetadata
+    @Default(\.tagRadioAsPodcast) var tagRadioAsPodcast
+
+    var body: some View {
+        Form {
+            Section {
+                HStack {
+                    TextField("Download Path:", text: $downloadPath)
+                    Spacer(minLength: 30)
+                    Button("Choose…") {
+                        showingFolderPicker = true
+                    }
+                }
+                .fileImporter(
+                    isPresented: $showingFolderPicker,
+                    allowedContentTypes: [.folder]
+                ) { result in
+                    if case .success(let url) = result {
+                        downloadPath = url.path
+                    }
+                }
+            }
+            Section {
+                TextField("Proxy:", text: $proxyHost)
+                Toggle("Always Use Proxy", isOn: $alwaysUseProxy)
+                    .toggleStyle(.checkbox)
+            }
+            Section {
+                Toggle("Auto-retry Failed Downloads", isOn: $autoRetryOnFailure)
+                    .toggleStyle(.checkbox)
+                TextField("Retry Interval:", value: $autoRetryDelayMinutes, format: .number)
+                    .frame(width: 130)
+                Toggle("Add Downloads to TV or Music", isOn: $addToTV)
+                    .toggleStyle(.checkbox)
+                Toggle("Tag Downloaded Programmes with Metadata", isOn: $tagDownloadsWithMetadata)
+                Toggle("Tag Radio Programs as Podcasts", isOn: $tagRadioAsPodcast)
+                    .disabled(!tagDownloadsWithMetadata)
+                Picker("Default Browser:", selection: $defaultBrowser) {
+                    ForEach(SupportedBrowsers.allCases, id: \.self) { browser in
+                        Text(browser.rawValue)
+                    }
+                }
+                .pickerStyle(.menu)
+            }
+            Section {
+                HStack {
+                    Toggle("BBC TV", isOn: $cacheBBCTV)
+                        .toggleStyle(.checkbox)
+
+                    Toggle("BBC Radio", isOn: $cacheBBCRadio)
+                        .toggleStyle(.checkbox)
+
+                    Toggle("ITV TV", isOn: $cacheITV)
+                        .toggleStyle(.checkbox)
+                }
+            }
+            Section {
+                HStack {
+                    TextField("Cache Refresh Interval:", value: $cacheRefreshHours, format: .number)
+                    Text("hours")
+                }
+
+                Toggle("Verbose Mode", isOn: $verbose)
+                    .toggleStyle(.checkbox)
+
+                Toggle("Add Available Series-Link Programs At Startup", isOn: $addSeriesLinkAtStartup)
+                    .toggleStyle(.checkbox)
+            }
+            Section {
+                Toggle("Download Subtitles", isOn: $downloadSubtitles)
+                Toggle("Embed Subtitles in Video", isOn: $embedSubtitles)
+                    .disabled(!downloadSubtitles)
+            }
+            Section {
+                Toggle("Use Kodi (XBMC) Naming", isOn: $useKodiNaming)
+                TextField("Delete Old Series-link\nEntries After X Days:", value: $deleteOldSeriesLinkDuration, format: .number)
+                    .lineLimit(2, reservesSpace: true)
+                Toggle("Look for Signed Versions", isOn: $getSignedVideo)
+                Toggle("Look for Audio-described Versions", isOn: $getADVideo)
+            }
+
+        }
+//        .formStyle(.columns)
+        .padding(10)
+    }
+}
+
+
+#Preview("Settings") {
+    GeneralSettingsView()
+}
