@@ -172,6 +172,7 @@
 		7F0C17C72F7449E900E208A2 /* GetiPlayerAutomatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetiPlayerAutomatorApp.swift; sourceTree = "<group>"; };
 		7F1E9D2A2A5D0427002C71A6 /* Get iPlayer Automator 2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Get iPlayer Automator 2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FA2EFB92A7CB8660049CE14 /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = System/Library/Frameworks/ScriptingBridge.framework; sourceTree = SDKROOT; };
+		7FAD2E792F763C02005E4303 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -341,6 +342,8 @@
 		7F0C17C82F7449E900E208A2 /* Get iPlayer Automator 2 */ = {
 			isa = PBXGroup;
 			children = (
+				7F0C17C52F7449E900E208A2 /* Get_iPlayer_Automator_2.entitlements */,
+				7FAD2E792F763C02005E4303 /* Info.plist */,
 				7F0C177B2F7449E900E208A2 /* DownloadHistory */,
 				7F0C17882F7449E900E208A2 /* Downloads */,
 				7F0C178C2F7449E900E208A2 /* LogViewer */,
@@ -352,7 +355,6 @@
 				7F0C17BF2F7449E900E208A2 /* Settings */,
 				7F0C17C32F7449E900E208A2 /* Utilities */,
 				7F0C17C42F7449E900E208A2 /* AppDelegate.swift */,
-				7F0C17C52F7449E900E208A2 /* Get_iPlayer_Automator_2.entitlements */,
 				7F0C17C62F7449E900E208A2 /* GetiPlayerAutomator-Bridging-Header.h */,
 				7F0C17C72F7449E900E208A2 /* GetiPlayerAutomatorApp.swift */,
 			);
@@ -396,6 +398,7 @@
 				7F1E9D272A5D0427002C71A6 /* Frameworks */,
 				7FA2EFCA2A7EDB620049CE14 /* CopyFiles */,
 				7F312EC72A7EDD4000ABDB8E /* Resources */,
+				7FCFB2662F78E27F00C76D03 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -472,6 +475,31 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7FCFB2662F78E27F00C76D03 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 8;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${CONFIGURATION_BUILD_DIR}/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/get_iplayer/perl/bin/perl",
+				"${CONFIGURATION_BUILD_DIR}/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/get_iplayer/utils/bin/ffmpeg",
+				"${CONFIGURATION_BUILD_DIR}/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/get_iplayer/utils/bin/AtomicParsley",
+				"${CONFIGURATION_BUILD_DIR}/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/yt-dlp_macos/yt-dlp_macos",
+				"$(SRCROOT)/Get iPlayer Automator 2/Get_iPlayer_Automator_2.entitlements",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+			shellPath = /bin/sh;
+			shellScript = "echo ${CONFIGURATION_BUILD_DIR}\necho ${UNLOCALIZED_RESOURCES_FOLDER_PATH}\n\nfor (( i=0; i<$SCRIPT_INPUT_FILE_COUNT; i++)) \ndo\n    FILE=\"SCRIPT_INPUT_FILE_$i\"\n    codesign --force --options runtime --entitlements \"${SRCROOT}/Get iPlayer Automator 2/Get_iPlayer_Automator_2.entitlements\" --sign \"Developer ID Application: Scott Kovatch (L8BMU8WLEC)\" \"${!FILE}\"\ndone\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7F1E9D262A5D0427002C71A6 /* Sources */ = {
@@ -586,7 +614,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -648,7 +676,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -672,7 +700,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
-				CODE_SIGN_ENTITLEMENTS = "Get iPlayer Automator 2/Get_iPlayer_Automator_2.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Get iPlayer Automator 2/Get_iPlayer_Automator_2.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -682,7 +710,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "${SRCROOT}/Get iPlayer Automator 2/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.video";
 				INFOPLIST_KEY_NSAppleEventsUsageDescription = "Get iPlayer Automator can scan the current browser tab for shows to download, and also automatically add downloaded content to Music or TV.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -706,7 +735,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
-				CODE_SIGN_ENTITLEMENTS = "Get iPlayer Automator 2/Get_iPlayer_Automator_2.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Get iPlayer Automator 2/Get_iPlayer_Automator_2.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -716,7 +745,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "${SRCROOT}/Get iPlayer Automator 2/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.video";
 				INFOPLIST_KEY_NSAppleEventsUsageDescription = "Get iPlayer Automator can scan the current browser tab for shows to download, and also automatically add downloaded content to Music or TV.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";

@@ -60,3 +60,10 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+Archive
+Product
+
+####
+# Generated binaries — built at release time via Makefile.
+Binaries/get_iplayer/
+Binaries/yt-dlp_macos/
