@@ -207,19 +207,15 @@ class BBCDownload: Download {
         } else if failureKeyword == "ShowNotFound" {
             show.progress = "Failed: PID not found"
         } else if failureKeyword == "proxy" {
-            let proxyOption = UserDefaults.standard.string(forKey: "Proxy")
-            if proxyOption == "None" {
-                show.progress = "Failed: See Log"
+            @Default(\.proxyHost) var proxyHost
+            if proxyHost.isEmpty {
+                show.progress = "Failed: Blocked by BBC"
                 DDLogError("REASON FOR FAILURE: VPN or System Proxy failed. If you are using a VPN or a proxy configured in System Preferences, contact the VPN or proxy provider for assistance.")
-            } else if proxyOption == "Provided" {
-                show.progress = "Failed: Bad Proxy"
-                DDLogError("REASON FOR FAILURE: Proxy failed. If in the UK, please disable the proxy in the preferences.")
-            } else if proxyOption == "Custom" {
+            } else {
                 show.progress = "Failed: Bad Proxy"
                 DDLogError("REASON FOR FAILURE: Proxy failed. If in the UK, please disable the proxy in the preferences.")
                 DDLogError("If outside the UK, please use a different proxy.")
             }
-
             DDLogError("\(show.name) failed")
         } else if failureKeyword == "Specified_Modes" {
             show.progress = "Failed: Requested download quality not available"

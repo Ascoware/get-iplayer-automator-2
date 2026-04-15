@@ -59,7 +59,7 @@ enum ProgramState : Int, CaseIterable, Codable, Comparable {
 
 @MainActor
 @Observable
-public class Programme: @preconcurrency Codable {
+class Programme: @preconcurrency Codable {
 
     @ObservationIgnored static var dateFormatter = {
         let df = DateFormatter()

@@ -14,7 +14,7 @@ import Subprocess
 import System
 
 @MainActor
-public class ITVDownload : Download {
+class ITVDownload : Download {
 
     @Default(\.maxITVSTVResolution) var maxResolution: TVFormat
 

@@ -14,7 +14,7 @@ class SearchContentViewModel {
     var selection: Set<String> = []
     let cachedProgramsViewModel: any ProgramCacheProviding
     
-    var programs: [Programme] {
+    var programs: [CachedProgramme] {
         cachedProgramsViewModel.dataFor(
             view: cachedProgramsViewModel.viewType,
             searchText: cachedProgramsViewModel.searchText

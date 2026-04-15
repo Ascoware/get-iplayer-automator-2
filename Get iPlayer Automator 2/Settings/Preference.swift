@@ -126,7 +126,7 @@ public class Defaults: ObservableObject {
     @AppStorage("cacheBBCTV") public var cacheBBCTV = false
     @AppStorage("cacheITVTV") public var cacheITV = false
     @AppStorage("cacheBBCRadio") public var cacheBBCRadio = false
-    @AppStorage("cacheRefreshInterval") public var cacheRefreshHours = 4
+    @AppStorage("cacheExpiryTime") public var cacheExpiryTime = 4
     @AppStorage("verbose") public var verbose = false
     @AppStorage("addSeriesLinkAtStartup") public var addSeriesLinkAtStartup = true
     @AppStorage("downloadSubtitles") public var downloadSubtitles = false
@@ -143,9 +143,6 @@ public class Defaults: ObservableObject {
     @AppStorage("bbcTVFormats") public var bbcTVFormats: [TVFormat] = []
     @AppStorage("bbcRadioFormats") public var radioFormats: [RadioFormat] = []
     @AppStorage("MaxITVResolution") public var maxITVSTVResolution: TVFormat = .hd
-
-//    @AppStorage("KeepSeriesFor") = "30";
-//    @AppStorage("RemoveOldSeries") = false
 
     // Options for all channel filters
     @AppStorage("BBCOne") public var BBCOne =  true

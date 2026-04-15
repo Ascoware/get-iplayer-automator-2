@@ -18,7 +18,6 @@ struct GetiPlayerAutomatorApp: App {
     @State private var downloadHistoryModel = DownloadHistoryModel()
     @State private var cacheUpdateService: CacheUpdateService
     @State private var pvrViewModel: PVRViewModel
-
     init() {
         let cache = CachedProgramsViewModel()
         let queue = DownloadQueueViewModel(cacheProvider: cache)
@@ -42,18 +41,34 @@ struct GetiPlayerAutomatorApp: App {
             .task {
                 appDelegate.downloadQueueViewModel = downloadQueueViewModel
                 appDelegate.cacheUpdateService = cacheUpdateService
-                downloadQueueViewModel.loadAppData()
-                cachedProgramsViewModel.reloadCachedShows()
-                await cacheUpdateService.checkForCacheUpdate()
-                cachedProgramsViewModel.reloadCachedShows()
+
+                if LegacyDataMigrator.shouldOfferMigration() {
+                    let shouldImport = await MainActor.run {
+                        let alert = NSAlert()
+                        alert.messageText = "Import Data from Get iPlayer Automator?"
+                        alert.informativeText = "Data from the previous version of Get iPlayer Automator was found. Would you like to import your settings, series links, and download history?"
+                        alert.addButton(withTitle: "Import")
+                        alert.addButton(withTitle: "Don't Import")
+                        return alert.runModal() == .alertFirstButtonReturn
+                    }
+
+                    if shouldImport {
+                        let migrator = LegacyDataMigrator()
+                        migrator.performMigration()
+                    }
+                    LegacyDataMigrator.markMigrationComplete()
+                }
+
+                await startupAfterMigration()
             }
         }
+        .windowToolbarStyle(.unified)
         .commands {
             SearchWindowMenus(cacheUpdateService: cacheUpdateService)
         }
 
         Window("Download Queue", id: "dl-queue") {
-            DownloadQueueView(downloadQueueViewModel: downloadQueueViewModel, pvrViewModel: pvrViewModel)
+            DownloadQueueView(downloadQueueViewModel: downloadQueueViewModel, pvrViewModel: pvrViewModel, downloadHistoryModel: downloadHistoryModel)
         }
 
         Window("PVR", id: "pvr") {
@@ -72,6 +87,18 @@ struct GetiPlayerAutomatorApp: App {
             DownloadHistoryView(historyModel: downloadHistoryModel)
         }
 
+    }
+
+    private func startupAfterMigration() async {
+        downloadQueueViewModel.loadAppData()
+        pvrViewModel.loadSeriesData()
+        cachedProgramsViewModel.reloadCachedShows()
+        await cacheUpdateService.checkForCacheUpdate()
+        cachedProgramsViewModel.reloadCachedShows()
+
+        if Defaults.shared.addSeriesLinkAtStartup {
+            await pvrViewModel.checkForNewEpisodes()
+        }
     }
 
 }

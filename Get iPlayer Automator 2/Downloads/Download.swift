@@ -11,7 +11,7 @@ import CocoaLumberjackSwift
 import Subprocess
 
 @MainActor
-public class Download {
+class Download {
 
 //    let proxy: HTTPProxy
     @Default(\.getADVideo) var getADVideo

@@ -10,19 +10,21 @@ import SwiftUI
 struct DownloadQueueView: View {
     var downloadQueueViewModel: any DownloadQueueProviding
     var pvrViewModel: PVRViewModel
+    var downloadHistoryModel: DownloadHistoryModel
+
+    @State private var selection: Set<String> = []
 
     var body: some View {
-        HStack {
-            DownloadQueueTableView(downloadQueueViewModel: downloadQueueViewModel)
-        }
-        .toolbar(id: "dl-queue-toolbar") {
-            DownloadQueueToolbar(downloadQueueViewModel: downloadQueueViewModel, pvrViewModel: pvrViewModel)
-        }
+        DownloadQueueTableView(downloadQueueViewModel: downloadQueueViewModel, selection: $selection)
+            .toolbar(id: "dl-queue-toolbar") {
+                DownloadQueueToolbar(downloadQueueViewModel: downloadQueueViewModel, pvrViewModel: pvrViewModel, downloadHistoryModel: downloadHistoryModel, selection: $selection)
+            }
     }
 }
 
 #Preview {
     @Previewable @State var mockQueue = MockDownloadQueueViewModel()
     let pvrViewModel = PVRViewModel(downloadQueueViewModel: mockQueue)
-    DownloadQueueView(downloadQueueViewModel: mockQueue, pvrViewModel: pvrViewModel)
+    let historyModel = DownloadHistoryModel(loadHistory: false)
+    DownloadQueueView(downloadQueueViewModel: mockQueue, pvrViewModel: pvrViewModel, downloadHistoryModel: historyModel)
 }

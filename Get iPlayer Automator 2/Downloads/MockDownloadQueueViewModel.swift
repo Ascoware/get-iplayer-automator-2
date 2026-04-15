@@ -15,7 +15,9 @@ class MockDownloadQueueViewModel: DownloadQueueProviding {
     var currentDownload: Task<Void, Never>? = nil
     var processPIDRunning: Bool = false
     var downloadsCancelled: Bool = false
-    
+    var retryTimerActive: Bool = false
+    var retryFireDate: Date? = nil
+
     var isDownloading: Bool {
         return currentDownload != nil && !downloadsCancelled
     }
@@ -30,6 +32,10 @@ class MockDownloadQueueViewModel: DownloadQueueProviding {
     
     func addToQueue(pid: String) {
         // Mock: do nothing for PID-based adds
+    }
+
+    func addToQueueFromPVR(pid: String) {
+        // Mock: do nothing
     }
     
     func removeFromQueue(pid: String) {
@@ -46,6 +52,11 @@ class MockDownloadQueueViewModel: DownloadQueueProviding {
     
     func stopDownloads() {
         downloadsCancelled = true
+    }
+
+    func cancelRetryTimer() {
+        retryTimerActive = false
+        retryFireDate = nil
     }
     
     func getCurrentWebpage() {

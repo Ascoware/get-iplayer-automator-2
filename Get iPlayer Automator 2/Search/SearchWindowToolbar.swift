@@ -12,8 +12,8 @@ struct SearchWindowToolbar: CustomizableToolbarContent {
     var downloadQueueViewModel: any DownloadQueueProviding
     var pvrViewModel: PVRViewModel
     @Binding var selection: Set<String>
-    let tableData: [Programme]
-    @Environment(\.openWindow) var openWindow
+    let tableData: [CachedProgramme]
+    @Environment(\.openWindow) private var openWindow
 
     var body: some CustomizableToolbarContent {
         ToolbarItem(

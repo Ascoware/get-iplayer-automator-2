@@ -16,13 +16,13 @@ import System
 /// Separated from CachedProgramsViewModel to provide a clear separation of concerns.
 @MainActor
 @Observable
-public class CacheUpdateService {
+class CacheUpdateService {
 
     var currentProgress: String = ""
     var isUpdating: Bool = false
     private var cacheWasUpdated = false
 
-    @ObservationIgnored @Default(\.cacheRefreshHours) var cacheRefreshHours
+    @ObservationIgnored @Default(\.cacheExpiryTime) var cacheExpiryTime
 
     private let onCacheUpdated: () -> Void
 
@@ -59,7 +59,7 @@ public class CacheUpdateService {
 
         isUpdating = true
 
-        let cacheRefreshSeconds = Int(cacheRefreshHours) * 3600
+        let cacheRefreshSeconds = Int(cacheExpiryTime) * 3600
 
         let cacheExpiryArg: String
         if rebuild {

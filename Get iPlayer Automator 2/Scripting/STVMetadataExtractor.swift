@@ -35,38 +35,40 @@ class STVMetadataExtractor {
                 let propertiesJSON = JSON(parseJSON: propertiesContent)
                 let propsDict = propertiesJSON["props"].dictionaryValue
                 if let pageProps = propsDict["pageProps"] {
-                    newProgram.pid = pageProps["episodeId"].stringValue
+                    let episodeInfo = pageProps["episodeInfo"]
+                    // episodeInfo.episodeId is a JSON string; pageProps.episodeId is an integer — use the string version
+                    newProgram.pid = episodeInfo["episodeId"].stringValue
+
+                    // Primary metadata from episodeInfo — always present on first page load
+                    newProgram.name = episodeInfo["name"].stringValue
+                    newProgram.episode = episodeInfo["title"].stringValue
+                    let startTime = episodeInfo["startTime"].stringValue
+                    newProgram.available = longDateFormatter.date(from: startTime) ?? Date()
+
+                    // episodeInfo.summary is the episode description; pageProps.summary is the series description
+                    let rawDesc = episodeInfo["summary"].string ?? pageProps["summary"].string ?? "None available"
+                    newProgram.desc = rawDesc.filter { !$0.isNewline }
+
+                    // Supplement with playerApiCache if available (series/episode numbers and DRM check)
                     let episodesKey = "/episodes/\(newProgram.pid)"
-                    if let showData = propsDict["initialReduxState"]?["playerApiCache"][episodesKey]["results"] {
-                        if showData.isEmpty {
-                            DDLogError("**** No metadata found")
-                            throw STVMetadataError.noMetadataFound
-                        }
-
+                    if let showData = propsDict["initialReduxState"]?["playerApiCache"][episodesKey]["results"],
+                       !showData.isEmpty {
                         let protectedMedia = showData["programme"]["drmEnabled"].boolValue
-
                         if protectedMedia {
                             DDLogError("**** DRM protected media - bailing out")
                             throw STVMetadataError.drmProtectedError
                         }
-                        newProgram.name = showData["title"].stringValue
-                        newProgram.episode = showData["programme"]["name"].stringValue
-                        let seriesString = showData["playerSeries"]["name"].stringValue
 
-                        let seriesComponents = seriesString.components(separatedBy: .whitespacesAndNewlines)
-                        for item in seriesComponents {
+                        let seriesString = showData["playerSeries"]["name"].stringValue
+                        for item in seriesString.components(separatedBy: .whitespacesAndNewlines) {
                             if let number = Int(item) {
                                 newProgram.seriesNum = number
                             }
                         }
-
                         newProgram.episodeNum = showData["number"].intValue
-                        let startTime = showData["schedule"]["startTime"].stringValue
-                        newProgram.available = longDateFormatter.date(from: startTime) ?? Date()
                     }
+
                     newProgram.web = URL(string: pageProps["currentUrl"].stringValue)
-                    let rawDesc = pageProps["summary"].string ?? "None available"
-                    newProgram.desc = rawDesc.filter { !$0.isNewline }
                     newProgram.thumbnail = URL(string: pageProps["image"].stringValue)
                 }
             }

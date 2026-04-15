@@ -11,14 +11,14 @@ struct SearchTableView: View {
     var downloadQueueViewModel: any DownloadQueueProviding
     var pvrViewModel: PVRViewModel
     @Binding var selection: Set<String>
-    var tableData: [Programme]
+    var tableData: [CachedProgramme]
 
-    @State private var sortOrder = [KeyPathComparator(\Programme.available)]
+    @State private var sortOrder = [KeyPathComparator(\CachedProgramme.available)]
     @Environment(\.openWindow) private var openWindow
 
-    @State private var sortedTableData: [Programme] = []
+    @State private var sortedTableData: [CachedProgramme] = []
 
-    var selectedProgrammes: [Programme] {
+    var selectedProgrammes: [CachedProgramme] {
         guard !selection.isEmpty else {
             return []
         }
@@ -43,6 +43,7 @@ struct SearchTableView: View {
         }
     }
 
+
     var body: some View {
         VStack {
             Table(
@@ -59,7 +60,7 @@ struct SearchTableView: View {
                 .onChange(of: tableData) { sortedTableData = tableData.sorted(using: sortOrder) }
                 .onChange(of: sortOrder)  { sortedTableData = tableData.sorted(using: sortOrder) }
                 .task { sortedTableData = tableData.sorted(using: sortOrder) }
-                .contextMenu(forSelectionType: Programme.ID.self) { programs in
+                .contextMenu(forSelectionType: CachedProgramme.ID.self) { programs in
                     Button("Add To Download Queue") {
                         addItemsToQueueAndOpen(pids: programs)
                     }
@@ -88,25 +89,25 @@ struct SearchTableView: View {
     @Previewable @State var mockQueue = MockDownloadQueueViewModel()
     let pvrViewModel = PVRViewModel(downloadQueueViewModel: mockQueue)
 
-    let program1 = Programme()
-    program1.name = "Sample Show"
-    program1.episode = "Episode 1"
-    program1.channel = "BBC One"
-    program1.type = .tv
-    program1.available = Date()
-    program1.desc = "A sample programme for preview"
-    program1.pid = "sample001"
-    
-    let program2 = Programme()
-    program2.name = "Another Show"
-    program2.episode = "Episode 5"
-    program2.channel = "BBC Two"
-    program2.type = .tv
-    program2.available = Date()
-    program2.desc = "Another sample programme"
-    program2.pid = "sample002"
-    
-    return SearchTableView(
+    let program1 = CachedProgramme(
+        pid: "sample001", index: 1, type: .tv,
+        name: "Sample Show", episode: "Episode 1",
+        seriesNum: 0, episodeNum: 0, channel: "BBC One",
+        available: Date(), expires: nil, duration: 0,
+        desc: "A sample programme for preview",
+        web: nil, thumbnail: nil, timeadded: nil,
+        radio: false, podcast: false, realPID: ""
+    )
+    let program2 = CachedProgramme(
+        pid: "sample002", index: 2, type: .tv,
+        name: "Another Show", episode: "Episode 5",
+        seriesNum: 0, episodeNum: 0, channel: "BBC Two",
+        available: Date(), expires: nil, duration: 0,
+        desc: "Another sample programme",
+        web: nil, thumbnail: nil, timeadded: nil,
+        radio: false, podcast: false, realPID: ""
+    )
+    SearchTableView(
         downloadQueueViewModel: mockQueue,
         pvrViewModel: pvrViewModel,
         selection: .constant([]),

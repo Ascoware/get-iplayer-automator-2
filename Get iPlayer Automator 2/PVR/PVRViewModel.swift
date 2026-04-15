@@ -24,7 +24,6 @@ class PVRViewModel {
 
     init(downloadQueueViewModel: any DownloadQueueProviding) {
         self.downloadQueueViewModel = downloadQueueViewModel
-        load()
     }
 
     // MARK: - Series Management
@@ -212,7 +211,7 @@ class PVRViewModel {
         }
     }
 
-    private func load() {
+    func loadSeriesData() {
         do {
             let data = try Data(contentsOf: seriesFileURL)
             series = try JSONDecoder().decode([Series].self, from: data)

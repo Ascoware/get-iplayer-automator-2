@@ -8,16 +8,6 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-//struct PrefsGroupBoxStyle: GroupBoxStyle {
-//    func makeBody(configuration: Configuration) -> some View {
-//        VStack(alignment: .leading) {
-//            configuration.label
-//            configuration.content
-//        }
-//        .padding()
-//    }
-//}
-
 struct GeneralSettingsView: View {
 
     @Default(\.downloadPath) var downloadPath
@@ -32,7 +22,7 @@ struct GeneralSettingsView: View {
     @Default(\.cacheBBCTV) var cacheBBCTV
     @Default(\.cacheITV) var cacheITV
     @Default(\.cacheBBCRadio) var cacheBBCRadio
-    @Default(\.cacheRefreshHours) var cacheRefreshHours
+    @Default(\.cacheExpiryTime) var cacheExpiryTime
     @Default(\.verbose) var verbose
     @Default(\.addSeriesLinkAtStartup) var addSeriesLinkAtStartup
     @Default(\.downloadSubtitles) var downloadSubtitles
@@ -100,7 +90,7 @@ struct GeneralSettingsView: View {
             }
             Section {
                 HStack {
-                    TextField("Cache Refresh Interval:", value: $cacheRefreshHours, format: .number)
+                    TextField("Cache Refresh Interval:", value: $cacheExpiryTime, format: .number)
                     Text("hours")
                 }
 
@@ -117,8 +107,14 @@ struct GeneralSettingsView: View {
             }
             Section {
                 Toggle("Use Kodi (XBMC) Naming", isOn: $useKodiNaming)
-                TextField("Delete Old Series-link\nEntries After X Days:", value: $deleteOldSeriesLinkDuration, format: .number)
-                    .lineLimit(2, reservesSpace: true)
+                Toggle("Delete Old Series-Link Entries", isOn: $deleteOldSeriesLink)
+                HStack {
+                    TextField("After:", value: $deleteOldSeriesLinkDuration, format: .number)
+                        .frame(width: 100)
+                    Text("days")
+                }
+                .padding(.leading, 20)
+                .disabled(!deleteOldSeriesLink)
                 Toggle("Look for Signed Versions", isOn: $getSignedVideo)
                 Toggle("Look for Audio-described Versions", isOn: $getADVideo)
             }

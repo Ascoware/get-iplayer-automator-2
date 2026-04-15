@@ -9,19 +9,22 @@ import Foundation
 import CocoaLumberjackSwift
 import SwiftUI
 import Observation
+import Combine
 
 /// View model for searching and filtering cached programs.
 /// Cache updating is handled separately by CacheUpdateService.
 @MainActor
 @Observable
-public class CachedProgramsViewModel: ProgramCacheProviding {
+class CachedProgramsViewModel: ProgramCacheProviding {
 
     @available(*, deprecated, message: "Use dependency injection instead")
     static let shared = CachedProgramsViewModel()
 
-    private var bbcTVShows: [Programme] = []
-    private var nonBbcTVShows: [Programme] = []
-    private var radioShows: [Programme] = []
+    private static let dateFormatter = ISO8601DateFormatter()
+
+    private var bbcTVShows: [CachedProgramme] = []
+    private var nonBbcTVShows: [CachedProgramme] = []
+    private var radioShows: [CachedProgramme] = []
 
     @ObservationIgnored @Default(\.IgnoreAllTVNews) var ignoreAllTVNews
     @ObservationIgnored @Default(\.IgnoreAllRadioNews) var ignoreAllRadioNews
@@ -39,9 +42,25 @@ public class CachedProgramsViewModel: ProgramCacheProviding {
     @ObservationIgnored @Default(\.CBBC) var showCBBC
     @ObservationIgnored @Default(\.CBeebies) var showCBeebies
 
+    /// Bumped when any channel filter preference changes, so observation triggers re-filtering.
+    var filterRevision = 0
+    @ObservationIgnored private var defaultsCancellable: AnyCancellable?
+
     var viewType: SearchViewType = .tvToday
     var searchText = ""
-    private(set) var viewCounts: [SearchViewType: Int] = [:]
+
+    var viewCounts: [SearchViewType: Int] {
+        let allTV = dataFor(view: .allTV, searchText: "")
+        let allRadio = dataFor(view: .allRadio, searchText: "")
+        let startDate = Date(timeIntervalSinceNow: -24 * 60 * 60)
+        let endDate = Date()
+        return [
+            .allTV: allTV.count,
+            .allRadio: allRadio.count,
+            .tvToday: allTV.filter { startDate < $0.available && endDate > $0.available }.count,
+            .radioToday: allRadio.filter { startDate < $0.available && endDate > $0.available }.count,
+        ]
+    }
 
     enum BBCNationalChannels: String, CaseIterable {
         case bbcOne = "BBC One"
@@ -104,7 +123,27 @@ public class CachedProgramsViewModel: ProgramCacheProviding {
     ];
 
 
+    private static let channelFilterKeys: Set<String> = [
+        "BBCOne", "BBCTwo", "BBCThree", "BBCFour",
+        "CBBC", "CBeebies", "BBCNews", "BBCParliament",
+        "ShowRegionalTVStations", "ShowLocalTVStations",
+        "ShowRegionalRadioStations", "ShowLocalRadioStations",
+        "Radio1", "Radio2", "Radio3", "Radio4", "Radio4Extra",
+        "Radio6Music", "BBCWorldService", "Radio5Live",
+        "Radio5LiveSportsExtra", "Radio1Xtra", "RadioAsianNetwork",
+        "CBeebiesRadio", "IgnoreAllTVNews", "IgnoreAllRadioNews",
+        "ShowDownloadedInSearch"
+    ]
+
     public init() {
+        defaultsCancellable = NotificationCenter.default
+            .publisher(for: UserDefaults.didChangeNotification)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                // UserDefaults.didChangeNotification doesn't include the key,
+                // so we bump unconditionally. The cost is a re-filter which is cheap.
+                self?.filterRevision &+= 1
+            }
     }
 
     /// Reload cached shows from disk.
@@ -117,21 +156,17 @@ public class CachedProgramsViewModel: ProgramCacheProviding {
         bbcTVShows = shows[0]
         radioShows = shows[1]
         nonBbcTVShows = shows[2]
-        viewCounts = Dictionary(uniqueKeysWithValues: SearchViewType.allCases.compactMap { type in
-            guard type != .all else { return nil }
-            return (type, dataFor(view: type, searchText: "").count)
-        })
     }
 
-    public func readCaches() -> [[Programme]] {
+    public func readCaches() -> [[CachedProgramme]] {
         let bbc = readCacheFile(fileName: "tv.cache")
         let radio = readCacheFile(fileName: "radio.cache")
         let nonBBC = readCacheFile(fileName: "itv.cache")
         return [bbc, radio, nonBBC]
     }
 
-    fileprivate func readCacheFile(fileName: String) -> [Programme] {
-        var cachedPrograms = [Programme]()
+    fileprivate func readCacheFile(fileName: String) -> [CachedProgramme] {
+        var cachedPrograms = [CachedProgramme]()
 
         let ourSupportDir = FileManager.default.applicationSupportDirectory
         let cacheFile = ourSupportDir.appending("/\(fileName)")
@@ -140,7 +175,6 @@ public class CachedProgramsViewModel: ProgramCacheProviding {
             return []
         }
 
-        let dateFormatter = ISO8601DateFormatter()
         // #index|type|name|episode|seriesnum|episodenum|pid|channel|available|expires|duration|desc|web|thumbnail|timeadded
 
         // 741|tv|Wimbledon: 2023|Day 6, Part 2|2023||m001nq2z|BBC One|2023-07-08T16:00:00+00:00|1691424000|16800|Further live action from day six of Wimbledon 2023.|https://www.bbc.co.uk/programmes/m001nq2z|https://ichef.bbci.co.uk/images/ic/192xn/p0fzss2c.jpg|1688838892|
@@ -159,46 +193,45 @@ public class CachedProgramsViewModel: ProgramCacheProviding {
             if line.isEmpty {
                 continue
             }
-            
+
             let elements = line.components(separatedBy: "|")
-            let availableDate = dateFormatter.date(from: elements[8]) ?? Date()
-            let expiresDate = dateFormatter.date(from: elements[9])
+            let availableDate = Self.dateFormatter.date(from: elements[8]) ?? Date()
+            let expiresDate = Self.dateFormatter.date(from: elements[9])
             let timeAddedSecs = Double(elements[14]) ?? 0.0
             let timeAdded = Date(timeIntervalSince1970: timeAddedSecs)
-            let p = Programme()
-            p.status = .processedPID
-            p.index = Int(elements[0]) ?? 0
-            p.type = ProgrammeType(rawValue: elements[1]) ?? .tv
-            p.name = elements[2]
-            p.episode = elements[3]
-            p.seriesNum = Int(elements[4]) ?? 0
-            p.episodeNum = Int(elements[5]) ?? 0
-            p.pid = elements[6]
-            p.channel = elements[7]
-            p.available = availableDate
-            p.expires = expiresDate
-            p.duration = Int(elements[10]) ?? 0
-            p.desc = elements[11]
-            p.web = URL(string: elements[12])
-            p.thumbnail = URL(string: elements[13])
-            p.timeadded = timeAdded
-            p.radio = isRadio
-            p.podcast = false
-            p.realPID = ""
-            p.progress = ""
-            p.downloadPath = ""
-
+            let p = CachedProgramme(
+                pid: elements[6],
+                index: Int(elements[0]) ?? 0,
+                type: ProgrammeType(rawValue: elements[1]) ?? .tv,
+                name: elements[2],
+                episode: elements[3],
+                seriesNum: Int(elements[4]) ?? 0,
+                episodeNum: Int(elements[5]) ?? 0,
+                channel: elements[7],
+                available: availableDate,
+                expires: expiresDate,
+                duration: Int(elements[10]) ?? 0,
+                desc: elements[11],
+                web: URL(string: elements[12]),
+                thumbnail: URL(string: elements[13]),
+                timeadded: timeAdded,
+                radio: isRadio,
+                podcast: false,
+                realPID: ""
+            )
             cachedPrograms.append(p)
         }
 
         return cachedPrograms
     }
 
-    public func dataFor(view: SearchViewType, searchText: String) -> [Programme] {
+    public func dataFor(view: SearchViewType, searchText: String) -> [CachedProgramme] {
+        // Access filterRevision so the observation system tracks it as a dependency.
+        _ = filterRevision
         let startDate = Date(timeIntervalSinceNow: -24 * 60 * 60)
         let endDate = Date()
 
-        var filteredShows: [Programme]
+        var filteredShows: [CachedProgramme]
         switch view {
         case .tvToday, .allTV:
             filteredShows = bbcTVShows + nonBbcTVShows
@@ -321,24 +354,9 @@ public class CachedProgramsViewModel: ProgramCacheProviding {
         return filteredShows
     }
 
-    public func findProgrammeFromPID(pid: String) -> Programme? {
-        var program: Programme?
-        program = bbcTVShows.first(where: {
-            $0.pid == pid
-        })
-
-        if program == nil {
-            program = radioShows.first(where: {
-                $0.pid == pid
-            })
-        }
-
-        if program == nil {
-            program = nonBbcTVShows.first(where: {
-                $0.pid == pid
-            })
-        }
-
-        return program
+    public func findProgrammeFromPID(pid: String) -> CachedProgramme? {
+        return bbcTVShows.first { $0.pid == pid }
+            ?? radioShows.first { $0.pid == pid }
+            ?? nonBbcTVShows.first { $0.pid == pid }
     }
 }

@@ -12,6 +12,14 @@ struct DownloadQueueToolbar: CustomizableToolbarContent {
 
     var downloadQueueViewModel: any DownloadQueueProviding
     var pvrViewModel: PVRViewModel
+    var downloadHistoryModel: DownloadHistoryModel
+    @Binding var selection: Set<String>
+
+    private var selectedSeriesLinkedItems: [Programme] {
+        downloadQueueViewModel.downloadQueue.filter { program in
+            selection.contains(program.pid) && program.status == .addedByPVR
+        }
+    }
 
     var body: some CustomizableToolbarContent {
         ToolbarItem(
@@ -64,6 +72,24 @@ struct DownloadQueueToolbar: CustomizableToolbarContent {
                         .imageScale(.large)
                 }
                 .help("Add the programme from the current browser tab to the queue")
+            }
+        ToolbarItem(
+            id: "skipSeriesLinked",
+            placement: .automatic,
+            showsByDefault: true) {
+                Button {
+                    let itemsToSkip = selectedSeriesLinkedItems
+                    downloadHistoryModel.addToHistory(programs: itemsToSkip)
+                    for program in itemsToSkip {
+                        downloadQueueViewModel.removeFromQueue(pid: program.pid)
+                    }
+                    selection.subtract(itemsToSkip.map(\.pid))
+                } label: {
+                    Label("Skip Selected Series-Linked Items", systemImage: "forward.circle")
+                        .imageScale(.large)
+                }
+                .help("Remove selected series-linked items from the queue and add them to download history")
+                .disabled(selectedSeriesLinkedItems.isEmpty)
             }
     }
 }

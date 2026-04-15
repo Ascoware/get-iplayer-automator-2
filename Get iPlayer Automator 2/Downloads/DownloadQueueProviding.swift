@@ -14,14 +14,18 @@ protocol DownloadQueueProviding: AnyObject {
     var processPIDRunning: Bool { get set }
     var downloadsCancelled: Bool { get set }
     var isDownloading: Bool { get }
-    
+    var retryTimerActive: Bool { get }
+    var retryFireDate: Date? { get }
+
     func addToQueue(programs: [Programme])
     func addToQueue(program: Programme)
     func addToQueue(pid: String)
+    func addToQueueFromPVR(pid: String)
     func removeFromQueue(pid: String)
     func movePrograms(fromOffsets: IndexSet, toOffset: Int)
     func startDownloads()
     func stopDownloads()
+    func cancelRetryTimer()
     func getCurrentWebpage()
     func saveAppData()
 }

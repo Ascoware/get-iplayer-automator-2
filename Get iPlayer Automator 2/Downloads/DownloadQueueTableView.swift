@@ -12,7 +12,7 @@ import UniformTypeIdentifiers
 struct DownloadQueueTableView: View {
     var downloadQueueViewModel: any DownloadQueueProviding
 
-    @State private var selection: Set<String> = []
+    @Binding var selection: Set<String>
     @State private var enteredPID: String = ""
     @State private var draggingPID: String?
 
@@ -120,6 +120,12 @@ struct DownloadQueueTableView: View {
                 }
 
                 Spacer()
+
+                if downloadQueueViewModel.retryTimerActive, let fireDate = downloadQueueViewModel.retryFireDate {
+                    RetryCountdownView(fireDate: fireDate) {
+                        downloadQueueViewModel.cancelRetryTimer()
+                    }
+                }
             }
             .padding(10)
             .border(.bar)
@@ -185,8 +191,56 @@ struct DownloadQueueDropDelegate: DropDelegate {
     }
 }
 
+struct RetryCountdownView: View {
+    let fireDate: Date
+    let onCancel: () -> Void
+
+    @State private var remainingSeconds: Int = 0
+    @State private var timer: Timer?
+
+    private var countdownText: String {
+        let minutes = remainingSeconds / 60
+        let seconds = remainingSeconds % 60
+        return String(format: "Next download attempt: %d:%02d", minutes, seconds)
+    }
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Text(countdownText)
+                .monospacedDigit()
+                .foregroundStyle(.secondary)
+
+            Button {
+                onCancel()
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+                    .foregroundStyle(.secondary)
+            }
+            .buttonStyle(.plain)
+            .help("Cancel retry")
+        }
+        .onAppear {
+            updateRemaining()
+            timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+                Task { @MainActor in
+                    updateRemaining()
+                }
+            }
+        }
+        .onDisappear {
+            timer?.invalidate()
+            timer = nil
+        }
+    }
+
+    private func updateRemaining() {
+        remainingSeconds = max(0, Int(fireDate.timeIntervalSinceNow))
+    }
+}
+
 #Preview {
     @Previewable @State var mockQueue = MockDownloadQueueViewModel()
-    DownloadQueueTableView(downloadQueueViewModel: mockQueue)
+    @Previewable @State var selection: Set<String> = []
+    DownloadQueueTableView(downloadQueueViewModel: mockQueue, selection: $selection)
 }
 

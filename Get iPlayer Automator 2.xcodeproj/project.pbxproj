@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8F80337E49E54328896745BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F0C17962F7449E900E208A2 /* Assets.xcassets */; };
 		7F0C17D02F744AC100E208A2 /* GetiPlayerAutomatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17C72F7449E900E208A2 /* GetiPlayerAutomatorApp.swift */; };
 		7F0C17D12F744AC900E208A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17C42F7449E900E208A2 /* AppDelegate.swift */; };
 		7F0C17D22F744ADD00E208A2 /* DownloadHistoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17762F7449E900E208A2 /* DownloadHistoryModel.swift */; };
@@ -75,6 +76,7 @@
 		7F0C18142F744BA800E208A2 /* Sweep in Frameworks */ = {isa = PBXBuildFile; productRef = 7F0C18132F744BA800E208A2 /* Sweep */; };
 		7F0C18172F744BCF00E208A2 /* Subprocess in Frameworks */ = {isa = PBXBuildFile; productRef = 7F0C18162F744BCF00E208A2 /* Subprocess */; };
 		7F2668EB2AAAE00A00049C93 /* DefaultsWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 7F2668EA2AAAE00A00049C93 /* DefaultsWrapper */; };
+		7F560C1D2F82167C00A30F18 /* CachedProgramme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F560C1C2F82167C00A30F18 /* CachedProgramme.swift */; };
 		7F8EDD012A85AA5F0076F176 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 7F8EDD002A85AA5F0076F176 /* SwiftyJSON */; };
 		7F8EDD042A85AAA60076F176 /* CocoaLumberjackSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7F8EDD032A85AAA60076F176 /* CocoaLumberjackSwift */; };
 		7F8EDD072A85AAFE0076F176 /* Kanna in Frameworks */ = {isa = PBXBuildFile; productRef = 7F8EDD062A85AAFE0076F176 /* Kanna */; };
@@ -82,6 +84,8 @@
 		7FA2EFBA2A7CB8660049CE14 /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FA2EFB92A7CB8660049CE14 /* ScriptingBridge.framework */; };
 		7FA7B1C72A78CF6E00A8B6CF /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 7FA7B1C62A78CF6E00A8B6CF /* Collections */; };
 		7FA7B1C92A78CF6E00A8B6CF /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 7FA7B1C82A78CF6E00A8B6CF /* OrderedCollections */; };
+		4812E1AF24974D7EBD551D56 /* LegacyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B32E8783B44715A9B2F9AA /* LegacyModels.swift */; };
+		03F0F0289A7E45F6AEE5D636 /* LegacyDataMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998CDC3F85714755A143A250 /* LegacyDataMigrator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -171,8 +175,11 @@
 		7F0C17C62F7449E900E208A2 /* GetiPlayerAutomator-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GetiPlayerAutomator-Bridging-Header.h"; sourceTree = "<group>"; };
 		7F0C17C72F7449E900E208A2 /* GetiPlayerAutomatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetiPlayerAutomatorApp.swift; sourceTree = "<group>"; };
 		7F1E9D2A2A5D0427002C71A6 /* Get iPlayer Automator 2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Get iPlayer Automator 2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F560C1C2F82167C00A30F18 /* CachedProgramme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedProgramme.swift; sourceTree = "<group>"; };
 		7FA2EFB92A7CB8660049CE14 /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = System/Library/Frameworks/ScriptingBridge.framework; sourceTree = SDKROOT; };
 		7FAD2E792F763C02005E4303 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E1B32E8783B44715A9B2F9AA /* LegacyModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyModels.swift; sourceTree = "<group>"; };
+		998CDC3F85714755A143A250 /* LegacyDataMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyDataMigrator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -245,6 +252,7 @@
 		7F0C178F2F7449E900E208A2 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				7F560C1C2F82167C00A30F18 /* CachedProgramme.swift */,
 				7F0C178D2F7449E900E208A2 /* Programme.swift */,
 				7F0C178E2F7449E900E208A2 /* Series.swift */,
 			);
@@ -339,6 +347,15 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
+		737A5DF128484738BD39A327 /* Migration */ = {
+			isa = PBXGroup;
+			children = (
+				E1B32E8783B44715A9B2F9AA /* LegacyModels.swift */,
+				998CDC3F85714755A143A250 /* LegacyDataMigrator.swift */,
+			);
+			path = Migration;
+			sourceTree = "<group>";
+		};
 		7F0C17C82F7449E900E208A2 /* Get iPlayer Automator 2 */ = {
 			isa = PBXGroup;
 			children = (
@@ -347,6 +364,7 @@
 				7F0C177B2F7449E900E208A2 /* DownloadHistory */,
 				7F0C17882F7449E900E208A2 /* Downloads */,
 				7F0C178C2F7449E900E208A2 /* LogViewer */,
+				737A5DF128484738BD39A327 /* Migration */,
 				7F0C178F2F7449E900E208A2 /* Models */,
 				7F0C17952F7449E900E208A2 /* PVR */,
 				7F0C179A2F7449E900E208A2 /* Resources */,
@@ -471,6 +489,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F80337E49E54328896745BA /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -560,6 +579,7 @@
 				7F0C17FF2F744B3400E208A2 /* SearchViewType.swift in Sources */,
 				7F0C18002F744B3400E208A2 /* CachedProgramsViewModel.swift in Sources */,
 				7F0C18012F744B3400E208A2 /* SearchWindowMenus.swift in Sources */,
+				7F560C1D2F82167C00A30F18 /* CachedProgramme.swift in Sources */,
 				7F0C18022F744B3400E208A2 /* SearchTableView.swift in Sources */,
 				7F0C18032F744B3400E208A2 /* SearchWindowToolbar.swift in Sources */,
 				7F0C18042F744B3400E208A2 /* MockCachedProgramsViewModel.swift in Sources */,
@@ -571,6 +591,8 @@
 				7F0C17D62F744ADD00E208A2 /* DownloadHistoryViewModel.swift in Sources */,
 				7F0C17D72F744ADD00E208A2 /* DownloadHistoryEntry.swift in Sources */,
 				7F0C17D02F744AC100E208A2 /* GetiPlayerAutomatorApp.swift in Sources */,
+				4812E1AF24974D7EBD551D56 /* LegacyModels.swift in Sources */,
+				03F0F0289A7E45F6AEE5D636 /* LegacyDataMigrator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

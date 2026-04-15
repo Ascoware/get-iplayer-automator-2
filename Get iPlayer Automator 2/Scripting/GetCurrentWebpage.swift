@@ -13,7 +13,7 @@ import CocoaLumberjackSwift
 import SwiftUI
 
 @MainActor
-public class GetCurrentWebpage {
+class GetCurrentWebpage {
 
     var programIDs: [String] = []
     var programs: [Programme] = []
@@ -184,8 +184,15 @@ public class GetCurrentWebpage {
                let tab = frontWindow.currentTab,
                let url = tab.URL,
                let name = tab.name,
-               let source = tab.source {
-                extractMetadata(url: url, tabTitle: name, pageSource: source)
+               let pageURL = URL(string: url) {
+                Task {
+                    var request = URLRequest(url: pageURL)
+                    request.addValue("Mozilla/5.0", forHTTPHeaderField: "User-Agent")
+                    if let (data, _) = try? await URLSession.shared.data(for: request),
+                       let html = String(data: data, encoding: .utf8) {
+                        self.extractMetadata(url: url, tabTitle: name, pageSource: html)
+                    }
+                }
             }
             break
 
@@ -208,8 +215,15 @@ public class GetCurrentWebpage {
                let tab = frontWindow.activeTab,
                let url = tab.URL,
                let title = tab.title,
-               let source = tab.executeJavascript?("document.documentElement.outerHTML") as? String {
-                extractMetadata(url: url, tabTitle: title, pageSource: source)
+               let pageURL = URL(string: url) {
+                Task {
+                    var request = URLRequest(url: pageURL)
+                    request.addValue("Mozilla/5.0", forHTTPHeaderField: "User-Agent")
+                    if let (data, _) = try? await URLSession.shared.data(for: request),
+                       let html = String(data: data, encoding: .utf8) {
+                        self.extractMetadata(url: url, tabTitle: title, pageSource: html)
+                    }
+                }
             }
         }
     }
