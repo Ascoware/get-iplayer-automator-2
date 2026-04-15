@@ -87,6 +87,16 @@ struct GetiPlayerAutomatorApp: App {
             DownloadHistoryView(historyModel: downloadHistoryModel)
         }
 
+        UtilityWindow("Activity", id: "activity") {
+            ActivityView(
+                cacheUpdateService: cacheUpdateService,
+                downloadQueueViewModel: downloadQueueViewModel,
+                pvrViewModel: pvrViewModel
+            )
+        }
+        .windowResizability(.contentSize)
+        .defaultLaunchBehavior(.presented)
+
     }
 
     private func startupAfterMigration() async {

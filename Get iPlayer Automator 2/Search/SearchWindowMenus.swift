@@ -27,5 +27,22 @@ struct SearchWindowMenus: Commands {
             }
             .keyboardShortcut("r", modifiers: [.command, .shift])
         }
+
+        CommandGroup(after: .windowArrangement) {
+            OpenWindowButton(title: "Activity", windowID: "activity")
+                .keyboardShortcut("0", modifiers: [.command])
+        }
+    }
+}
+
+private struct OpenWindowButton: View {
+    let title: String
+    let windowID: String
+    @Environment(\.openWindow) private var openWindow
+
+    var body: some View {
+        Button(title) {
+            openWindow(id: windowID)
+        }
     }
 }

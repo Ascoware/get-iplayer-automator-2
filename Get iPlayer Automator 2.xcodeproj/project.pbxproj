@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8F80337E49E54328896745BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F0C17962F7449E900E208A2 /* Assets.xcassets */; };
+		A1B2C3D4E5F647890ABCDEF0 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F647890ABCDEF1 /* ActivityView.swift */; };
 		7F0C17D02F744AC100E208A2 /* GetiPlayerAutomatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17C72F7449E900E208A2 /* GetiPlayerAutomatorApp.swift */; };
 		7F0C17D12F744AC900E208A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17C42F7449E900E208A2 /* AppDelegate.swift */; };
 		7F0C17D22F744ADD00E208A2 /* DownloadHistoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17762F7449E900E208A2 /* DownloadHistoryModel.swift */; };
@@ -180,6 +181,7 @@
 		7FAD2E792F763C02005E4303 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E1B32E8783B44715A9B2F9AA /* LegacyModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyModels.swift; sourceTree = "<group>"; };
 		998CDC3F85714755A143A250 /* LegacyDataMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyDataMigrator.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F647890ABCDEF1 /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -372,6 +374,7 @@
 				7F0C17B72F7449E900E208A2 /* Search */,
 				7F0C17BF2F7449E900E208A2 /* Settings */,
 				7F0C17C32F7449E900E208A2 /* Utilities */,
+				A1B2C3D4E5F647890ABCDEF1 /* ActivityView.swift */,
 				7F0C17C42F7449E900E208A2 /* AppDelegate.swift */,
 				7F0C17C62F7449E900E208A2 /* GetiPlayerAutomator-Bridging-Header.h */,
 				7F0C17C72F7449E900E208A2 /* GetiPlayerAutomatorApp.swift */,
@@ -593,6 +596,7 @@
 				7F0C17D02F744AC100E208A2 /* GetiPlayerAutomatorApp.swift in Sources */,
 				4812E1AF24974D7EBD551D56 /* LegacyModels.swift in Sources */,
 				03F0F0289A7E45F6AEE5D636 /* LegacyDataMigrator.swift in Sources */,
+				A1B2C3D4E5F647890ABCDEF0 /* ActivityView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
