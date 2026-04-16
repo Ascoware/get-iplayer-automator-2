@@ -36,7 +36,8 @@ struct GetiPlayerAutomatorApp: App {
             SearchContentView(
                 cachedProgramsViewModel: cachedProgramsViewModel,
                 downloadQueueViewModel: downloadQueueViewModel,
-                pvrViewModel: pvrViewModel
+                pvrViewModel: pvrViewModel,
+                historyModel: downloadHistoryModel
             )
             .task {
                 appDelegate.downloadQueueViewModel = downloadQueueViewModel

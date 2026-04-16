@@ -20,7 +20,7 @@ struct GeneralSettingsView: View {
     @Default(\.addToTV) var addToTV
     @Default(\.defaultBrowser) var defaultBrowser
     @Default(\.cacheBBCTV) var cacheBBCTV
-    @Default(\.cacheITV) var cacheITV
+
     @Default(\.cacheBBCRadio) var cacheBBCRadio
     @Default(\.cacheExpiryTime) var cacheExpiryTime
     @Default(\.verbose) var verbose
@@ -34,6 +34,7 @@ struct GeneralSettingsView: View {
     @Default(\.getADVideo) var getADVideo
     @Default(\.tagDownloadsWithMetadata) var tagDownloadsWithMetadata
     @Default(\.tagRadioAsPodcast) var tagRadioAsPodcast
+    @Default(\.ShowDownloadedInSearch) var showDownloadedInSearch
 
     var body: some View {
         Form {
@@ -84,8 +85,6 @@ struct GeneralSettingsView: View {
                     Toggle("BBC Radio", isOn: $cacheBBCRadio)
                         .toggleStyle(.checkbox)
 
-                    Toggle("ITV TV", isOn: $cacheITV)
-                        .toggleStyle(.checkbox)
                 }
             }
             Section {
@@ -98,6 +97,10 @@ struct GeneralSettingsView: View {
                     .toggleStyle(.checkbox)
 
                 Toggle("Add Available Series-Link Programs At Startup", isOn: $addSeriesLinkAtStartup)
+                    .toggleStyle(.checkbox)
+            }
+            Section {
+                Toggle("Show Downloaded Programmes", isOn: $showDownloadedInSearch)
                     .toggleStyle(.checkbox)
             }
             Section {

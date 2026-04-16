@@ -1,5 +1,5 @@
 //
-//  ITVDownload.swift
+//  STVDownload.swift
 //  Get iPlayer Automator 2
 //
 //  Created by Scott Kovatch on 9/20/23.
@@ -14,9 +14,9 @@ import Subprocess
 import System
 
 @MainActor
-class ITVDownload : Download {
+class STVDownload : Download {
 
-    @Default(\.maxITVSTVResolution) var maxResolution: TVFormat
+    @Default(\.maxSTVResolution) var maxResolution: TVFormat
 
     public init(programme: Programme) {
         super.init(program: programme)
@@ -186,7 +186,7 @@ class ITVDownload : Download {
     func createDownloadPath() {
         var fileName = show.episode
 
-        // XBMC naming is always used on ITV shows to ensure unique names.
+        // XBMC naming is always used on STV shows to ensure unique names.
         if !show.name.isEmpty {
             fileName = show.name;
         }

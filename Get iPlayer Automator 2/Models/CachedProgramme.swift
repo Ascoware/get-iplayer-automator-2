@@ -33,6 +33,14 @@ struct CachedProgramme: Identifiable, Hashable, Comparable {
 
     var id: String { pid }
 
+    var typeDescription: String {
+        switch type {
+        case .tv: "BBC TV"
+        case .radio: "BBC Radio"
+        case .stv: "STV"
+        }
+    }
+
     static func == (lhs: CachedProgramme, rhs: CachedProgramme) -> Bool {
         lhs.pid == rhs.pid
     }

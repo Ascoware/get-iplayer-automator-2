@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8F80337E49E54328896745BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F0C17962F7449E900E208A2 /* Assets.xcassets */; };
-		A1B2C3D4E5F647890ABCDEF0 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F647890ABCDEF1 /* ActivityView.swift */; };
+		03F0F0289A7E45F6AEE5D636 /* LegacyDataMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998CDC3F85714755A143A250 /* LegacyDataMigrator.swift */; };
+		4812E1AF24974D7EBD551D56 /* LegacyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B32E8783B44715A9B2F9AA /* LegacyModels.swift */; };
 		7F0C17D02F744AC100E208A2 /* GetiPlayerAutomatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17C72F7449E900E208A2 /* GetiPlayerAutomatorApp.swift */; };
 		7F0C17D12F744AC900E208A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17C42F7449E900E208A2 /* AppDelegate.swift */; };
 		7F0C17D22F744ADD00E208A2 /* DownloadHistoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17762F7449E900E208A2 /* DownloadHistoryModel.swift */; };
@@ -20,7 +20,7 @@
 		7F0C17D82F744AE700E208A2 /* DownloadQueueToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17822F7449E900E208A2 /* DownloadQueueToolbar.swift */; };
 		7F0C17D92F744AE700E208A2 /* DownloadQueueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17842F7449E900E208A2 /* DownloadQueueViewModel.swift */; };
 		7F0C17DA2F744AE700E208A2 /* DownloadQueueTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17812F7449E900E208A2 /* DownloadQueueTableView.swift */; };
-		7F0C17DB2F744AE700E208A2 /* ITVDownload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17862F7449E900E208A2 /* ITVDownload.swift */; };
+		7F0C17DB2F744AE700E208A2 /* STVDownload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17862F7449E900E208A2 /* STVDownload.swift */; };
 		7F0C17DC2F744AE700E208A2 /* DownloadQueueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17832F7449E900E208A2 /* DownloadQueueView.swift */; };
 		7F0C17DD2F744AE700E208A2 /* BBCDownload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C177C2F7449E900E208A2 /* BBCDownload.swift */; };
 		7F0C17DE2F744AE700E208A2 /* DownloadQueueProviding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17802F7449E900E208A2 /* DownloadQueueProviding.swift */; };
@@ -85,8 +85,9 @@
 		7FA2EFBA2A7CB8660049CE14 /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FA2EFB92A7CB8660049CE14 /* ScriptingBridge.framework */; };
 		7FA7B1C72A78CF6E00A8B6CF /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 7FA7B1C62A78CF6E00A8B6CF /* Collections */; };
 		7FA7B1C92A78CF6E00A8B6CF /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 7FA7B1C82A78CF6E00A8B6CF /* OrderedCollections */; };
-		4812E1AF24974D7EBD551D56 /* LegacyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B32E8783B44715A9B2F9AA /* LegacyModels.swift */; };
-		03F0F0289A7E45F6AEE5D636 /* LegacyDataMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998CDC3F85714755A143A250 /* LegacyDataMigrator.swift */; };
+		7FE5EED92F90AC020079290B /* ProgramInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE5EED82F90AC020079290B /* ProgramInfoView.swift */; };
+		8F80337E49E54328896745BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F0C17962F7449E900E208A2 /* Assets.xcassets */; };
+		A1B2C3D4E5F647890ABCDEF0 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F647890ABCDEF1 /* ActivityView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -118,7 +119,7 @@
 		7F0C17832F7449E900E208A2 /* DownloadQueueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadQueueView.swift; sourceTree = "<group>"; };
 		7F0C17842F7449E900E208A2 /* DownloadQueueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadQueueViewModel.swift; sourceTree = "<group>"; };
 		7F0C17852F7449E900E208A2 /* DownloadStatusImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadStatusImage.swift; sourceTree = "<group>"; };
-		7F0C17862F7449E900E208A2 /* ITVDownload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ITVDownload.swift; sourceTree = "<group>"; };
+		7F0C17862F7449E900E208A2 /* STVDownload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STVDownload.swift; sourceTree = "<group>"; };
 		7F0C17872F7449E900E208A2 /* MockDownloadQueueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDownloadQueueViewModel.swift; sourceTree = "<group>"; };
 		7F0C17892F7449E900E208A2 /* LogController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogController.swift; sourceTree = "<group>"; };
 		7F0C178A2F7449E900E208A2 /* LogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView.swift; sourceTree = "<group>"; };
@@ -179,9 +180,10 @@
 		7F560C1C2F82167C00A30F18 /* CachedProgramme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedProgramme.swift; sourceTree = "<group>"; };
 		7FA2EFB92A7CB8660049CE14 /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = System/Library/Frameworks/ScriptingBridge.framework; sourceTree = SDKROOT; };
 		7FAD2E792F763C02005E4303 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E1B32E8783B44715A9B2F9AA /* LegacyModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyModels.swift; sourceTree = "<group>"; };
+		7FE5EED82F90AC020079290B /* ProgramInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramInfoView.swift; sourceTree = "<group>"; };
 		998CDC3F85714755A143A250 /* LegacyDataMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyDataMigrator.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F647890ABCDEF1 /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
+		E1B32E8783B44715A9B2F9AA /* LegacyModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyModels.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -209,6 +211,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		737A5DF128484738BD39A327 /* Migration */ = {
+			isa = PBXGroup;
+			children = (
+				E1B32E8783B44715A9B2F9AA /* LegacyModels.swift */,
+				998CDC3F85714755A143A250 /* LegacyDataMigrator.swift */,
+			);
+			path = Migration;
+			sourceTree = "<group>";
+		};
 		7F0C177B2F7449E900E208A2 /* DownloadHistory */ = {
 			isa = PBXGroup;
 			children = (
@@ -235,7 +246,7 @@
 				7F0C17832F7449E900E208A2 /* DownloadQueueView.swift */,
 				7F0C17842F7449E900E208A2 /* DownloadQueueViewModel.swift */,
 				7F0C17852F7449E900E208A2 /* DownloadStatusImage.swift */,
-				7F0C17862F7449E900E208A2 /* ITVDownload.swift */,
+				7F0C17862F7449E900E208A2 /* STVDownload.swift */,
 				7F0C17872F7449E900E208A2 /* MockDownloadQueueViewModel.swift */,
 			);
 			path = Downloads;
@@ -321,6 +332,7 @@
 				7F0C17B42F7449E900E208A2 /* SearchViewType.swift */,
 				7F0C17B52F7449E900E208A2 /* SearchWindowMenus.swift */,
 				7F0C17B62F7449E900E208A2 /* SearchWindowToolbar.swift */,
+				7FE5EED82F90AC020079290B /* ProgramInfoView.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -347,15 +359,6 @@
 				7F0C17C22F7449E900E208A2 /* HTTPProxy.swift */,
 			);
 			path = Utilities;
-			sourceTree = "<group>";
-		};
-		737A5DF128484738BD39A327 /* Migration */ = {
-			isa = PBXGroup;
-			children = (
-				E1B32E8783B44715A9B2F9AA /* LegacyModels.swift */,
-				998CDC3F85714755A143A250 /* LegacyDataMigrator.swift */,
-			);
-			path = Migration;
 			sourceTree = "<group>";
 		};
 		7F0C17C82F7449E900E208A2 /* Get iPlayer Automator 2 */ = {
@@ -560,7 +563,7 @@
 				7F0C17D82F744AE700E208A2 /* DownloadQueueToolbar.swift in Sources */,
 				7F0C17D92F744AE700E208A2 /* DownloadQueueViewModel.swift in Sources */,
 				7F0C17DA2F744AE700E208A2 /* DownloadQueueTableView.swift in Sources */,
-				7F0C17DB2F744AE700E208A2 /* ITVDownload.swift in Sources */,
+				7F0C17DB2F744AE700E208A2 /* STVDownload.swift in Sources */,
 				7F0C17DC2F744AE700E208A2 /* DownloadQueueView.swift in Sources */,
 				7F0C17DD2F744AE700E208A2 /* BBCDownload.swift in Sources */,
 				7F0C17DE2F744AE700E208A2 /* DownloadQueueProviding.swift in Sources */,
@@ -589,6 +592,7 @@
 				7F0C18052F744B3400E208A2 /* ProgramCacheProviding.swift in Sources */,
 				7F0C18062F744B3400E208A2 /* CacheUpdateService.swift in Sources */,
 				7F0C18072F744B3400E208A2 /* GridView.swift in Sources */,
+				7FE5EED92F90AC020079290B /* ProgramInfoView.swift in Sources */,
 				7F0C17ED2F744B0200E208A2 /* PVRToolbar.swift in Sources */,
 				7F0C17D52F744ADD00E208A2 /* DownloadHistoryProviding.swift in Sources */,
 				7F0C17D62F744ADD00E208A2 /* DownloadHistoryViewModel.swift in Sources */,

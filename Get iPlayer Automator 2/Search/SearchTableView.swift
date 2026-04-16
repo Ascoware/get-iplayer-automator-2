@@ -12,11 +12,13 @@ struct SearchTableView: View {
     var pvrViewModel: PVRViewModel
     @Binding var selection: Set<String>
     var tableData: [CachedProgramme]
+    var downloadedPIDs: Set<String> = []
 
     @State private var sortOrder = [KeyPathComparator(\CachedProgramme.available)]
     @Environment(\.openWindow) private var openWindow
 
     @State private var sortedTableData: [CachedProgramme] = []
+    @State private var programInfoTarget: CachedProgramme? = nil
 
     var selectedProgrammes: [CachedProgramme] {
         guard !selection.isEmpty else {
@@ -43,6 +45,11 @@ struct SearchTableView: View {
         }
     }
 
+    private func singleSelectedProgramme(from pids: Set<String>) -> CachedProgramme? {
+        guard pids.count == 1, let pid = pids.first else { return nil }
+        return sortedTableData.first(where: { $0.pid == pid })
+    }
+
 
     var body: some View {
         VStack {
@@ -50,12 +57,22 @@ struct SearchTableView: View {
                 sortedTableData,
                 selection: $selection,
                 sortOrder: $sortOrder) {
-                    TableColumn("Show", value: \.name)
-                    TableColumn("Episode", value: \.episode)
+                    TableColumn("Show", value: \.name) { program in
+                        Text(program.name)
+                            .foregroundStyle(downloadedPIDs.contains(program.pid) ? AnyShapeStyle(.tertiary) : AnyShapeStyle(.primary))
+                    }
+                    TableColumn("Episode", value: \.episode) { program in
+                        Text(program.episode)
+                            .foregroundStyle(downloadedPIDs.contains(program.pid) ? AnyShapeStyle(.tertiary) : AnyShapeStyle(.primary))
+                    }
                     TableColumn("Last Broadcast", value: \.available) { program in
                         Text(program.available, style: .date)
+                            .foregroundStyle(downloadedPIDs.contains(program.pid) ? AnyShapeStyle(.tertiary) : AnyShapeStyle(.primary))
                     }
-                    TableColumn("Network", value: \.channel)
+                    TableColumn("Network", value: \.channel) { program in
+                        Text(program.channel)
+                            .foregroundStyle(downloadedPIDs.contains(program.pid) ? AnyShapeStyle(.tertiary) : AnyShapeStyle(.primary))
+                    }
                 }
                 .onChange(of: tableData) { sortedTableData = tableData.sorted(using: sortOrder) }
                 .onChange(of: sortOrder)  { sortedTableData = tableData.sorted(using: sortOrder) }
@@ -67,8 +84,17 @@ struct SearchTableView: View {
                     Button("Record Series") {
                         addSelectedSeriesToAutoRecord(pids: programs)
                     }
+                    if let programme = singleSelectedProgramme(from: programs) {
+                        Divider()
+                        Button("Show Programme Information…") {
+                            programInfoTarget = programme
+                        }
+                    }
                 } primaryAction: { pids in
                     addItemsToQueueAndOpen(pids: pids)
+                }
+                .sheet(item: $programInfoTarget) { programme in
+                    ProgramInfoView(programme: programme)
                 }
         }
     }

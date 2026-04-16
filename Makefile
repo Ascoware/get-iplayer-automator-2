@@ -1,6 +1,6 @@
 # Populate Binaries/ before building a release:
 #
-#   make binaries          — full build (slow, ~30 min first time)
+#   make all               — full build (slow, ~30 min first time)
 #   make gip               — re-fetch get_iplayer only (fast)
 #   make install-perl      — rebuild Perl + dylibs only
 #   make install-utils     — rebuild AtomicParsley + ffmpeg only
@@ -21,6 +21,11 @@ YT_DLP_URL  ?= https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_
 YT_DLP_DIR  := Binaries/yt-dlp_macos
 YT_DLP_BIN  := $(YT_DLP_DIR)/yt-dlp_macos
 
+# Install destinations for get_iplayer_macos (override its hardcoded ../get-iplayer-automator paths)
+AUTOMATOR_PERL  := $(CURDIR)/Binaries/get_iplayer/perl
+AUTOMATOR_DYLIB := $(AUTOMATOR_PERL)/dylib
+AUTOMATOR_UTILS := $(CURDIR)/Binaries/get_iplayer/utils/bin
+
 # ── Heavy build (delegated to get_iplayer_macos) ───────────────────────────
 
 perl-libs:
@@ -37,7 +42,10 @@ BUNDLE_RPATH      := @executable_path/../dylib
 PERL_LIB          := Binaries/get_iplayer/perl/lib
 
 install-perl: perl-libs
-	$(MAKE) -C $(GIP_MACOS) perl-install
+	$(MAKE) -C $(GIP_MACOS) perl-install \
+		automator_perl=$(AUTOMATOR_PERL) \
+		automator_dylib=$(AUTOMATOR_DYLIB) \
+		automator_utils=$(AUTOMATOR_UTILS)
 	@$(MAKE) rpath-fixup
 
 # Ensure .bundle rpath is @executable_path/../dylib on both arch slices.
@@ -76,7 +84,10 @@ rpath-fixup:
 	@echo "rpath fixup done"
 
 install-utils: utils
-	$(MAKE) -C $(GIP_MACOS) utils-install
+	$(MAKE) -C $(GIP_MACOS) utils-install \
+		automator_perl=$(AUTOMATOR_PERL) \
+		automator_dylib=$(AUTOMATOR_DYLIB) \
+		automator_utils=$(AUTOMATOR_UTILS)
 
 # ── Fetch, patch, and install get_iplayer scripts ──────────────────────────
 
@@ -101,9 +112,11 @@ $(YT_DLP_BIN):
 
 yt-dlp: $(YT_DLP_BIN)
 
-# ── Top-level target ───────────────────────────────────────────────────────
+# ── Top-level targets ──────────────────────────────────────────────────────
 
 binaries: install-perl install-utils gip yt-dlp
 	@echo "Binaries/ ready"
 
-.PHONY: perl-libs utils install-perl rpath-fixup install-utils gip yt-dlp binaries
+all: binaries
+
+.PHONY: perl-libs utils install-perl rpath-fixup install-utils gip yt-dlp binaries all

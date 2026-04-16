@@ -63,20 +63,12 @@ class GetiPlayerArguments {
     let noWarningArg = "--nocopyright"
 
     func typeArgument(forCacheUpdate: Bool) -> String {
-        // There's no harm in passing 'itv' as a cache type, but it will report 0 shows cached
-        // which can be confusing.
-        let includeITV = !forCacheUpdate
-
         var cacheTypes = ""
 
         @Default(\.cacheBBCTV) var cacheBBCTV
-        @Default(\.cacheITV) var cacheITV
         @Default(\.cacheBBCRadio) var cacheBBCRadio
         if cacheBBCTV || !forCacheUpdate {
             cacheTypes += "tv,"
-        }
-        if (cacheITV && includeITV) || !forCacheUpdate {
-            cacheTypes += "itv,"
         }
         if cacheBBCRadio || !forCacheUpdate {
             cacheTypes += "radio,"

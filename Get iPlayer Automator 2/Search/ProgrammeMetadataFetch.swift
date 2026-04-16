@@ -12,6 +12,12 @@ import Sweep
 import Subprocess
 import System
 
+struct ProgrammeExtendedInfo {
+    let programme: Programme
+    let categories: String
+    let modeSizes: [[String: String]]
+}
+
 @MainActor
 class ProgrammeMetadataFetch {
 
@@ -25,92 +31,10 @@ class ProgrammeMetadataFetch {
     }
 
     func getProgramme() async -> Programme? {
-        //        let getNameTask = Process()
-        //        let getNamePipe = Pipe()
-        //        // index|type|name|episode|seriesnum|episodenum|pid|channel|available|expires|duration|desc|web|thumbnail|timeadded
-        //        let listArgument = "--listformat=<index>|<pid>|<type>|<name>|<episode>|<seriesnum>|<episodenum>|<channel>|<available>|<desc>|<web>|<thumbnail>|<timeadded>"
-        //
-        //        let fieldsArgument = "--fields=index,pid"
-        //        let wantedID = pid
-        //        let args = [
-        //            GetiPlayerArguments.shared.getiPlayerPath,
-        //            GetiPlayerArguments.shared.noWarningArg,
-        //            GetiPlayerArguments.shared.cacheExpiryArg,
-        //            "--nopurge",
-        //            GetiPlayerArguments.shared.typeArgument(forCacheUpdate: false),
-        //            listArgument,
-        //            GetiPlayerArguments.shared.profileDirArg,
-        //            fieldsArgument,
-        //            wantedID
-        //        ]
-        //
-        //        getNameTask.arguments = args
-        //        getNameTask.launchPath = GetiPlayerArguments.shared.perlBinaryPath
-        //        getNameTask.standardOutput = getNamePipe
-        //        let getNameFh = getNamePipe.fileHandleForReading
-        //
-        //        var envVariableDictionary = [String : String]()
-        //        envVariableDictionary["HOME"] = URL.homeDirectory.path(percentEncoded: false)
-        //        envVariableDictionary["PERL_UNICODE"] = "AS"
-        //        envVariableDictionary["PATH"] = GetiPlayerArguments.shared.perlEnvironmentPath
-        //        getNameTask.environment = envVariableDictionary
-        //        getNameTask.launch()
-        //
-        //        let data = getNameFh.readDataToEndOfFile()
-        //        guard let taskOutput = String(data: data, encoding: .utf8) else {
-        //            return nil
-        //        }
-        //
-        //        let taskLines = taskOutput.components(separatedBy: .newlines)
-        //        var found = false
-        //
-        //        let dateFormatter = DateFormatter()
-        //        dateFormatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ssZZZZZ"
-        //
-        //        var index, type, name, episode, seriesnum, episodenum, pid, channel, available, expires, duration, desc, web, thumbnail, timeadded: String
-        //        var lastBroadcast: Date?, lastBroadcastString = ""
-        //
-        //        for line in taskLines {
-        //            let elements = line.components(separatedBy: "|")
-        //
-        //            if elements.count != 13 {
-        //                continue
-        //            }
-        //
-        //            index = elements[0]
-        //            pid = elements[1]
-        //
-        //            //<index>|<pid>|<type>|<name>|<episode>|<seriesnum>|<episodenum>|<channel>|<available>|<desc>|<web>|<thumbnail>|<timeadded>
-        //            if (wantedID == pid) || (wantedID == index) {
-        //                found = true
-        //                type = elements[2]
-        //                name = elements[3]
-        //                episode = elements[4]
-        //                seriesnum = elements[5]
-        //                episodenum = elements[6]
-        //                channel = elements[7]
-        //                available = elements[8]
-        //                desc = elements[9]
-        //                web = elements[10]
-        //                thumbnail = elements[11]
-        //                timeadded = elements[12]
-        //                break
-        //            }
-        //        }
-        //
-        //        // Found it in the cache, otherwise we have to do a remote fetch.
-        //        if found {
-        //            if let date = dateFormatter.date(from: available) {
-        //                lastBroadcast = date
-        //            }
-        //
-        //            let indexInt = Int(index) ?? 0
-        //            let seriesInt = Int(seriesnum) ?? 0
-        //            let episodeInt = Int(episodenum) ?? 0
-        //            let programType: ProgrammeType = (type == "radio" ? .radio : .tv)
-        //
-        //            let programme = Programme(index: indexInt, type: programType, name: name, episode: episode, seriesNum: seriesInt, episodeNum: episodeInt, pid: pid, channel: channel)
-        //        }
+        return await getExtendedInfo()?.programme
+    }
+
+    func getExtendedInfo() async -> ProgrammeExtendedInfo? {
         var args = [
             GetiPlayerArguments.shared.getiPlayerPath,
             GetiPlayerArguments.shared.noWarningArg,
@@ -210,18 +134,13 @@ class ProgrammeMetadataFetch {
             }
         }
 
-        //        status = runDownloads.boolValue ? "Waiting…" : "Available"
-
-        //            let categories = scanField("categories", lines: validOutput)
+        let categories = scanField("categories", lines: validOutput)
 
         desc = scanField("desclong", lines: validOutput)
 
         if desc.isEmpty {
             desc = scanField("desc", lines: validOutput)
         }
-
-        //        let durationStr = scanField("runtime", lines: validOutput)
-        //        duration = Int(durationStr) ?? 0
 
         let available = scanField("firstbcast", lines: validOutput)
         let firstBcastDate: Date
@@ -296,7 +215,7 @@ class ProgrammeMetadataFetch {
         p.web = URL(string: url)
         p.radio = radio
 
-        return p
+        return ProgrammeExtendedInfo(programme: p, categories: categories, modeSizes: modeSizes)
     }
 
     // Look for 'field:' at the beginning of a line in 'lines'. If found, and 'secondField' is empty, return the rest

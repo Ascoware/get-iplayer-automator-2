@@ -124,7 +124,6 @@ public class Defaults: ObservableObject {
     @AppStorage("addToTV") public var addToTV: Bool = true
     @AppStorage("defaultBrowser") public var defaultBrowser: SupportedBrowsers = .safari
     @AppStorage("cacheBBCTV") public var cacheBBCTV = false
-    @AppStorage("cacheITVTV") public var cacheITV = false
     @AppStorage("cacheBBCRadio") public var cacheBBCRadio = false
     @AppStorage("cacheExpiryTime") public var cacheExpiryTime = 4
     @AppStorage("verbose") public var verbose = false
@@ -142,7 +141,7 @@ public class Defaults: ObservableObject {
 
     @AppStorage("bbcTVFormats") public var bbcTVFormats: [TVFormat] = []
     @AppStorage("bbcRadioFormats") public var radioFormats: [RadioFormat] = []
-    @AppStorage("MaxITVResolution") public var maxITVSTVResolution: TVFormat = .hd
+    @AppStorage("MaxITVResolution") public var maxSTVResolution: TVFormat = .hd
 
     // Options for all channel filters
     @AppStorage("BBCOne") public var BBCOne =  true
@@ -176,7 +175,6 @@ public class Defaults: ObservableObject {
     // Filter out all BBC TV, Radio, or STV
     @AppStorage("ShowBBCTV") public var ShowBBCTV = true
     @AppStorage("ShowBBCRadio") public var ShowBBCRadio = true
-    @AppStorage("ShowSTV") public var ShowITV = true
 
     @AppStorage("TestProxy") public var TestProxy = true
     @AppStorage("ShowDownloadedInSearch") public var ShowDownloadedInSearch = true

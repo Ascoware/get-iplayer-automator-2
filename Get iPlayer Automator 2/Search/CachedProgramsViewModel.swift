@@ -23,7 +23,6 @@ class CachedProgramsViewModel: ProgramCacheProviding {
     private static let dateFormatter = ISO8601DateFormatter()
 
     private var bbcTVShows: [CachedProgramme] = []
-    private var nonBbcTVShows: [CachedProgramme] = []
     private var radioShows: [CachedProgramme] = []
 
     @ObservationIgnored @Default(\.IgnoreAllTVNews) var ignoreAllTVNews
@@ -155,14 +154,12 @@ class CachedProgramsViewModel: ProgramCacheProviding {
         let shows = readCaches()
         bbcTVShows = shows[0]
         radioShows = shows[1]
-        nonBbcTVShows = shows[2]
     }
 
     public func readCaches() -> [[CachedProgramme]] {
         let bbc = readCacheFile(fileName: "tv.cache")
         let radio = readCacheFile(fileName: "radio.cache")
-        let nonBBC = readCacheFile(fileName: "itv.cache")
-        return [bbc, radio, nonBBC]
+        return [bbc, radio]
     }
 
     fileprivate func readCacheFile(fileName: String) -> [CachedProgramme] {
@@ -234,11 +231,11 @@ class CachedProgramsViewModel: ProgramCacheProviding {
         var filteredShows: [CachedProgramme]
         switch view {
         case .tvToday, .allTV:
-            filteredShows = bbcTVShows + nonBbcTVShows
+            filteredShows = bbcTVShows
         case .radioToday, .allRadio:
             filteredShows = radioShows
         default:
-            filteredShows = bbcTVShows + radioShows + nonBbcTVShows
+            filteredShows = bbcTVShows + radioShows
         }
 
         // Filter out programs by category first
@@ -357,6 +354,5 @@ class CachedProgramsViewModel: ProgramCacheProviding {
     public func findProgrammeFromPID(pid: String) -> CachedProgramme? {
         return bbcTVShows.first { $0.pid == pid }
             ?? radioShows.first { $0.pid == pid }
-            ?? nonBbcTVShows.first { $0.pid == pid }
     }
 }

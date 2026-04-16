@@ -141,7 +141,7 @@ class GetCurrentWebpage {
             let invalidPage = NSAlert()
             invalidPage.addButton(withTitle: "OK")
             invalidPage.messageText = "Programme Page Not Found"
-            invalidPage.informativeText = "Please ensure the frontmost browser tab is open to an iPlayer episode page or ITV Hub episode page."
+            invalidPage.informativeText = "Please ensure the frontmost browser tab is open to an iPlayer or STV episode page."
             invalidPage.alertStyle = .warning
             invalidPage.runModal()
         }

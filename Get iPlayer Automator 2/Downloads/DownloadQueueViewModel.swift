@@ -95,7 +95,7 @@ class DownloadQueueViewModel: DownloadQueueProviding {
         let download: Download
 
         if currProgram.type == .stv {
-            download = ITVDownload(programme: currProgram)
+            download = STVDownload(programme: currProgram)
         } else {
             download = BBCDownload(programme: currProgram)
         }

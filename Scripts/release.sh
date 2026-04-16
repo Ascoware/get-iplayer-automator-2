@@ -8,7 +8,7 @@ PUBLISH=0
 
 cd "$PROJECT_DIR"
 
-EXPORT_OPTIONS_PLIST=$(find "$PROJECT_DIR" -name "ExportOptions.plist" -not -path "*/build/*" -not -path "*/DerivedData/*" | head -1)
+EXPORT_OPTIONS_PLIST="$PROJECT_DIR/$PROJECT_NAME/ExportOptions.plist"
 
 # Sparkle sign_update tool (from SPM artifacts)
 SIGN_UPDATE=$(find ~/Library/Developer/Xcode/DerivedData -name "sign_update" \
