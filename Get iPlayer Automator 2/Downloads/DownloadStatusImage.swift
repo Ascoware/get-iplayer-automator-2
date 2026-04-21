@@ -17,8 +17,11 @@ struct DownloadStatusImage: View {
             case .new:
                 Image(systemName: "questionmark.circle")
                     .accessibilityLabel("Queued")
-            case .processedPID, .addedByPVR:
+            case .processedPID:
                 EmptyView()
+            case .addedByPVR:
+                Image(systemName: "recordingtape.circle")
+                    .accessibilityLabel("Added by PVR")
             case .downloadingProgram, .finishedProgramDownload:
                 Image(systemName: "arrow.down.circle")
                     .accessibilityLabel("Downloading")

@@ -174,6 +174,8 @@
 		7F0C17C22F7449E900E208A2 /* HTTPProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPProxy.swift; sourceTree = "<group>"; };
 		7F0C17C42F7449E900E208A2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7F0C17C52F7449E900E208A2 /* Get_iPlayer_Automator_2.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Get_iPlayer_Automator_2.entitlements; sourceTree = "<group>"; };
+		7FA1B0012F9900000000AA01 /* Bundled Tool.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Bundled Tool.entitlements"; sourceTree = "<group>"; };
+		7FA1B0022F9900000000AA02 /* yt-dlp_macos.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "yt-dlp_macos.entitlements"; sourceTree = "<group>"; };
 		7F0C17C62F7449E900E208A2 /* GetiPlayerAutomator-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GetiPlayerAutomator-Bridging-Header.h"; sourceTree = "<group>"; };
 		7F0C17C72F7449E900E208A2 /* GetiPlayerAutomatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetiPlayerAutomatorApp.swift; sourceTree = "<group>"; };
 		7F1E9D2A2A5D0427002C71A6 /* Get iPlayer Automator 2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Get iPlayer Automator 2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -365,6 +367,8 @@
 			isa = PBXGroup;
 			children = (
 				7F0C17C52F7449E900E208A2 /* Get_iPlayer_Automator_2.entitlements */,
+				7FA1B0012F9900000000AA01 /* Bundled Tool.entitlements */,
+				7FA1B0022F9900000000AA02 /* yt-dlp_macos.entitlements */,
 				7FAD2E792F763C02005E4303 /* Info.plist */,
 				7F0C177B2F7449E900E208A2 /* DownloadHistory */,
 				7F0C17882F7449E900E208A2 /* Downloads */,
@@ -514,7 +518,8 @@
 				"${CONFIGURATION_BUILD_DIR}/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/get_iplayer/utils/bin/ffmpeg",
 				"${CONFIGURATION_BUILD_DIR}/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/get_iplayer/utils/bin/AtomicParsley",
 				"${CONFIGURATION_BUILD_DIR}/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/yt-dlp_macos/yt-dlp_macos",
-				"$(SRCROOT)/Get iPlayer Automator 2/Get_iPlayer_Automator_2.entitlements",
+				"$(SRCROOT)/Get iPlayer Automator 2/Bundled Tool.entitlements",
+				"$(SRCROOT)/Get iPlayer Automator 2/yt-dlp_macos.entitlements",
 			);
 			outputFileListPaths = (
 			);
@@ -522,7 +527,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "echo ${CONFIGURATION_BUILD_DIR}\necho ${UNLOCALIZED_RESOURCES_FOLDER_PATH}\n\nfor (( i=0; i<$SCRIPT_INPUT_FILE_COUNT; i++)) \ndo\n    FILE=\"SCRIPT_INPUT_FILE_$i\"\n    codesign --force --options runtime --entitlements \"${SRCROOT}/Get iPlayer Automator 2/Get_iPlayer_Automator_2.entitlements\" --sign \"Developer ID Application: Scott Kovatch (L8BMU8WLEC)\" \"${!FILE}\"\ndone\n";
+			shellScript = "IDENTITY=\"Developer ID Application: Scott Kovatch (L8BMU8WLEC)\"\nTOOL_ENTITLEMENTS=\"${SRCROOT}/Get iPlayer Automator 2/Bundled Tool.entitlements\"\nYTDLP_ENTITLEMENTS=\"${SRCROOT}/Get iPlayer Automator 2/yt-dlp_macos.entitlements\"\n\nfor (( i=0; i<$SCRIPT_INPUT_FILE_COUNT; i++))\ndo\n    FILE_VAR=\"SCRIPT_INPUT_FILE_$i\"\n    FILE=\"${!FILE_VAR}\"\n\n    # Skip entitlements files (listed as dependencies, not binaries to sign)\n    if [[ \"$FILE\" == *.entitlements ]]; then\n        continue\n    fi\n\n    ENTITLEMENTS=\"$TOOL_ENTITLEMENTS\"\n    if [[ \"$(basename \"$FILE\")\" == \"yt-dlp_macos\" ]]; then\n        ENTITLEMENTS=\"$YTDLP_ENTITLEMENTS\"\n    fi\n\n    codesign --force --options runtime --entitlements \"$ENTITLEMENTS\" --sign \"$IDENTITY\" \"$FILE\"\ndone\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

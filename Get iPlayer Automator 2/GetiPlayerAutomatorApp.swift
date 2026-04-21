@@ -15,17 +15,19 @@ struct GetiPlayerAutomatorApp: App {
     @State private var logger = LogController()
     @State private var cachedProgramsViewModel: CachedProgramsViewModel
     @State private var downloadQueueViewModel: DownloadQueueViewModel
-    @State private var downloadHistoryModel = DownloadHistoryModel()
+    @State private var downloadHistoryModel: DownloadHistoryModel
     @State private var cacheUpdateService: CacheUpdateService
     @State private var pvrViewModel: PVRViewModel
     init() {
         let cache = CachedProgramsViewModel()
-        let queue = DownloadQueueViewModel(cacheProvider: cache)
+        let history = DownloadHistoryModel()
+        let queue = DownloadQueueViewModel(cacheProvider: cache, historyModel: history)
         let cacheService = CacheUpdateService(onCacheUpdated: {
             cache.reloadCachedShows()
         })
         let pvr = PVRViewModel(downloadQueueViewModel: queue)
         cachedProgramsViewModel = cache
+        downloadHistoryModel = history
         downloadQueueViewModel = queue
         cacheUpdateService = cacheService
         pvrViewModel = pvr

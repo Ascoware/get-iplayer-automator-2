@@ -16,12 +16,14 @@ import Observation
 class DownloadQueueViewModel: DownloadQueueProviding {
 
     @available(*, deprecated, message: "Use dependency injection instead")
-    static let shared = DownloadQueueViewModel(cacheProvider: CachedProgramsViewModel.shared)
+    static let shared = DownloadQueueViewModel(cacheProvider: CachedProgramsViewModel.shared, historyModel: DownloadHistoryModel(loadHistory: false))
 
     private let cacheProvider: any ProgramCacheProviding
+    private let historyModel: any DownloadHistoryProviding
 
-    public init(cacheProvider: any ProgramCacheProviding) {
+    public init(cacheProvider: any ProgramCacheProviding, historyModel: any DownloadHistoryProviding) {
         self.cacheProvider = cacheProvider
+        self.historyModel = historyModel
     }
 
     @ObservationIgnored @Default(\.addToTV) var addToTV: Bool
@@ -89,6 +91,15 @@ class DownloadQueueViewModel: DownloadQueueProviding {
 
         guard let currProgram = nextDownloadableShow() else {
             scheduleRetryIfNeeded()
+            return
+        }
+
+        if currProgram.type == .stv && historyModel.downloadHistory.contains(where: { $0.pid == currProgram.pid }) {
+            DDLogInfo("\(currProgram.name) is already in download history, skipping")
+            currProgram.status = .failed
+            currProgram.complete = true
+            currProgram.progress = "Failed: In download history"
+            startOneDownload()
             return
         }
 

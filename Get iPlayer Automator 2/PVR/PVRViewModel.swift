@@ -146,7 +146,7 @@ class PVRViewModel {
 
             guard channelMatches(tvNetwork, pattern: series.tvNetwork) else { continue }
 
-            downloadQueueViewModel.addToQueue(pid: pid)
+            downloadQueueViewModel.addToQueueFromPVR(pid: pid)
             foundAny = true
             DDLogInfo("PVR: queuing \(pid) (\(type), \(tvNetwork), \(dateStr)) for '\(series.showName)'")
         }
