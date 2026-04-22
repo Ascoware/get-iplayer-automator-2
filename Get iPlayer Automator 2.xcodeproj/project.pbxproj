@@ -174,12 +174,12 @@
 		7F0C17C22F7449E900E208A2 /* HTTPProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPProxy.swift; sourceTree = "<group>"; };
 		7F0C17C42F7449E900E208A2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7F0C17C52F7449E900E208A2 /* Get_iPlayer_Automator_2.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Get_iPlayer_Automator_2.entitlements; sourceTree = "<group>"; };
-		7FA1B0012F9900000000AA01 /* Bundled Tool.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Bundled Tool.entitlements"; sourceTree = "<group>"; };
-		7FA1B0022F9900000000AA02 /* yt-dlp_macos.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "yt-dlp_macos.entitlements"; sourceTree = "<group>"; };
 		7F0C17C62F7449E900E208A2 /* GetiPlayerAutomator-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GetiPlayerAutomator-Bridging-Header.h"; sourceTree = "<group>"; };
 		7F0C17C72F7449E900E208A2 /* GetiPlayerAutomatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetiPlayerAutomatorApp.swift; sourceTree = "<group>"; };
 		7F1E9D2A2A5D0427002C71A6 /* Get iPlayer Automator 2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Get iPlayer Automator 2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F560C1C2F82167C00A30F18 /* CachedProgramme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedProgramme.swift; sourceTree = "<group>"; };
+		7FA1B0012F9900000000AA01 /* Bundled Tool.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Bundled Tool.entitlements"; sourceTree = "<group>"; };
+		7FA1B0022F9900000000AA02 /* yt-dlp_macos.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "yt-dlp_macos.entitlements"; sourceTree = "<group>"; };
 		7FA2EFB92A7CB8660049CE14 /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = System/Library/Frameworks/ScriptingBridge.framework; sourceTree = SDKROOT; };
 		7FAD2E792F763C02005E4303 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7FE5EED82F90AC020079290B /* ProgramInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramInfoView.swift; sourceTree = "<group>"; };

@@ -1,7 +1,7 @@
 #!/bin/sh
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
-INFOPLIST_FILE=$(find "$PROJECT_DIR" -name "Info.plist" -not -path "*/Carthage/*" -not -path "*/build/*" -not -path "*/DerivedData/*" | head -1)
+INFOPLIST_FILE="$PROJECT_DIR/Get iPlayer Automator 2/Info.plist"
 buildString=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "${INFOPLIST_FILE}")
 buildDate=$(echo $buildString | cut -c 1-8)
 buildNumber=$(echo $buildString | cut -c 9-11)
