@@ -19,7 +19,7 @@ class GetCurrentWebpage {
     var programs: [Programme] = []
     var canRetrieveMetadata = true
 
-    private func extractMetadata(url: String, tabTitle: String, pageSource: String) {
+    private func extractMetadata(url: String, tabTitle: String, pageSource: String) async {
         if url.hasPrefix("https://www.bbc.co.uk/iplayer/episode/") {
             // PID is always the second-to-last element in the URL.
             var pid = ""
@@ -137,6 +137,31 @@ class GetCurrentWebpage {
                     DDLogError("Got some other error: \(error)")
                 }
             }
+        } else if url.hasPrefix("https://player.stv.tv/summary/") {
+            do {
+                let episodes = try await STVMetadataExtractor.getSeriesEpisodes(html: pageSource)
+                programs.append(contentsOf: episodes)
+            } catch {
+                canRetrieveMetadata = false
+                switch error {
+                case STVMetadataError.noMetadataFound:
+                    let alert = NSAlert()
+                    alert.addButton(withTitle: "OK")
+                    alert.messageText = "Series not available"
+                    alert.informativeText = "No episode information was found on this page. The series may not be available in your region."
+                    alert.alertStyle = .warning
+                    alert.runModal()
+                case STVMetadataError.drmProtectedError:
+                    let alert = NSAlert()
+                    alert.addButton(withTitle: "OK")
+                    alert.messageText = "Protected content"
+                    alert.informativeText = "This series is DRM protected and cannot be retrieved with Get iPlayer Automator."
+                    alert.alertStyle = .warning
+                    alert.runModal()
+                default:
+                    DDLogError("STV series extraction error: \(error)")
+                }
+            }
         } else {
             let invalidPage = NSAlert()
             invalidPage.addButton(withTitle: "OK")
@@ -190,7 +215,7 @@ class GetCurrentWebpage {
                     request.addValue("Mozilla/5.0", forHTTPHeaderField: "User-Agent")
                     if let (data, _) = try? await URLSession.shared.data(for: request),
                        let html = String(data: data, encoding: .utf8) {
-                        self.extractMetadata(url: url, tabTitle: name, pageSource: html)
+                        await self.extractMetadata(url: url, tabTitle: name, pageSource: html)
                     }
                 }
             }
@@ -221,7 +246,7 @@ class GetCurrentWebpage {
                     request.addValue("Mozilla/5.0", forHTTPHeaderField: "User-Agent")
                     if let (data, _) = try? await URLSession.shared.data(for: request),
                        let html = String(data: data, encoding: .utf8) {
-                        self.extractMetadata(url: url, tabTitle: title, pageSource: html)
+                        await self.extractMetadata(url: url, tabTitle: title, pageSource: html)
                     }
                 }
             }

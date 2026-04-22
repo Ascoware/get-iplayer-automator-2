@@ -94,4 +94,58 @@ class STVMetadataExtractor {
         return newProgram
     }
 
+    @MainActor static func getSeriesEpisodes(html: String) async throws -> [Programme] {
+        guard let htmlPage = try? HTML(html: html, encoding: .utf8),
+              let propertiesElement = htmlPage.at_xpath("//script[@id='__NEXT_DATA__']"),
+              let propertiesContent = propertiesElement.content else {
+            throw STVMetadataError.noMetadataFound
+        }
+
+        let json = JSON(parseJSON: propertiesContent)
+        let data = json["props"]["pageProps"]["data"]
+
+        // Programme-level DRM check
+        if data["programmeData"]["drmEnabled"].boolValue {
+            throw STVMetadataError.drmProtectedError
+        }
+
+        let showName = data["programmeHeader"]["name"].stringValue
+        guard !showName.isEmpty else {
+            throw STVMetadataError.noMetadataFound
+        }
+
+        // Find the standard episode tab (type=episode, accessibility=null — excludes audio-described tab)
+        guard let episodeTab = data["tabs"].array?.first(where: {
+            $0["type"].stringValue == "episode" && $0["accessibility"].type == .null
+        }) else {
+            throw STVMetadataError.noMetadataFound
+        }
+
+        var programmes: [Programme] = []
+
+        for episode in episodeTab["data"].arrayValue {
+            guard let link = episode["link"].string,
+                  let episodeURL = URL(string: "https://player.stv.tv" + link) else {
+                continue
+            }
+
+            var request = URLRequest(url: episodeURL)
+            request.setValue("Mozilla/5.0", forHTTPHeaderField: "User-Agent")
+            guard let (episodeData, _) = try? await URLSession.shared.data(for: request),
+                  let episodeHTML = String(data: episodeData, encoding: .utf8) else {
+                DDLogWarn("Failed to fetch episode page: \(episodeURL)")
+                continue
+            }
+
+            do {
+                let prog = try getShowMetadata(html: episodeHTML)
+                programmes.append(prog)
+            } catch {
+                DDLogWarn("Failed to extract metadata from \(episodeURL): \(error)")
+            }
+        }
+
+        return programmes
+    }
+
 }
