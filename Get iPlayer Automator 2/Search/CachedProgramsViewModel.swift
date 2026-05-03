@@ -213,7 +213,6 @@ class CachedProgramsViewModel: ProgramCacheProviding {
                 thumbnail: URL(string: elements[13]),
                 timeadded: timeAdded,
                 radio: isRadio,
-                podcast: false,
                 realPID: ""
             )
             cachedPrograms.append(p)

@@ -225,7 +225,6 @@ struct ProgramInfoView: View {
         thumbnail: URL(string: "https://ichef.bbci.co.uk/images/ic/192xn/p0fzss2c.jpg"),
         timeadded: nil,
         radio: false,
-        podcast: false,
         realPID: ""
     ))
 }

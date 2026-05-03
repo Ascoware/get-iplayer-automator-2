@@ -145,7 +145,6 @@ class BBCDownload: Download {
 
         if tagRadio {
             args.append("--tag-podcast-radio")
-            show.podcast = true
         }
 
         show.status = .downloadingProgram

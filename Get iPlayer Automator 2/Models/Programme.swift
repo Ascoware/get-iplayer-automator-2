@@ -90,7 +90,7 @@ class Programme: @preconcurrency Codable {
         case status, complete, successful
         case index, type, name, episode, seriesNum, episodeNum
         case pid, channel, available, expires, duration, desc
-        case web, thumbnail, timeadded, radio, podcast, realPID
+        case web, thumbnail, timeadded, radio, realPID
         case subtitlePath, downloadPath
     }
 
@@ -114,7 +114,6 @@ class Programme: @preconcurrency Codable {
         thumbnail = try container.decodeIfPresent(URL.self, forKey: .thumbnail)
         timeadded = try container.decodeIfPresent(Date.self, forKey: .timeadded)
         radio = try container.decodeIfPresent(Bool.self, forKey: .radio) ?? false
-        podcast = try container.decodeIfPresent(Bool.self, forKey: .podcast) ?? false
         realPID = try container.decodeIfPresent(String.self, forKey: .realPID) ?? ""
         subtitlePath = try container.decodeIfPresent(String.self, forKey: .subtitlePath) ?? ""
         downloadPath = try container.decodeIfPresent(String.self, forKey: .downloadPath) ?? ""
@@ -141,7 +140,6 @@ class Programme: @preconcurrency Codable {
         try container.encodeIfPresent(thumbnail, forKey: .thumbnail)
         try container.encodeIfPresent(timeadded, forKey: .timeadded)
         try container.encode(radio, forKey: .radio)
-        try container.encode(podcast, forKey: .podcast)
         try container.encode(realPID, forKey: .realPID)
         try container.encode(subtitlePath, forKey: .subtitlePath)
         try container.encode(downloadPath, forKey: .downloadPath)
@@ -170,7 +168,6 @@ class Programme: @preconcurrency Codable {
         return Programme.dateFormatter.string(from: available)
     }
 
-    var podcast: Bool = false
     var realPID: String = ""
     var subtitlePath: String = ""
     var downloadPath: String = ""

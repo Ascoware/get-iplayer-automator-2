@@ -262,17 +262,14 @@ class DownloadQueueViewModel: DownloadQueueProviding {
 
         switch (show.type) {
         case .radio:
-            if (!show.podcast) {
-                iTunes = SBApplication(bundleIdentifier:"com.apple.Music")
-                appName = "Music"
-            }
+            iTunes = SBApplication(bundleIdentifier:"com.apple.Music")
+            appName = "Music"
 
         default:
             iTunes = SBApplication(bundleIdentifier:"com.apple.TV")
             appName = "TV"
         }
 
-        // In this case it's a podcast and we're on Catalina or later. Can't do much with it, unfortunately.
         guard let iTunes, let appName else {
             show.progress = "Complete: No media app available"
             show.status = .successful

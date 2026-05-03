@@ -26,7 +26,7 @@ class MockCachedProgramsViewModel: ProgramCacheProviding {
             desc: "A sample programme for preview",
             web: URL(string: "https://www.bbc.co.uk/programmes/sample001"),
             thumbnail: URL(string: "https://ichef.bbci.co.uk/images/ic/192xn/sample.jpg"),
-            timeadded: nil, radio: false, podcast: false, realPID: ""
+            timeadded: nil, radio: false, realPID: ""
         )
         let program2 = CachedProgramme(
             pid: "sample002", index: 2, type: .tv,
@@ -36,7 +36,7 @@ class MockCachedProgramsViewModel: ProgramCacheProviding {
             desc: "Another sample programme",
             web: URL(string: "https://www.bbc.co.uk/programmes/sample002"),
             thumbnail: URL(string: "https://ichef.bbci.co.uk/images/ic/192xn/sample2.jpg"),
-            timeadded: nil, radio: false, podcast: false, realPID: ""
+            timeadded: nil, radio: false, realPID: ""
         )
         mockPrograms = [program1, program2]
         viewCounts = Dictionary(uniqueKeysWithValues: SearchViewType.allCases.compactMap { type in

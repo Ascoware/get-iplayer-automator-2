@@ -67,7 +67,6 @@ class LegacyProgramme: NSObject, NSSecureCoding {
     var season: Int = 0
     var episode: Int = 0
     var processedPID: Bool = false
-    var podcast: Bool = false
     var realPID: String = ""
     var subtitlePath: String = ""
     var desc: String = ""
@@ -96,7 +95,6 @@ class LegacyProgramme: NSObject, NSSecureCoding {
         season = coder.decodeInteger(forKey: "season")
         episode = coder.decodeInteger(forKey: "episode")
         processedPID = coder.decodeBool(forKey: "processedPID")
-        podcast = coder.decodeBool(forKey: "podcast")
         realPID = coder.decodeObject(forKey: "realPID") as? String ?? ""
         subtitlePath = coder.decodeObject(forKey: "subtitlePath") as? String ?? ""
         desc = coder.decodeObject(forKey: "desc") as? String ?? ""
@@ -128,7 +126,6 @@ class LegacyProgramme: NSObject, NSSecureCoding {
         p.desc = desc
         p.duration = duration
         p.radio = radio
-        p.podcast = podcast
         p.realPID = realPID
         p.complete = complete
 

@@ -28,7 +28,6 @@ struct CachedProgramme: Identifiable, Hashable, Comparable {
     let thumbnail: URL?
     let timeadded: Date?
     let radio: Bool
-    let podcast: Bool
     let realPID: String
 
     var id: String { pid }
@@ -74,7 +73,6 @@ struct CachedProgramme: Identifiable, Hashable, Comparable {
         p.thumbnail = thumbnail
         p.timeadded = timeadded
         p.radio = radio
-        p.podcast = podcast
         p.realPID = realPID
         return p
     }
