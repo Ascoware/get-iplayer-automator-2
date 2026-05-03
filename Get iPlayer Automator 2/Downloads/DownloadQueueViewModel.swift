@@ -179,9 +179,9 @@ class DownloadQueueViewModel: DownloadQueueProviding {
         }
     }
     
-    public func getCurrentWebpage() {
+    public func getCurrentWebpage() async {
         let scanner = GetCurrentWebpage()
-        scanner.getCurrentWebpage()
+        await scanner.getCurrentWebpage()
 
         // Add BBC programs by PID (looked up via cache or metadata fetch)
         for pid in scanner.programIDs {
@@ -189,6 +189,19 @@ class DownloadQueueViewModel: DownloadQueueProviding {
         }
 
         // Add STV programs directly (already have full metadata)
+        for program in scanner.programs {
+            addToQueue(program: program)
+        }
+    }
+
+    public func processExtensionPayload() async {
+        let scanner = GetCurrentWebpage()
+        await scanner.processExtensionPayload()
+
+        for pid in scanner.programIDs {
+            addToQueue(pid: pid)
+        }
+
         for program in scanner.programs {
             addToQueue(program: program)
         }

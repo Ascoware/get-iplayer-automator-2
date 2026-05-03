@@ -94,7 +94,7 @@ class STVMetadataExtractor {
         return newProgram
     }
 
-    @MainActor static func getSeriesEpisodes(html: String) async throws -> [Programme] {
+    @MainActor static func getSeriesEpisodes(html: String, selectedSeriesId: String? = nil) async throws -> [Programme] {
         guard let htmlPage = try? HTML(html: html, encoding: .utf8),
               let propertiesElement = htmlPage.at_xpath("//script[@id='__NEXT_DATA__']"),
               let propertiesContent = propertiesElement.content else {
@@ -114,21 +114,30 @@ class STVMetadataExtractor {
             throw STVMetadataError.noMetadataFound
         }
 
-        // Find the standard episode tab (type=episode, accessibility=null — excludes audio-described tab)
-        guard let episodeTab = data["tabs"].array?.first(where: {
+        // Each series gets its own tab. The tab the page rendered server-side has its
+        // episodes inline in `data`; the others have `data: null` and a `params` block
+        // pointing at the player API.
+        let episodeTabs = data["tabs"].arrayValue.filter {
             $0["type"].stringValue == "episode" && $0["accessibility"].type == .null
-        }) else {
+        }
+        guard !episodeTabs.isEmpty else {
             throw STVMetadataError.noMetadataFound
         }
 
+        // Pick the tab matching the selected series fragment (e.g. "all31-kingdom-series-3"),
+        // falling back to the first/only tab.
+        let episodeTab: JSON = {
+            if let id = selectedSeriesId,
+               let match = episodeTabs.first(where: { $0["id"].stringValue == id }) {
+                return match
+            }
+            return episodeTabs[0]
+        }()
+
+        let episodeURLs = await episodeURLs(for: episodeTab)
         var programmes: [Programme] = []
 
-        for episode in episodeTab["data"].arrayValue {
-            guard let link = episode["link"].string,
-                  let episodeURL = URL(string: "https://player.stv.tv" + link) else {
-                continue
-            }
-
+        for episodeURL in episodeURLs {
             var request = URLRequest(url: episodeURL)
             request.setValue("Mozilla/5.0", forHTTPHeaderField: "User-Agent")
             guard let (episodeData, _) = try? await URLSession.shared.data(for: request),
@@ -146,6 +155,48 @@ class STVMetadataExtractor {
         }
 
         return programmes
+    }
+
+    /// Resolve a series tab to a list of episode page URLs. Inline `data` is used when
+    /// present; otherwise the player API is queried using the tab's `params`.
+    private static func episodeURLs(for episodeTab: JSON) async -> [URL] {
+        if let inline = episodeTab["data"].array, !inline.isEmpty {
+            return inline.compactMap { episode in
+                guard let link = episode["link"].string, !link.isEmpty else { return nil }
+                return URL(string: "https://player.stv.tv" + link)
+            }
+        }
+
+        let params = episodeTab["params"]
+        let path = params["path"].stringValue
+        guard !path.isEmpty else { return [] }
+
+        var components = URLComponents(string: "https://player.api.stv.tv/v1" + path)
+        var items: [URLQueryItem] = []
+        for (key, value) in params["query"].dictionaryValue {
+            items.append(URLQueryItem(name: key, value: value.stringValue))
+        }
+        if !items.contains(where: { $0.name == "limit" }) {
+            items.append(URLQueryItem(name: "limit", value: "200"))
+        }
+        components?.queryItems = items
+
+        guard let apiURL = components?.url else {
+            return []
+        }
+
+        var request = URLRequest(url: apiURL)
+        request.setValue("Mozilla/5.0", forHTTPHeaderField: "User-Agent")
+        guard let (data, _) = try? await URLSession.shared.data(for: request) else {
+            DDLogWarn("Failed to fetch series episodes from player API: \(apiURL)")
+            return []
+        }
+
+        let apiJSON = JSON(data)
+        return apiJSON["results"].arrayValue.compactMap {
+            guard let permalink = $0["_permalink"].string else { return nil }
+            return URL(string: permalink)
+        }
     }
 
 }

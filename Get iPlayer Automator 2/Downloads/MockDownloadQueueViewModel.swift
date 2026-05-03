@@ -59,7 +59,11 @@ class MockDownloadQueueViewModel: DownloadQueueProviding {
         retryFireDate = nil
     }
     
-    func getCurrentWebpage() {
+    func getCurrentWebpage() async {
+        // Mock: do nothing
+    }
+
+    func processExtensionPayload() async {
         // Mock: do nothing
     }
     

@@ -66,7 +66,7 @@ struct DownloadQueueToolbar: CustomizableToolbarContent {
             placement: .automatic,
             showsByDefault: true) {
                 Button {
-                    downloadQueueViewModel.getCurrentWebpage()
+                    Task { await downloadQueueViewModel.getCurrentWebpage() }
                 } label: {
                     Label("Use Current Webpage", systemImage: "globe")
                         .imageScale(.large)

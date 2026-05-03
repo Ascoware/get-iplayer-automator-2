@@ -19,7 +19,7 @@ class GetCurrentWebpage {
     var programs: [Programme] = []
     var canRetrieveMetadata = true
 
-    private func extractMetadata(url: String, tabTitle: String, pageSource: String) async {
+    func extractMetadata(url: String, tabTitle: String, pageSource: String) async {
         if url.hasPrefix("https://www.bbc.co.uk/iplayer/episode/") {
             // PID is always the second-to-last element in the URL.
             var pid = ""
@@ -138,8 +138,11 @@ class GetCurrentWebpage {
                 }
             }
         } else if url.hasPrefix("https://player.stv.tv/summary/") {
+            // The selected series is encoded in the URL fragment, e.g.
+            // .../summary/all31-kingdom#all31-kingdom-series-3
+            let selectedSeriesId = URLComponents(string: url)?.fragment
             do {
-                let episodes = try await STVMetadataExtractor.getSeriesEpisodes(html: pageSource)
+                let episodes = try await STVMetadataExtractor.getSeriesEpisodes(html: pageSource, selectedSeriesId: selectedSeriesId)
                 programs.append(contentsOf: episodes)
             } catch {
                 canRetrieveMetadata = false
@@ -173,7 +176,7 @@ class GetCurrentWebpage {
 
     }
 
-    public func getCurrentWebpage() {
+    public func getCurrentWebpage() async {
         //Get Default Browser
         @Default(\.defaultBrowser) var browser
 
@@ -210,13 +213,11 @@ class GetCurrentWebpage {
                let url = tab.URL,
                let name = tab.name,
                let pageURL = URL(string: url) {
-                Task {
-                    var request = URLRequest(url: pageURL)
-                    request.addValue("Mozilla/5.0", forHTTPHeaderField: "User-Agent")
-                    if let (data, _) = try? await URLSession.shared.data(for: request),
-                       let html = String(data: data, encoding: .utf8) {
-                        await self.extractMetadata(url: url, tabTitle: name, pageSource: html)
-                    }
+                var request = URLRequest(url: pageURL)
+                request.addValue("Mozilla/5.0", forHTTPHeaderField: "User-Agent")
+                if let (data, _) = try? await URLSession.shared.data(for: request),
+                   let html = String(data: data, encoding: .utf8) {
+                    await self.extractMetadata(url: url, tabTitle: name, pageSource: html)
                 }
             }
             break
@@ -241,16 +242,32 @@ class GetCurrentWebpage {
                let url = tab.URL,
                let title = tab.title,
                let pageURL = URL(string: url) {
-                Task {
-                    var request = URLRequest(url: pageURL)
-                    request.addValue("Mozilla/5.0", forHTTPHeaderField: "User-Agent")
-                    if let (data, _) = try? await URLSession.shared.data(for: request),
-                       let html = String(data: data, encoding: .utf8) {
-                        await self.extractMetadata(url: url, tabTitle: title, pageSource: html)
-                    }
+                var request = URLRequest(url: pageURL)
+                request.addValue("Mozilla/5.0", forHTTPHeaderField: "User-Agent")
+                if let (data, _) = try? await URLSession.shared.data(for: request),
+                   let html = String(data: data, encoding: .utf8) {
+                    await self.extractMetadata(url: url, tabTitle: title, pageSource: html)
                 }
             }
         }
+    }
+
+    public func processExtensionPayload() async {
+        guard let containerURL = FileManager.default.containerURL(
+            forSecurityApplicationGroupIdentifier: "group.com.ascoware.get-iplayer-automator-2") else {
+            DDLogError("[GiA] processExtensionPayload: no App Group container")
+            return
+        }
+        let fileURL = containerURL.appendingPathComponent("pending_page.json")
+        guard let data = try? Data(contentsOf: fileURL),
+              let payload = try? JSONSerialization.jsonObject(with: data) as? [String: String],
+              let url = payload["url"] else {
+            return
+        }
+        let title = payload["title"] ?? ""
+        let html  = payload["html"]  ?? ""
+        try? FileManager.default.removeItem(at: fileURL)
+        await extractMetadata(url: url, tabTitle: title, pageSource: html)
     }
 
     private func searchForPIDs(url: String) -> [String] {

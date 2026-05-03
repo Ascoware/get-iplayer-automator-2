@@ -1,0 +1,6 @@
+// Shared by the main app and the Safari extension so CFBundleShortVersionString
+// stays in sync. Edited by Scripts/release.sh — keep this format
+// (one setting per line, no trailing inline comments) so the sed scripts work.
+
+MARKETING_VERSION = 2.0.0
+CURRENT_PROJECT_VERSION = 202605021938

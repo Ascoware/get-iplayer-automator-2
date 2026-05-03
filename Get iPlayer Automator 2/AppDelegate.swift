@@ -11,6 +11,22 @@ import SwiftUI
 import UserNotifications
 import CocoaLumberjackSwift
 
+private let extensionNewPageNotification = "com.ascoware.get-iplayer-automator-2.newpage"
+
+private func extensionNewPageCallback(
+    center: CFNotificationCenter?,
+    observer: UnsafeMutableRawPointer?,
+    name: CFNotificationName?,
+    object: UnsafeRawPointer?,
+    userInfo: CFDictionary?
+) {
+    guard let observer else { return }
+    let delegate = Unmanaged<AppDelegate>.fromOpaque(observer).takeUnretainedValue()
+    DispatchQueue.main.async {
+        delegate.handleExtensionNewPage()
+    }
+}
+
 class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
 
     var downloadQueueViewModel: DownloadQueueViewModel? = nil
@@ -30,6 +46,26 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
                 DDLogError("Error while requesting notification authorization: \(error)")
             }
         }
+
+        // Register for the Safari extension's Darwin notification
+        CFNotificationCenterAddObserver(
+            CFNotificationCenterGetDarwinNotifyCenter(),
+            Unmanaged.passUnretained(self).toOpaque(),
+            extensionNewPageCallback,
+            extensionNewPageNotification as CFString,
+            nil,
+            .deliverImmediately)
+    }
+
+    func applicationDidBecomeActive(_ notification: Notification) {
+        // Pick up any page the Safari extension wrote before the app was running.
+        handleExtensionNewPage()
+    }
+
+    @MainActor
+    func handleExtensionNewPage() {
+        guard let downloadQueueViewModel else { return }
+        Task { await downloadQueueViewModel.processExtensionPayload() }
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
@@ -84,6 +120,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
 
         // Save queue data
         downloadQueueViewModel?.saveAppData()
+
+        CFNotificationCenterRemoveObserver(
+            CFNotificationCenterGetDarwinNotifyCenter(),
+            Unmanaged.passUnretained(self).toOpaque(),
+            CFNotificationName(extensionNewPageNotification as CFString),
+            nil)
     }
 
     func updaterDidFindValidUpdate(item: SUAppcastItem)

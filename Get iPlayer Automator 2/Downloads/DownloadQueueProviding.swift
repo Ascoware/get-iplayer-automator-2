@@ -26,6 +26,7 @@ protocol DownloadQueueProviding: AnyObject {
     func startDownloads()
     func stopDownloads()
     func cancelRetryTimer()
-    func getCurrentWebpage()
+    func getCurrentWebpage() async
+    func processExtensionPayload() async
     func saveAppData()
 }
