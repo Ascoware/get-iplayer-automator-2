@@ -179,6 +179,9 @@ public class Defaults: ObservableObject {
     @AppStorage("TestProxy") public var TestProxy = true
     @AppStorage("ShowDownloadedInSearch") public var ShowDownloadedInSearch = true
 
+    @AppStorage("searchSortColumn") public var searchSortColumn: String = "available"
+    @AppStorage("searchSortAscending") public var searchSortAscending: Bool = true
+
     public static let shared = Defaults()
 }
 

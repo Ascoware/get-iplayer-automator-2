@@ -14,11 +14,33 @@ struct SearchTableView: View {
     var tableData: [CachedProgramme]
     var downloadedPIDs: Set<String> = []
 
-    @State private var sortOrder = [KeyPathComparator(\CachedProgramme.available)]
+    @Default(\.searchSortColumn) private var searchSortColumn
+    @Default(\.searchSortAscending) private var searchSortAscending
+
+    @State private var sortOrder: [KeyPathComparator<CachedProgramme>] = []
     @Environment(\.openWindow) private var openWindow
 
     @State private var sortedTableData: [CachedProgramme] = []
     @State private var programInfoTarget: CachedProgramme? = nil
+
+    private static func comparator(column: String, ascending: Bool) -> KeyPathComparator<CachedProgramme> {
+        let order: SortOrder = ascending ? .forward : .reverse
+        switch column {
+        case "name":      return KeyPathComparator(\CachedProgramme.name, order: order)
+        case "episode":   return KeyPathComparator(\CachedProgramme.episode, order: order)
+        case "channel":   return KeyPathComparator(\CachedProgramme.channel, order: order)
+        default:          return KeyPathComparator(\CachedProgramme.available, order: order)
+        }
+    }
+
+    private func columnKey(for comparator: KeyPathComparator<CachedProgramme>) -> String {
+        switch comparator.keyPath {
+        case \CachedProgramme.name:    return "name"
+        case \CachedProgramme.episode: return "episode"
+        case \CachedProgramme.channel: return "channel"
+        default:                       return "available"
+        }
+    }
 
     var selectedProgrammes: [CachedProgramme] {
         guard !selection.isEmpty else {
@@ -75,8 +97,19 @@ struct SearchTableView: View {
                     }
                 }
                 .onChange(of: tableData) { sortedTableData = tableData.sorted(using: sortOrder) }
-                .onChange(of: sortOrder)  { sortedTableData = tableData.sorted(using: sortOrder) }
-                .task { sortedTableData = tableData.sorted(using: sortOrder) }
+                .onChange(of: sortOrder)  {
+                    sortedTableData = tableData.sorted(using: sortOrder)
+                    if let first = sortOrder.first {
+                        searchSortColumn = columnKey(for: first)
+                        searchSortAscending = (first.order == .forward)
+                    }
+                }
+                .task {
+                    if sortOrder.isEmpty {
+                        sortOrder = [Self.comparator(column: searchSortColumn, ascending: searchSortAscending)]
+                    }
+                    sortedTableData = tableData.sorted(using: sortOrder)
+                }
                 .contextMenu(forSelectionType: CachedProgramme.ID.self) { programs in
                     Button("Add To Download Queue") {
                         addItemsToQueueAndOpen(pids: programs)
@@ -122,7 +155,7 @@ struct SearchTableView: View {
         available: Date(), expires: nil, duration: 0,
         desc: "A sample programme for preview",
         web: nil, thumbnail: nil, timeadded: nil,
-        radio: false, podcast: false, realPID: ""
+        radio: false, realPID: ""
     )
     let program2 = CachedProgramme(
         pid: "sample002", index: 2, type: .tv,
@@ -131,7 +164,7 @@ struct SearchTableView: View {
         available: Date(), expires: nil, duration: 0,
         desc: "Another sample programme",
         web: nil, thumbnail: nil, timeadded: nil,
-        radio: false, podcast: false, realPID: ""
+        radio: false, realPID: ""
     )
     SearchTableView(
         downloadQueueViewModel: mockQueue,
