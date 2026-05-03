@@ -129,6 +129,14 @@ class DownloadQueueViewModel: DownloadQueueProviding {
                 }
             }
 
+            if currProgram.successful {
+                if currProgram.type == .stv {
+                    historyModel.addToHistory(programs: [currProgram])
+                } else {
+                    historyModel.readDownloadHistory()
+                }
+            }
+
             currentDownload = nil
 
             // Only continue to the next download if downloads weren't cancelled
