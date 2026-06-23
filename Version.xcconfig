@@ -3,4 +3,4 @@
 // (one setting per line, no trailing inline comments) so the sed scripts work.
 
 MARKETING_VERSION = 2.0.0
-CURRENT_PROJECT_VERSION = 202605021938
+CURRENT_PROJECT_VERSION = 202605061528
