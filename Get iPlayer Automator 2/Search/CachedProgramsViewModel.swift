@@ -143,6 +143,7 @@ class CachedProgramsViewModel: ProgramCacheProviding {
                 // so we bump unconditionally. The cost is a re-filter which is cheap.
                 self?.filterRevision &+= 1
             }
+        reloadCachedShows()
     }
 
     /// Reload cached shows from disk.
@@ -240,13 +241,13 @@ class CachedProgramsViewModel: ProgramCacheProviding {
         // Filter out programs by category first
         if ignoreAllTVNews && !view.radio() {
             filteredShows = filteredShows.filter { show in
-                !(!show.radio && show.name.localizedCaseInsensitiveContains("news"))
+                !(!show.radio && show.name.hasSuffix("News"))
             }
         }
 
         if ignoreAllRadioNews && !view.tv() {
             filteredShows = filteredShows.filter { show in
-                !(show.radio && show.name.localizedCaseInsensitiveContains("news"))
+                !(show.radio && show.name.hasSuffix("News"))
             }
         }
 

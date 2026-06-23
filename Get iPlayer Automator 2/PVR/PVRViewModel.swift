@@ -24,6 +24,7 @@ class PVRViewModel {
 
     init(downloadQueueViewModel: any DownloadQueueProviding) {
         self.downloadQueueViewModel = downloadQueueViewModel
+        loadSeriesData()
     }
 
     // MARK: - Series Management

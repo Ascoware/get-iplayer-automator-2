@@ -24,6 +24,7 @@ class DownloadQueueViewModel: DownloadQueueProviding {
     public init(cacheProvider: any ProgramCacheProviding, historyModel: any DownloadHistoryProviding) {
         self.cacheProvider = cacheProvider
         self.historyModel = historyModel
+        loadAppData()
     }
 
     @ObservationIgnored @Default(\.addToTV) var addToTV: Bool
