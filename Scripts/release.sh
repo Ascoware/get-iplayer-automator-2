@@ -159,11 +159,17 @@ if [ "$PUBLISH" -eq 1 ]; then
                 type=\"application/octet-stream\" />
         </item>"
 
-    git checkout gh-pages
+    # Edit gh-pages in an isolated worktree so the main working tree is never
+    # switched (switching branches in place clobbers build artifacts and leaves
+    # tracked files looking deleted/untracked).
+    GHPAGES_WT="$(mktemp -d)/gh-pages"
+    git fetch origin gh-pages:gh-pages   # fast-forward local gh-pages to origin
+    git worktree add "$GHPAGES_WT" gh-pages
+
     for APPCAST in appcast.xml appcast_pre.xml; do
-        # Insert new item after <channel> opening tags (before first <item>)
-        python3 - "$APPCAST" "$NEW_ITEM" <<'PYEOF'
-import sys, re
+        # Insert the new item before the first <item>
+        python3 - "$GHPAGES_WT/$APPCAST" "$NEW_ITEM" <<'PYEOF'
+import sys
 path, item = sys.argv[1], sys.argv[2]
 content = open(path).read()
 # Insert before the first <item>
@@ -172,10 +178,10 @@ open(path, 'w').write(updated)
 PYEOF
     done
 
-    git add appcast.xml appcast_pre.xml
-    git commit -m "release: ${TAG}"
-    git push origin gh-pages
-    git checkout main
+    git -C "$GHPAGES_WT" add appcast.xml appcast_pre.xml
+    git -C "$GHPAGES_WT" commit -m "release: ${TAG}"
+    git -C "$GHPAGES_WT" push origin gh-pages
+    git worktree remove "$GHPAGES_WT" --force
 
     echo ""
     echo "Draft release created: https://github.com/${REPO}/releases"
