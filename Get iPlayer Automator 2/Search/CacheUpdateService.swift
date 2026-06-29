@@ -58,6 +58,7 @@ class CacheUpdateService {
         }
 
         isUpdating = true
+        var refreshSucceeded = false
 
         let cacheRefreshSeconds = Int(cacheExpiryTime) * 3600
 
@@ -101,22 +102,33 @@ class CacheUpdateService {
                     self.processOutput(line)
                 }
             }
+            refreshSucceeded = true
         } catch {
             DDLogError("Cache update failed: \(error)")
         }
 
         isUpdating = false
 
-        if cacheWasUpdated {
-            await sendUpdateNotification()
+        // Reload the in-memory cache from disk whenever the refresh completes
+        // successfully. We can't reliably detect whether the on-disk cache
+        // actually changed from get_iplayer's output (its progress dots arrive
+        // grouped, not as single "." lines), so don't gate the reload on
+        // `cacheWasUpdated` — reloading from disk is cheap and idempotent.
+        if refreshSucceeded {
             DDLogInfo("BBC Index Updated")
             onCacheUpdated()
+
+            // Only post a user-facing notification when we have positive
+            // evidence the index changed, to avoid spurious "Index Updated"
+            // alerts on no-op refreshes.
+            if cacheWasUpdated {
+                await sendUpdateNotification()
+            }
         }
     }
 
     private func processOutput(_ output: String) {
         let lines = output.components(separatedBy: .newlines)
-        let maxProgress = ".........."
 
         for line in lines {
             if line.hasPrefix("INFO:") {
@@ -128,16 +140,14 @@ class CacheUpdateService {
                 DDLogWarn("\(line)")
             } else if line.hasPrefix("ERROR:") {
                 DDLogError("\(line)")
-            } else if line == "." {
-                var newProgress = currentProgress + "."
-
-                if newProgress.hasSuffix(maxProgress) {
-                    if let range = newProgress.range(of: maxProgress) {
-                        newProgress.replaceSubrange(range, with: "")
-                    }
-                }
-
-                currentProgress = newProgress
+            } else if !line.isEmpty, line.allSatisfy({ $0 == "." }) {
+                // get_iplayer prints feed-download progress as runs of dots
+                // with no newlines, so they reach us grouped (e.g. "....."),
+                // not as single "." lines. Any all-dots line means a real
+                // refresh ran (a skipped/fresh refresh prints none), which is
+                // our signal that the on-disk index may have changed. The
+                // progress bar in ActivityView is indeterminate and the detail
+                // text comes from INFO lines, so we don't render the dots.
                 cacheWasUpdated = true
             }
         }
