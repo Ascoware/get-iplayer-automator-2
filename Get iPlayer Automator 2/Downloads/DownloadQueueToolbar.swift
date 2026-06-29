@@ -32,8 +32,7 @@ struct DownloadQueueToolbar: CustomizableToolbarContent {
                     Label("Start", systemImage: "arrow.down.circle")
                         .imageScale(.large)
                 }
-                .help("Start Downloading")
-                .disabled(downloadQueueViewModel.downloadQueue.count == 0 || downloadQueueViewModel.isDownloading)
+                .toolbarHelp("Start Downloading", disabled: downloadQueueViewModel.downloadQueue.count == 0 || downloadQueueViewModel.isDownloading)
             }
         ToolbarItem(
             id: "stopDownloads",
@@ -45,8 +44,7 @@ struct DownloadQueueToolbar: CustomizableToolbarContent {
                     Label("Stop", systemImage: "stop.circle")
                         .imageScale(.large)
                 }
-                .help("Stop Downloading")
-                .disabled(!downloadQueueViewModel.isDownloading)
+                .toolbarHelp("Stop Downloading", disabled: !downloadQueueViewModel.isDownloading)
             }
         ToolbarItem(
             id: "seriesLinkToQueue",
@@ -58,8 +56,7 @@ struct DownloadQueueToolbar: CustomizableToolbarContent {
                     Label("Add Series", systemImage: "record.circle")
                         .imageScale(.large)
                 }
-                .help("Search for new episodes of all auto-recorded series")
-                .disabled(pvrViewModel.series.isEmpty || pvrViewModel.isChecking)
+                .toolbarHelp("Search for new episodes of all auto-recorded series", disabled: pvrViewModel.series.isEmpty || pvrViewModel.isChecking)
             }
         ToolbarItem(
             id: "currentWebpage",
@@ -88,8 +85,7 @@ struct DownloadQueueToolbar: CustomizableToolbarContent {
                     Label("Skip Selected Series-Linked Items", systemImage: "forward.circle")
                         .imageScale(.large)
                 }
-                .help("Remove selected series-linked items from the queue and add them to download history")
-                .disabled(selectedSeriesLinkedItems.isEmpty)
+                .toolbarHelp("Remove selected series-linked items from the queue and add them to download history", disabled: selectedSeriesLinkedItems.isEmpty)
             }
     }
 }

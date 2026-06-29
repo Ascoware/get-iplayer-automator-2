@@ -26,8 +26,7 @@ struct PVRToolbar: CustomizableToolbarContent {
                 Label("Add Series", systemImage: "record.circle")
                     .imageScale(.large)
             }
-            .help("Search for new episodes of all auto-recorded series")
-            .disabled(pvrViewModel.series.isEmpty || pvrViewModel.isChecking)
+            .toolbarHelp("Search for new episodes of all auto-recorded series", disabled: pvrViewModel.series.isEmpty || pvrViewModel.isChecking)
         }
 
         ToolbarItem(
@@ -41,8 +40,7 @@ struct PVRToolbar: CustomizableToolbarContent {
                 Label("Remove", systemImage: "minus")
                     .imageScale(.large)
             }
-            .help("Remove selected series from the auto-record list")
-            .disabled(seriesSelection.isEmpty)
+            .toolbarHelp("Remove selected series from the auto-record list", disabled: seriesSelection.isEmpty)
         }
     }
 

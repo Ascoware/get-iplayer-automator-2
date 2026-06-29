@@ -41,8 +41,7 @@ struct SearchWindowToolbar: CustomizableToolbarContent {
                     Label("Add to Queue", systemImage: "rectangle.stack.badge.plus")
                         .imageScale(.large)
                 }
-                .help("Add selected items to download queue")
-                .disabled(selection.isEmpty)
+                .toolbarHelp("Add selected items to download queue", disabled: selection.isEmpty)
             }
         ToolbarItem(
             id: "autoRecord",
@@ -54,8 +53,7 @@ struct SearchWindowToolbar: CustomizableToolbarContent {
                     Label("Auto-record", systemImage: "recordingtape.circle")
                         .imageScale(.large)
                 }
-                .help("Add the selected show to the auto-record list")
-                .disabled(selection.isEmpty)
+                .toolbarHelp("Add the selected show to the auto-record list", disabled: selection.isEmpty)
             }
     }
 
@@ -72,5 +70,34 @@ struct SearchWindowToolbar: CustomizableToolbarContent {
             .tryToPerform(
                 #selector(NSSplitViewController.toggleSidebar(_:)),
                 with: nil)
+    }
+}
+
+extension View {
+    /// Applies a help tooltip that stays visible even while the control is
+    /// disabled.
+    ///
+    /// macOS suppresses `.help(_:)` tooltips on disabled controls, so a
+    /// greyed-out toolbar button in icon-only mode gives the user no hint about
+    /// what it does. When `disabled` is true we additionally surface the
+    /// tooltip through a transparent, still-enabled overlay that owns the hover
+    /// tracking area. When the control is enabled the overlay is absent and the
+    /// button's own `.help(_:)` provides the tooltip as usual.
+    ///
+    /// - Parameters:
+    ///   - text: The hover text to display.
+    ///   - disabled: Whether the underlying control is disabled.
+    func toolbarHelp(_ text: String, disabled: Bool) -> some View {
+        self
+            .disabled(disabled)
+            .help(text)
+            .overlay {
+                if disabled {
+                    Color.clear
+                        .contentShape(Rectangle())
+                        .help(text)
+                        .accessibilityHidden(true)
+                }
+            }
     }
 }
