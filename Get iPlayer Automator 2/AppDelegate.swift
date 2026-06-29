@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Sparkle
 import SwiftUI
 import UserNotifications
 import CocoaLumberjackSwift
@@ -27,7 +26,7 @@ private func extensionNewPageCallback(
     }
 }
 
-class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate {
 
     var downloadQueueViewModel: DownloadQueueViewModel? = nil
     var cacheUpdateService: CacheUpdateService? = nil
@@ -135,22 +134,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
             Unmanaged.passUnretained(self).toOpaque(),
             CFNotificationName(extensionNewPageNotification as CFString),
             nil)
-    }
-
-    func updaterDidFindValidUpdate(item: SUAppcastItem)
-    {
-        let center = UNUserNotificationCenter.current()
-        let content = UNMutableNotificationContent()
-        content.title = "Index Updated";
-        content.body = "Get iPlayer Automator \(item.displayVersionString) is available."
-        let request = UNNotificationRequest(identifier: "", content: content, trigger: nil)
-        Task {
-            do {
-                try await center.add(request)
-            } catch {
-                DDLogError("Error posting update notification: \(error)")
-            }
-        }
     }
 
 }

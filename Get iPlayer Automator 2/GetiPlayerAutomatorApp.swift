@@ -18,6 +18,7 @@ struct GetiPlayerAutomatorApp: App {
     @State private var downloadHistoryModel: DownloadHistoryModel
     @State private var cacheUpdateService: CacheUpdateService
     @State private var pvrViewModel: PVRViewModel
+    @State private var updaterViewModel: UpdaterViewModel
     init() {
         let cache = CachedProgramsViewModel()
         let history = DownloadHistoryModel()
@@ -31,6 +32,7 @@ struct GetiPlayerAutomatorApp: App {
         downloadQueueViewModel = queue
         cacheUpdateService = cacheService
         pvrViewModel = pvr
+        updaterViewModel = UpdaterViewModel()
 
         appDelegate.downloadQueueViewModel = queue
         appDelegate.cacheUpdateService = cacheService
@@ -58,7 +60,7 @@ struct GetiPlayerAutomatorApp: App {
         }
         .windowToolbarStyle(.unified)
         .commands {
-            SearchWindowMenus(cacheUpdateService: cacheUpdateService)
+            SearchWindowMenus(cacheUpdateService: cacheUpdateService, updaterViewModel: updaterViewModel)
         }
 
         Window("Download Queue", id: "dl-queue") {
