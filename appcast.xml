@@ -4,6 +4,18 @@
         <title>Get iPlayer Automator 2</title>
         <description>Most recent changes with links to updates.</description>
         <language>en</language>
+                <item>
+            <title>v1.0.2</title>
+            <pubDate>Mon, 29 Jun 2026 00:57:20 +0000</pubDate>
+            <sparkle:minimumSystemVersion>15.6.0</sparkle:minimumSystemVersion>
+            <enclosure
+                url="https://github.com/Ascoware/get-iplayer-automator-2/releases/download/v1.0.2/Get.iPlayer.Automator.2.v1.0.2.b202606281753.zip"
+                sparkle:version="202606281753"
+                sparkle:shortVersionString="1.0.2"
+                sparkle:edSignature="BTBU5Jdcth8B/LCaJzcQy8DE/MTFMpgClJxxt0VzSHGH9jsCSdpXGj2K8dLlUtbkA9OMHsISQWQuXYOcTJs7Cg=="
+                length="120202912"
+                type="application/octet-stream" />
+        </item>
         <item>
             <title>v1.0.1</title>
             <pubDate>Mon, 29 Jun 2026 00:31:27 +0000</pubDate>
