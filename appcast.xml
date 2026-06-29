@@ -1,4 +1,34 @@
----
-release_only: true
----
-{%include appcast.inc %}
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel>
+        <title>Get iPlayer Automator 2</title>
+        <description>Most recent changes with links to updates.</description>
+        <language>en</language>
+        <item>
+            <title>v1.0.1</title>
+            <pubDate>Mon, 29 Jun 2026 00:31:27 +0000</pubDate>
+            <description><![CDATA[<ul><li>Faster launch: the cache update, data loading, and legacy-data migration prompt now run as soon as the app starts instead of waiting for the Search window to appear.</li><li>Get iPlayer Automator 2 and its Safari extension now have their own icons and name. Previously the v1 and v2 Safari extensions shared an identical display name, toolbar label, and icon, so it was easy to trigger the old app by mistake. The v2 extension's name, toolbar label, and description now end in "2", with new artwork throughout.</li></ul>]]></description>
+            <sparkle:minimumSystemVersion>15.6.0</sparkle:minimumSystemVersion>
+            <enclosure
+                url="https://github.com/Ascoware/get-iplayer-automator-2/releases/download/v1.0.1/Get.iPlayer.Automator.2.v1.0.1.b202606281721.zip"
+                sparkle:version="202606281721"
+                sparkle:shortVersionString="1.0.1"
+                sparkle:edSignature="IlAk4GLbXc42WlSxGUlyVGa01payRP3urvCaHXgo/bUGXp403Sp6lOPFNFQyMirQIB3HdsHwcqKvuZjvZUy3Bg=="
+                length="120192050"
+                type="application/octet-stream" />
+        </item>
+        <item>
+            <title>v1.0.0</title>
+            <pubDate>Sun, 28 Jun 2026 21:17:55 +0000</pubDate>
+            <description><![CDATA[Version 1.0 of Get iPlayer Automator 2]]></description>
+            <sparkle:minimumSystemVersion>15.6.0</sparkle:minimumSystemVersion>
+            <enclosure
+                url="https://github.com/Ascoware/get-iplayer-automator-2/releases/download/v1.0.0/Get.iPlayer.Automator.2.v1.0.0.b202606281355.zip"
+                sparkle:version="202606281355"
+                sparkle:shortVersionString="1.0.0"
+                sparkle:edSignature="JHP7I8aQ9yHqKA3Bh+0zv5BqvfNb1Nveii8q69KF2jjsrNjH7FMl7jDQMSIxlWycwKuNvdZm0jSifqqETNxUBg=="
+                length="120113209"
+                type="application/octet-stream" />
+        </item>
+    </channel>
+</rss>
