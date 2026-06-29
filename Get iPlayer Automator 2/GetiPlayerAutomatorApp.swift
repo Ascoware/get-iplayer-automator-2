@@ -31,6 +31,20 @@ struct GetiPlayerAutomatorApp: App {
         downloadQueueViewModel = queue
         cacheUpdateService = cacheService
         pvrViewModel = pvr
+
+        appDelegate.downloadQueueViewModel = queue
+        appDelegate.cacheUpdateService = cacheService
+
+        Task { @MainActor in
+            queue.loadAppData()
+            pvr.loadSeriesData()
+            cache.reloadCachedShows()
+            await cacheService.checkForCacheUpdate()
+            cache.reloadCachedShows()
+            if Defaults.shared.addSeriesLinkAtStartup {
+                await pvr.checkForNewEpisodes()
+            }
+        }
     }
 
     var body: some Scene {
@@ -41,29 +55,6 @@ struct GetiPlayerAutomatorApp: App {
                 pvrViewModel: pvrViewModel,
                 historyModel: downloadHistoryModel
             )
-            .task {
-                appDelegate.downloadQueueViewModel = downloadQueueViewModel
-                appDelegate.cacheUpdateService = cacheUpdateService
-
-                if LegacyDataMigrator.shouldOfferMigration() {
-                    let shouldImport = await MainActor.run {
-                        let alert = NSAlert()
-                        alert.messageText = "Import Data from Get iPlayer Automator?"
-                        alert.informativeText = "Data from the previous version of Get iPlayer Automator was found. Would you like to import your settings, series links, and download history?"
-                        alert.addButton(withTitle: "Import")
-                        alert.addButton(withTitle: "Don't Import")
-                        return alert.runModal() == .alertFirstButtonReturn
-                    }
-
-                    if shouldImport {
-                        let migrator = LegacyDataMigrator()
-                        migrator.performMigration()
-                    }
-                    LegacyDataMigrator.markMigrationComplete()
-                }
-
-                await startupAfterMigration()
-            }
         }
         .windowToolbarStyle(.unified)
         .commands {
@@ -100,18 +91,6 @@ struct GetiPlayerAutomatorApp: App {
         .windowResizability(.contentSize)
         .defaultLaunchBehavior(.presented)
 
-    }
-
-    private func startupAfterMigration() async {
-        downloadQueueViewModel.loadAppData()
-        pvrViewModel.loadSeriesData()
-        cachedProgramsViewModel.reloadCachedShows()
-        await cacheUpdateService.checkForCacheUpdate()
-        cachedProgramsViewModel.reloadCachedShows()
-
-        if Defaults.shared.addSeriesLinkAtStartup {
-            await pvrViewModel.checkForNewEpisodes()
-        }
     }
 
 }

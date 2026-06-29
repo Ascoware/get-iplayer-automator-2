@@ -31,11 +31,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
 
     var downloadQueueViewModel: DownloadQueueViewModel? = nil
     var cacheUpdateService: CacheUpdateService? = nil
-
     private var allowedToNotify = false
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        // Queue data is loaded in GetiPlayerAutomatorApp.task after the view model is injected
+        if LegacyDataMigrator.shouldOfferMigration() {
+            let alert = NSAlert()
+            alert.messageText = "Import Data from Get iPlayer Automator?"
+            alert.informativeText = "Data from the previous version of Get iPlayer Automator was found. Would you like to import your settings, series links, and download history?"
+            alert.addButton(withTitle: "Import")
+            alert.addButton(withTitle: "Don't Import")
+            if alert.runModal() == .alertFirstButtonReturn {
+                LegacyDataMigrator().performMigration()
+            }
+            LegacyDataMigrator.markMigrationComplete()
+        }
 
         Task {
             do {
