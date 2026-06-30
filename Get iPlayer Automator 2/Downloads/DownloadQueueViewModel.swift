@@ -366,7 +366,7 @@ class DownloadQueueViewModel: DownloadQueueProviding {
         do {
             let data = try JSONEncoder().encode(cleanedQueue)
             try data.write(to: fileURL, options: .atomic)
-            DDLogInfo("Saved \(cleanedQueue.count) items to queue file")
+            DDLogVerbose("Saved \(cleanedQueue.count) items to queue file")
         } catch {
             DDLogError("Error saving queue data: \(error.localizedDescription)")
         }

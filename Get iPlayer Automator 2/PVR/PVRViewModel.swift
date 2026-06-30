@@ -149,7 +149,7 @@ class PVRViewModel {
 
             downloadQueueViewModel.addToQueueFromPVR(pid: pid)
             foundAny = true
-            DDLogInfo("PVR: queuing \(pid) (\(type), \(tvNetwork), \(dateStr)) for '\(series.showName)'")
+            DDLogVerbose("PVR: queuing \(pid) (\(type), \(tvNetwork), \(dateStr)) for '\(series.showName)'")
         }
 
         return (true, foundAny)
@@ -216,9 +216,9 @@ class PVRViewModel {
         do {
             let data = try Data(contentsOf: seriesFileURL)
             series = try JSONDecoder().decode([Series].self, from: data)
-            DDLogInfo("PVRViewModel: loaded \(series.count) series")
+            DDLogVerbose("PVRViewModel: loaded \(series.count) series")
         } catch {
-            DDLogInfo("PVRViewModel: no existing series file or load error: \(error.localizedDescription)")
+            DDLogVerbose("PVRViewModel: no existing series file or load error: \(error.localizedDescription)")
         }
     }
 

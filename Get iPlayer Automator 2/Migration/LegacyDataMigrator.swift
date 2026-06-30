@@ -31,9 +31,9 @@ class LegacyDataMigrator {
 
     static func shouldOfferMigration() -> Bool {
         let flagValue = UserDefaults.standard.bool(forKey: migrationCompleteKey)
-        DDLogInfo("Migration: migrationComplete flag = \(flagValue)")
+        DDLogVerbose("Migration: migrationComplete flag = \(flagValue)")
         guard !flagValue else {
-            DDLogInfo("Migration: Skipping — migration already marked complete")
+            DDLogVerbose("Migration: Skipping — migration already marked complete")
             return false
         }
 
@@ -42,17 +42,17 @@ class LegacyDataMigrator {
             .appendingPathComponent("Library/Application Support/Get iPlayer Automator")
             .path(percentEncoded: false)
 
-        DDLogInfo("Migration: Looking for old data at \(oldPath)")
+        DDLogVerbose("Migration: Looking for old data at \(oldPath)")
 
         let fm = FileManager.default
         let dataFiles = ["Queue.automatorqueue", "download_history", "Formats.automatorqueue"]
         for file in dataFiles {
             let fullPath = (oldPath as NSString).appendingPathComponent(file)
             let exists = fm.fileExists(atPath: fullPath)
-            DDLogInfo("Migration: \(file) exists = \(exists)")
+            DDLogVerbose("Migration: \(file) exists = \(exists)")
         }
         let found = dataFiles.contains { fm.fileExists(atPath: (oldPath as NSString).appendingPathComponent($0)) }
-        DDLogInfo("Migration: shouldOfferMigration returning \(found)")
+        DDLogVerbose("Migration: shouldOfferMigration returning \(found)")
         return found
     }
 
@@ -61,7 +61,7 @@ class LegacyDataMigrator {
     }
 
     @MainActor func performMigration() {
-        DDLogInfo("Starting legacy data migration from \(oldAppSupportPath)")
+        DDLogVerbose("Starting legacy data migration from \(oldAppSupportPath)")
 
         migrateDownloadHistory()
         migrateSeriesAndQueue()
@@ -78,7 +78,7 @@ class LegacyDataMigrator {
         let newFile = (newAppSupportPath as NSString).appendingPathComponent("download_history")
 
         guard FileManager.default.fileExists(atPath: oldFile) else {
-            DDLogInfo("Migration: No old download_history found, skipping")
+            DDLogVerbose("Migration: No old download_history found, skipping")
             return
         }
 
@@ -117,13 +117,13 @@ class LegacyDataMigrator {
                         handle.seekToEndOfFile()
                         handle.write(data)
                         try handle.close()
-                        DDLogInfo("Migration: Appended \(newEntries.count) history entries")
+                        DDLogVerbose("Migration: Appended \(newEntries.count) history entries")
                     }
                 }
             } else {
                 let content = convertedLines.joined(separator: "\n") + "\n"
                 try content.write(toFile: newFile, atomically: true, encoding: .utf8)
-                DDLogInfo("Migration: Wrote \(convertedLines.count) history entries")
+                DDLogVerbose("Migration: Wrote \(convertedLines.count) history entries")
             }
         } catch {
             DDLogError("Migration: Failed to migrate download history: \(error)")
