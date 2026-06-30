@@ -80,6 +80,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return true
     }
 
+    /// Opt in to secure state restoration. Without this, macOS 14+ disables
+    /// window/state restoration entirely (and logs a warning), so windows do
+    /// not reopen in their previous positions on the next launch. Adopting a
+    /// custom AppDelegate via @NSApplicationDelegateAdaptor means we no longer
+    /// inherit SwiftUI's implicit default, so we must declare it ourselves.
+    func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
+        return true
+    }
+
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
         if !confirmExit() {
             return .terminateCancel
