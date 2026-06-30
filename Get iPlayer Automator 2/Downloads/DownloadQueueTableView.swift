@@ -9,6 +9,12 @@ import SwiftUI
 import OrderedCollections
 import UniformTypeIdentifiers
 
+/// Uniform content height for every download-queue row. Rows size to their
+/// tallest cell, and some cells (status icon, progress spinner) are taller than
+/// a line of text while others are empty, so without a shared floor the rows
+/// vary in height. Applied as a `minHeight` to each cell.
+private let queueRowContentHeight: CGFloat = 28
+
 struct DownloadQueueTableView: View {
     var downloadQueueViewModel: any DownloadQueueProviding
 
@@ -31,21 +37,21 @@ struct DownloadQueueTableView: View {
 
                 TableColumn("PID") { program in
                     Text(program.pid)
-                        .frame(maxHeight: .infinity)
+                        .frame(minHeight: queueRowContentHeight, maxHeight: .infinity)
                         .opacity(draggingPID == program.pid ? 0.4 : 1.0)
                 }
                 .width(min: 60, ideal: 80, max: 120)
 
                 TableColumn("Status") { program in
                     DownloadStatusImage(program: program)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .frame(maxWidth: .infinity, minHeight: queueRowContentHeight, maxHeight: .infinity)
                         .opacity(draggingPID == program.pid ? 0.4 : 1.0)
                 }
                 .width(min: 20, ideal: 30, max: 40)
 
                 TableColumn("Progress") { program in
                     DownloadProgressView(program: program)
-                        .frame(maxHeight: .infinity)
+                        .frame(minHeight: queueRowContentHeight, maxHeight: .infinity)
                         .opacity(draggingPID == program.pid ? 0.4 : 1.0)
                 }
                 .width(min: 20, ideal: 30, max: 40)
@@ -53,7 +59,7 @@ struct DownloadQueueTableView: View {
                 TableColumn("Name") { program in
                     Text(program.name)
                         .lineLimit(1)
-                        .frame(maxHeight: .infinity)
+                        .frame(minHeight: queueRowContentHeight, maxHeight: .infinity)
                         .opacity(draggingPID == program.pid ? 0.4 : 1.0)
                 }
                 .width(min: 100, ideal: 200)
@@ -61,21 +67,21 @@ struct DownloadQueueTableView: View {
                 TableColumn("Episode") { program in
                     Text(program.episode)
                         .lineLimit(1)
-                        .frame(maxHeight: .infinity)
+                        .frame(minHeight: queueRowContentHeight, maxHeight: .infinity)
                         .opacity(draggingPID == program.pid ? 0.4 : 1.0)
                 }
                 .width(min: 80, ideal: 150)
 
                 TableColumn("Available") { program in
                     Text(program.available, format: .dateTime.day().month(.abbreviated).year())
-                        .frame(maxHeight: .infinity)
+                        .frame(minHeight: queueRowContentHeight, maxHeight: .infinity)
                         .opacity(draggingPID == program.pid ? 0.4 : 1.0)
                 }
                 .width(min: 80, ideal: 100, max: 120)
 
                 TableColumn("Channel") { program in
                     Text(program.channel)
-                        .frame(maxHeight: .infinity)
+                        .frame(minHeight: queueRowContentHeight, maxHeight: .infinity)
                         .opacity(draggingPID == program.pid ? 0.4 : 1.0)
                 }
                 .width(min: 60, ideal: 100, max: 150)
@@ -83,7 +89,7 @@ struct DownloadQueueTableView: View {
                 TableColumn("Message") { program in
                     DownloadMessageView(program: program)
                         .lineLimit(1)
-                        .frame(maxHeight: .infinity)
+                        .frame(minHeight: queueRowContentHeight, maxHeight: .infinity)
                         .opacity(draggingPID == program.pid ? 0.4 : 1.0)
                 }
                 .width(min: 80, ideal: 150)
