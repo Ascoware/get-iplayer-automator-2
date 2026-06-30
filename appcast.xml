@@ -7,6 +7,12 @@
                         <item>
             <title>v1.0.3</title>
             <pubDate>Tue, 30 Jun 2026 01:13:04 +0000</pubDate>
+            <description><![CDATA[<ul>
+<li>Search list now refreshes after updating the cache. Choosing "Check for Cache Update" (Cmd-R) now shows newly available shows right away — no need to quit and relaunch.</li>
+<li>Toolbar tooltips work in icon-only mode. Hovering over a toolbar button now explains what it does, even when the button is disabled.</li>
+<li>PVR and Download History are now in the Window menu. Open them directly with Cmd-P and Cmd-Y.</li>
+<li>Windows reopen where you left them. Window positions are now properly restored when you relaunch the app.</li>
+</ul>]]></description>
             <sparkle:minimumSystemVersion>15.6.0</sparkle:minimumSystemVersion>
             <enclosure
                 url="https://github.com/Ascoware/get-iplayer-automator-2/releases/download/v1.0.3/Get.iPlayer.Automator.2.v1.0.3.b202606291808.zip"
@@ -19,6 +25,18 @@
         <item>
             <title>v1.0.2</title>
             <pubDate>Mon, 29 Jun 2026 00:57:20 +0000</pubDate>
+            <description><![CDATA[<ul>
+<li>
+<p>Automatic software updates now work. Get iPlayer Automator 2 checks for new<br>
+versions in the background, and a new "Check for Updates…" item in the<br>
+application menu lets you check on demand.</p>
+</li>
+<li>
+<p>Important: because of a bug in the updater, versions 1.0.0 and 1.0.1 could<br>
+not update themselves. If you're on one of those builds, please install this<br>
+version manually this one time — automatic updates will work from here on.</p>
+</li>
+</ul>]]></description>
             <sparkle:minimumSystemVersion>15.6.0</sparkle:minimumSystemVersion>
             <enclosure
                 url="https://github.com/Ascoware/get-iplayer-automator-2/releases/download/v1.0.2/Get.iPlayer.Automator.2.v1.0.2.b202606281753.zip"
