@@ -123,9 +123,18 @@ if [ "$PUBLISH" -eq 1 ]; then
     printf "Release title (short description of major change): "
     read -r RELEASE_TITLE
 
-    # Release notes — read until Ctrl-D
-    echo "Release notes (bullet points, Ctrl-D when done):"
+    # Release notes — read until Ctrl-D. Written as Markdown: used verbatim for
+    # the GitHub release body, and rendered to HTML (via GitHub's own renderer)
+    # for the Sparkle appcast <description>, which displays HTML, not Markdown.
+    echo "Release notes (Markdown, Ctrl-D when done):"
     RELEASE_NOTES=$(cat)
+
+    RELEASE_NOTES_HTML=$(printf '%s' "$RELEASE_NOTES" \
+        | gh api -X POST /markdown -f mode=gfm --field text=@-)
+    if [ -z "$RELEASE_NOTES_HTML" ]; then
+        echo "ERROR: failed to render release notes to HTML for the appcast"
+        exit 1
+    fi
 
     # Tag and push
     cd "$PROJECT_DIR"
@@ -149,6 +158,7 @@ if [ "$PUBLISH" -eq 1 ]; then
     NEW_ITEM="        <item>
             <title>${TAG}</title>
             <pubDate>${PUB_DATE}</pubDate>
+            <description><![CDATA[${RELEASE_NOTES_HTML}]]></description>
             <sparkle:minimumSystemVersion>15.6.0</sparkle:minimumSystemVersion>
             <enclosure
                 url=\"${DOWNLOAD_URL}\"
