@@ -80,6 +80,8 @@ class SafariExtensionHandler: SFSafariExtensionHandler {
         "https://www.bbc.co.uk/programmes/",
         "https://player.stv.tv/episode/",
         "https://player.stv.tv/summary/",
+        "https://iview.abc.net.au/video/",
+        "https://iview.abc.net.au/show/",
     ]
 
     override func validateToolbarItem(in window: SFSafariWindow, validationHandler: @escaping ((Bool, String) -> Void)) {
