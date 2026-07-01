@@ -4,7 +4,23 @@
         <title>Get iPlayer Automator 2</title>
         <description>Most recent changes with links to updates.</description>
         <language>en</language>
-                        <item>
+                                <item>
+            <title>v1.0.4</title>
+            <pubDate>Wed, 01 Jul 2026 05:20:24 +0000</pubDate>
+            <description><![CDATA[<ul>
+<li>ABC iView support! You can now download content from iview.abc.net.au, subject to geographical restrictions.</li>
+<li>Cosmetic changes to the download queue</li>
+</ul>]]></description>
+            <sparkle:minimumSystemVersion>15.6.0</sparkle:minimumSystemVersion>
+            <enclosure
+                url="https://github.com/Ascoware/get-iplayer-automator-2/releases/download/v1.0.4/Get.iPlayer.Automator.2.v1.0.4.b202606302213.zip"
+                sparkle:version="202606302213"
+                sparkle:shortVersionString="1.0.4"
+                sparkle:edSignature="Cz5+TKWUxTdKZw6Gdyhm6vvfE+bYcFpUHm3WxFG36HKw+Oc8e8dYC0+5/tLUN4EWF4Pp0m/VlMYUwYxoF3u1Dg=="
+                length="120225429"
+                type="application/octet-stream" />
+        </item>
+        <item>
             <title>v1.0.3</title>
             <pubDate>Tue, 30 Jun 2026 01:13:04 +0000</pubDate>
             <description><![CDATA[<ul>
