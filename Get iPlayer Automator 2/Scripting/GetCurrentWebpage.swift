@@ -165,11 +165,35 @@ class GetCurrentWebpage {
                     DDLogError("STV series extraction error: \(error)")
                 }
             }
+        } else if url.hasPrefix("https://iview.abc.net.au/video/") || url.hasPrefix("https://iview.abc.net.au/show/") {
+            do {
+                if url.hasPrefix("https://iview.abc.net.au/show/") {
+                    let episodes = try await ABCMetadataExtractor.getShowEpisodes(url: url)
+                    programs.append(contentsOf: episodes)
+                } else {
+                    let show = try await ABCMetadataExtractor.getEpisode(url: url)
+                    programs.append(show)
+                }
+            } catch {
+                canRetrieveMetadata = false
+                let alert = NSAlert()
+                alert.addButton(withTitle: "OK")
+                alert.alertStyle = .warning
+                switch error {
+                case ABCMetadataError.unavailable:
+                    alert.messageText = "Programme not available"
+                    alert.informativeText = "This ABC iView programme is not available, most likely because it can only be streamed from within Australia."
+                default:
+                    alert.messageText = "Programme not available"
+                    alert.informativeText = "No programme information was found on this page. The programme may have expired or is not available in your region."
+                }
+                alert.runModal()
+            }
         } else {
             let invalidPage = NSAlert()
             invalidPage.addButton(withTitle: "OK")
             invalidPage.messageText = "Programme Page Not Found"
-            invalidPage.informativeText = "Please ensure the frontmost browser tab is open to an iPlayer or STV episode page."
+            invalidPage.informativeText = "Please ensure the frontmost browser tab is open to an iPlayer, STV, or ABC iView episode page."
             invalidPage.alertStyle = .warning
             invalidPage.runModal()
         }

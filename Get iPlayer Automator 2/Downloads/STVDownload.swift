@@ -16,7 +16,14 @@ import System
 @MainActor
 class STVDownload : Download {
 
-    @Default(\.maxSTVResolution) var maxResolution: TVFormat
+    @Default(\.maxSTVResolution) var maxSTVResolution: TVFormat
+    @Default(\.maxABCResolution) var maxABCResolution: TVFormat
+
+    /// The yt-dlp downloader is shared across non-BBC providers; pick the
+    /// resolution preference that matches the programme's provider.
+    var maxResolution: TVFormat {
+        show.type == .abc ? maxABCResolution : maxSTVResolution
+    }
 
     public init(programme: Programme) {
         super.init(program: programme)

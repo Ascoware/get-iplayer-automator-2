@@ -12,6 +12,13 @@ enum ProgrammeType : String, CaseIterable, Codable {
     case tv
     case radio
     case stv
+    case abc
+
+    /// Providers downloaded via yt-dlp rather than get_iplayer. These programmes
+    /// are not present in any on-disk cache, so they share history-by-pid handling.
+    var usesYtDlp: Bool {
+        self == .stv || self == .abc
+    }
 }
 
 enum ProgramState : Int, CaseIterable, Codable, Comparable {
@@ -189,6 +196,8 @@ class Programme: @preconcurrency Codable {
             "BBC Radio"
         case .stv:
             "STV"
+        case .abc:
+            "ABC iView"
         }
     }
 

@@ -37,6 +37,7 @@ struct CachedProgramme: Identifiable, Hashable, Comparable {
         case .tv: "BBC TV"
         case .radio: "BBC Radio"
         case .stv: "STV"
+        case .abc: "ABC iView"
         }
     }
 

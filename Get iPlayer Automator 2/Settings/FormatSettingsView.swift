@@ -12,6 +12,7 @@ struct FormatSettingsView: View {
     @Default(\.bbcTVFormats) var tvFormats: [TVFormat]
     @Default(\.radioFormats) var radioFormats: [RadioFormat]
     @Default(\.maxSTVResolution) var maxSTVSize: TVFormat
+    @Default(\.maxABCResolution) var maxABCSize: TVFormat
 
     var body: some View {
         VStack {
@@ -54,6 +55,11 @@ struct FormatSettingsView: View {
                 }
             }
             Picker("Maximum STV Resolution", selection: $maxSTVSize) {
+                ForEach(TVFormat.allCases) { format in
+                    Text(format.desc)
+                }
+            }
+            Picker("Maximum ABC iView Resolution", selection: $maxABCSize) {
                 ForEach(TVFormat.allCases) { format in
                     Text(format.desc)
                 }

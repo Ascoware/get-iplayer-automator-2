@@ -142,6 +142,7 @@ public class Defaults: ObservableObject {
     @AppStorage("bbcTVFormats") public var bbcTVFormats: [TVFormat] = []
     @AppStorage("bbcRadioFormats") public var radioFormats: [RadioFormat] = []
     @AppStorage("MaxITVResolution") public var maxSTVResolution: TVFormat = .hd
+    @AppStorage("MaxABCResolution") public var maxABCResolution: TVFormat = .fhd
 
     // Options for all channel filters
     @AppStorage("BBCOne") public var BBCOne =  true

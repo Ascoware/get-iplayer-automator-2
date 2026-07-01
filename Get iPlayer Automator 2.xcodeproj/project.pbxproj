@@ -43,6 +43,7 @@
 		7F0C17EF2F744B1D00E208A2 /* GetCurrentWebpage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C179D2F7449E900E208A2 /* GetCurrentWebpage.swift */; };
 		7F0C17F02F744B1D00E208A2 /* TVScripting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17A82F7449E900E208A2 /* TVScripting.swift */; };
 		7F0C17F12F744B1D00E208A2 /* STVMetadataExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17A62F7449E900E208A2 /* STVMetadataExtractor.swift */; };
+		7FABCA110000000000000002 /* ABCMetadataExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FABCA110000000000000001 /* ABCMetadataExtractor.swift */; };
 		7F0C17F32F744B1D00E208A2 /* SBApplicationProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17A42F7449E900E208A2 /* SBApplicationProtocol.swift */; };
 		7F0C17F42F744B1D00E208A2 /* SBObjectProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17A52F7449E900E208A2 /* SBObjectProtocol.swift */; };
 		7F0C17F52F744B1D00E208A2 /* MicrosoftEdgeScripting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17A02F7449E900E208A2 /* MicrosoftEdgeScripting.swift */; };
@@ -172,6 +173,7 @@
 		7F0C17A42F7449E900E208A2 /* SBApplicationProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SBApplicationProtocol.swift; sourceTree = "<group>"; };
 		7F0C17A52F7449E900E208A2 /* SBObjectProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SBObjectProtocol.swift; sourceTree = "<group>"; };
 		7F0C17A62F7449E900E208A2 /* STVMetadataExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STVMetadataExtractor.swift; sourceTree = "<group>"; };
+		7FABCA110000000000000001 /* ABCMetadataExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABCMetadataExtractor.swift; sourceTree = "<group>"; };
 		7F0C17A72F7449E900E208A2 /* TV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TV.swift; sourceTree = "<group>"; };
 		7F0C17A82F7449E900E208A2 /* TVScripting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVScripting.swift; sourceTree = "<group>"; };
 		7F0C17AA2F7449E900E208A2 /* CachedProgramsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedProgramsViewModel.swift; sourceTree = "<group>"; };
@@ -349,6 +351,7 @@
 				7F0C17A42F7449E900E208A2 /* SBApplicationProtocol.swift */,
 				7F0C17A52F7449E900E208A2 /* SBObjectProtocol.swift */,
 				7F0C17A62F7449E900E208A2 /* STVMetadataExtractor.swift */,
+				7FABCA110000000000000001 /* ABCMetadataExtractor.swift */,
 				7F0C17A72F7449E900E208A2 /* TV.swift */,
 				7F0C17A82F7449E900E208A2 /* TVScripting.swift */,
 			);
@@ -623,6 +626,7 @@
 				7F0C17EF2F744B1D00E208A2 /* GetCurrentWebpage.swift in Sources */,
 				7F0C17F02F744B1D00E208A2 /* TVScripting.swift in Sources */,
 				7F0C17F12F744B1D00E208A2 /* STVMetadataExtractor.swift in Sources */,
+				7FABCA110000000000000002 /* ABCMetadataExtractor.swift in Sources */,
 				7F0C18082F744B4100E208A2 /* GeneralSettingsView.swift in Sources */,
 				7F0C18092F744B4100E208A2 /* SettingsView.swift in Sources */,
 				7F0C180A2F744B4100E208A2 /* Preference.swift in Sources */,

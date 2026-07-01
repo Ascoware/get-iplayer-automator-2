@@ -95,7 +95,7 @@ class DownloadQueueViewModel: DownloadQueueProviding {
             return
         }
 
-        if currProgram.type == .stv && historyModel.downloadHistory.contains(where: { $0.pid == currProgram.pid }) {
+        if currProgram.type.usesYtDlp && historyModel.downloadHistory.contains(where: { $0.pid == currProgram.pid }) {
             DDLogInfo("\(currProgram.name) is already in download history, skipping")
             currProgram.status = .failed
             currProgram.complete = true
@@ -106,7 +106,7 @@ class DownloadQueueViewModel: DownloadQueueProviding {
 
         let download: Download
 
-        if currProgram.type == .stv {
+        if currProgram.type.usesYtDlp {
             download = STVDownload(programme: currProgram)
         } else {
             download = BBCDownload(programme: currProgram)
@@ -131,7 +131,7 @@ class DownloadQueueViewModel: DownloadQueueProviding {
             }
 
             if currProgram.successful {
-                if currProgram.type == .stv {
+                if currProgram.type.usesYtDlp {
                     historyModel.addToHistory(programs: [currProgram])
                 } else {
                     historyModel.readDownloadHistory()
