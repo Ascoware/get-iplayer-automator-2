@@ -154,8 +154,10 @@ class BBCDownload: Download {
         var platformOptions = PlatformOptions()
         platformOptions.processGroupID = 0
 
+        var terminationStatus: TerminationStatus?
+
         do {
-            _ = try await run(
+            let result = try await run(
                 .path(FilePath(GetiPlayerArguments.shared.perlBinaryPath)),
                 arguments: Arguments(args),
                 environment: .inherit.updating([
@@ -173,6 +175,7 @@ class BBCDownload: Download {
                     self.processGetiPlayerOutput(line)
                 }
             }
+            terminationStatus = result.terminationStatus
         } catch {
             DDLogError("get_iplayer failed: \(error)")
         }
@@ -180,20 +183,20 @@ class BBCDownload: Download {
         currentExecution = nil
 
         show.downloadPercent = 0.0
-
-        // If we have a path it was successful. Note that and return.
-        if show.status == .finishedProgramDownload {
-            show.complete = true
-            show.progress = "Finished downloading"
-            return
-        }
-
-        // Handle all other error cases.
         show.complete = true
 
         if show.status == .cancelled {
             show.progress = "Cancelled by user"
-            show.status = .cancelled
+            return
+        }
+
+        // For --pid downloads get_iplayer exits with the number of failed downloads,
+        // so success is exit code 0. The one exit-0 case that doesn't produce a file
+        // is "already in download history", which we detect from its log line and
+        // report as a failure below.
+        if terminationStatus?.isSuccess == true && failureKeyword != "InHistory" {
+            show.status = .finishedProgramDownload
+            show.progress = "Finished downloading"
             return
         }
 
@@ -324,11 +327,6 @@ class BBCDownload: Download {
                     if let percentage = Double(percentStr) {
                         show.downloadPercent = percentage
                     }
-                }
-            } else if line.hasPrefix("INFO: Command exit code 0") {
-                if show.status == .tagging {
-                    show.status = .finishedProgramDownload
-                    show.progress = ""
                 }
             }
         }
