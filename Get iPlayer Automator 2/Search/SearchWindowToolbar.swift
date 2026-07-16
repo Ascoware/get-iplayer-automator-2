@@ -36,7 +36,7 @@ struct SearchWindowToolbar: CustomizableToolbarContent {
                     for p in selection {
                         downloadQueueViewModel.addToQueue(pid: p)
                     }
-                    openWindow(id: "dl-queue")
+                    openWindow(id: "main")
                 } label: {
                     Label("Add to Queue", systemImage: "rectangle.stack.badge.plus")
                         .imageScale(.large)

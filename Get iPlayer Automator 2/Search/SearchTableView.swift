@@ -57,7 +57,7 @@ struct SearchTableView: View {
             downloadQueueViewModel.addToQueue(pid: p)
         }
 
-        openWindow(id: "dl-queue")
+        openWindow(id: "main")
     }
 
     func addSelectedSeriesToAutoRecord(pids: Set<String>) {

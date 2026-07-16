@@ -50,7 +50,20 @@ struct GetiPlayerAutomatorApp: App {
     }
 
     var body: some Scene {
-        Window("Search", id: "search-window") {
+        Window("Search & Downloads", id: "main") {
+            MainWindowView(
+                cachedProgramsViewModel: cachedProgramsViewModel,
+                downloadQueueViewModel: downloadQueueViewModel,
+                pvrViewModel: pvrViewModel,
+                downloadHistoryModel: downloadHistoryModel
+            )
+        }
+        .windowToolbarStyle(.unified)
+        .commands {
+            SearchWindowMenus(cacheUpdateService: cacheUpdateService, updaterViewModel: updaterViewModel)
+        }
+
+        Window("Browse", id: "browse") {
             SearchContentView(
                 cachedProgramsViewModel: cachedProgramsViewModel,
                 downloadQueueViewModel: downloadQueueViewModel,
@@ -59,13 +72,6 @@ struct GetiPlayerAutomatorApp: App {
             )
         }
         .windowToolbarStyle(.unified)
-        .commands {
-            SearchWindowMenus(cacheUpdateService: cacheUpdateService, updaterViewModel: updaterViewModel)
-        }
-
-        Window("Download Queue", id: "dl-queue") {
-            DownloadQueueView(downloadQueueViewModel: downloadQueueViewModel, pvrViewModel: pvrViewModel, downloadHistoryModel: downloadHistoryModel)
-        }
 
         Window("PVR", id: "pvr") {
             PVRContentView(pvrViewModel: pvrViewModel)

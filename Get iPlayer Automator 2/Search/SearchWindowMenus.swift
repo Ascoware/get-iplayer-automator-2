@@ -38,8 +38,10 @@ struct SearchWindowMenus: Commands {
         }
 
         CommandGroup(after: .windowArrangement) {
-            OpenWindowButton(title: "Download Queue", windowID: "dl-queue")
+            OpenWindowButton(title: "Search & Downloads", windowID: "main")
                 .keyboardShortcut("d", modifiers: [.command])
+            OpenWindowButton(title: "Browse", windowID: "browse")
+                .keyboardShortcut("b", modifiers: [.command])
             OpenWindowButton(title: "Series-Link (PVR)", windowID: "pvr")
                 .keyboardShortcut("p", modifiers: [.command])
             OpenWindowButton(title: "Download History", windowID: "history")
