@@ -11,7 +11,7 @@ import Observation
 @MainActor
 @Observable
 class MockCachedProgramsViewModel: ProgramCacheProviding {
-    var viewType: SearchViewType = .tvToday
+    var viewType: SearchViewType = .tv
     var searchText: String = ""
     private(set) var viewCounts: [SearchViewType: Int] = [:]
 

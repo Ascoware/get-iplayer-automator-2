@@ -8,18 +8,16 @@
 import Foundation
 
 public enum SearchViewType: String, CaseIterable {
-    case tvToday = "TV Today"
-    case allTV = "All TV Shows"
-    case radioToday = "Radio Today"
-    case allRadio = "All Radio Shows"
+    case tv = "BBC TV"
+    case radio = "BBC Radio"
     case all = "All Shows"
 
     func radio() -> Bool {
-        self == .radioToday || self == .allRadio || self == .all
+        self == .radio || self == .all
     }
 
     func tv() -> Bool {
-        self == .tvToday || self == .allTV || self == .all
+        self == .tv || self == .all
     }
 
 }

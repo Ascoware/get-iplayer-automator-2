@@ -45,19 +45,13 @@ class CachedProgramsViewModel: ProgramCacheProviding {
     var filterRevision = 0
     @ObservationIgnored private var defaultsCancellable: AnyCancellable?
 
-    var viewType: SearchViewType = .tvToday
+    var viewType: SearchViewType = .tv
     var searchText = ""
 
     var viewCounts: [SearchViewType: Int] {
-        let allTV = dataFor(view: .allTV, searchText: "")
-        let allRadio = dataFor(view: .allRadio, searchText: "")
-        let startDate = Date(timeIntervalSinceNow: -24 * 60 * 60)
-        let endDate = Date()
-        return [
-            .allTV: allTV.count,
-            .allRadio: allRadio.count,
-            .tvToday: allTV.filter { startDate < $0.available && endDate > $0.available }.count,
-            .radioToday: allRadio.filter { startDate < $0.available && endDate > $0.available }.count,
+        [
+            .tv: dataFor(view: .tv, searchText: "").count,
+            .radio: dataFor(view: .radio, searchText: "").count,
         ]
     }
 
@@ -225,16 +219,14 @@ class CachedProgramsViewModel: ProgramCacheProviding {
     public func dataFor(view: SearchViewType, searchText: String) -> [CachedProgramme] {
         // Access filterRevision so the observation system tracks it as a dependency.
         _ = filterRevision
-        let startDate = Date(timeIntervalSinceNow: -24 * 60 * 60)
-        let endDate = Date()
 
         var filteredShows: [CachedProgramme]
         switch view {
-        case .tvToday, .allTV:
+        case .tv:
             filteredShows = bbcTVShows
-        case .radioToday, .allRadio:
+        case .radio:
             filteredShows = radioShows
-        default:
+        case .all:
             filteredShows = bbcTVShows + radioShows
         }
 
@@ -339,12 +331,6 @@ class CachedProgramsViewModel: ProgramCacheProviding {
                 show.desc.localizedStandardContains(searchText) ||
                 show.name.localizedStandardContains(searchText) ||
                 show.episode.localizedStandardContains(searchText)
-            }
-        }
-
-        if view == .tvToday || view == .radioToday {
-            filteredShows = filteredShows.filter { show in
-                return startDate < show.available && endDate > show.available
             }
         }
 
