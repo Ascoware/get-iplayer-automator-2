@@ -33,21 +33,24 @@ class GetCurrentWebpage {
 
             programIDs.append(pid)
         } else if url.hasPrefix("https://www.bbc.co.uk/iplayer/episodes/") {
-            // https://www.bbc.co.uk/iplayer/episodes/p00yzlr0/line-of-duty?seriesId=b01k9pm3
-            // It looks like a PID, but it's a 'brand ID' The real URL is embedded in an anchor tag.
-            var pid = ""
-            if let htmlPage = try? HTML(html: pageSource, encoding: .utf8) {
-                // There should only be one 'video' element.
-                if let anchorElement = htmlPage.at_xpath("//a[@class='play-cta__inner play-cta__inner--do-not-wrap play-cta__inner--link']") {
-                    let showURLString = anchorElement.at_xpath("//@href")?.text ?? ""
-                    if let pageURL = URL(string: url), let showURL = URL(string: showURLString, relativeTo: pageURL) {
-                        pid = showURL.deletingLastPathComponent().lastPathComponent
-                    }
-                }
+            // https://www.bbc.co.uk/iplayer/episodes/m002xhy2/ann-droid
+            // The brand/series ID in the URL isn't downloadable itself. Instead, each episode
+            // tile on the page links to "/iplayer/episode/<pid>/<slug>" — collect all of them
+            // so a series page adds every episode, and a single-programme page adds the one.
+            guard let htmlPage = try? HTML(html: pageSource, encoding: .utf8) else {
+                return
             }
 
-            if !pid.isEmpty {
-                programIDs.append(pid)
+            var seenPIDs = Set<String>()
+            for anchor in htmlPage.xpath("//a[starts-with(@href, '/iplayer/episode/')]") {
+                guard let href = anchor["href"] else { continue }
+                let path = href.hasPrefix("http") ? (URL(string: href)?.path ?? "") : href
+                let components = path.split(separator: "/")
+                guard components.count >= 3, components[0] == "iplayer", components[1] == "episode" else { continue }
+                let pid = String(components[2])
+                if seenPIDs.insert(pid).inserted {
+                    programIDs.append(pid)
+                }
             }
 
         } else if url.hasPrefix("https://www.bbc.co.uk/radio/play/") || url.hasPrefix("https://www.bbc.co.uk/sounds/play/") {
