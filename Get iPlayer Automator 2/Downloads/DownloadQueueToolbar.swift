@@ -15,6 +15,8 @@ struct DownloadQueueToolbar: CustomizableToolbarContent {
     var downloadHistoryModel: DownloadHistoryModel
     @Binding var selection: Set<String>
 
+    @Environment(\.openWindow) private var openWindow
+
     private var selectedSeriesLinkedItems: [Programme] {
         downloadQueueViewModel.downloadQueue.filter { program in
             selection.contains(program.pid) && program.status == .addedByPVR
@@ -51,7 +53,11 @@ struct DownloadQueueToolbar: CustomizableToolbarContent {
             placement: .automatic,
             showsByDefault: true) {
                 Button {
-                    Task { await pvrViewModel.checkForNewEpisodes() }
+                    Task {
+                        if await pvrViewModel.checkForNewEpisodes() {
+                            openWindow(id: "main")
+                        }
+                    }
                 } label: {
                     Label("Add Series", systemImage: "record.circle")
                         .imageScale(.large)

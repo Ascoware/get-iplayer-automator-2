@@ -46,7 +46,8 @@ struct ActivityView: View {
             if pvrViewModel.isChecking {
                 ActivityRow(
                     title: "Checking Series-Link",
-                    detail: "Searching for new episodes..."
+                    detail: pvrViewModel.currentSeriesName.map { "Searching for: \($0)…" }
+                        ?? "Searching for new episodes..."
                 )
             }
 

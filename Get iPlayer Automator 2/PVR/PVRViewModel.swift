@@ -18,6 +18,7 @@ class PVRViewModel {
 
     var series: [Series] = []
     private(set) var isChecking = false
+    private(set) var currentSeriesName: String?
 
     private let downloadQueueViewModel: any DownloadQueueProviding
     private let seriesFileName = "series.pvrdata"
@@ -60,12 +61,18 @@ class PVRViewModel {
     // MARK: - Searching for new episodes
 
     /// Search get_iplayer for any new episodes matching each recorded series and add them to the queue.
-    func checkForNewEpisodes() async {
-        guard !series.isEmpty, !isChecking else { return }
+    /// Returns `true` if any new episode was found and added to the download queue.
+    @discardableResult
+    func checkForNewEpisodes() async -> Bool {
+        guard !series.isEmpty, !isChecking else { return false }
         isChecking = true
-        defer { isChecking = false }
+        defer {
+            isChecking = false
+            currentSeriesName = nil
+        }
 
         var toRemove: [Series] = []
+        var foundAnyOverall = false
 
         for index in series.indices {
             let s = series[index]
@@ -74,6 +81,7 @@ class PVRViewModel {
                 continue
             }
 
+            currentSeriesName = s.showName
             let searchArgs = buildSearchArgs(for: s)
             var outputLines: [String] = []
 
@@ -104,6 +112,7 @@ class PVRViewModel {
                 toRemove.append(s)
             } else if foundAny {
                 series[index].lastFound = Date()
+                foundAnyOverall = true
             }
         }
 
@@ -111,6 +120,8 @@ class PVRViewModel {
             series.removeAll { toRemove.contains($0) }
         }
         save()
+
+        return foundAnyOverall
     }
 
     // MARK: - Output Parsing

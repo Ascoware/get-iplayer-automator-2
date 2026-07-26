@@ -14,6 +14,8 @@ struct PVRToolbar: CustomizableToolbarContent {
     /// UUIDs selected in the series list.
     @Binding var seriesSelection: Set<UUID>
 
+    @Environment(\.openWindow) private var openWindow
+
     var body: some CustomizableToolbarContent {
         ToolbarItem(
             id: "checkNow",
@@ -21,7 +23,11 @@ struct PVRToolbar: CustomizableToolbarContent {
             showsByDefault: true
         ) {
             Button {
-                Task { await pvrViewModel.checkForNewEpisodes() }
+                Task {
+                    if await pvrViewModel.checkForNewEpisodes() {
+                        openWindow(id: "main")
+                    }
+                }
             } label: {
                 Label("Add Series", systemImage: "record.circle")
                     .imageScale(.large)
