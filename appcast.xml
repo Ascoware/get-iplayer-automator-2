@@ -4,7 +4,22 @@
         <title>Get iPlayer Automator 2</title>
         <description>Most recent changes with links to updates.</description>
         <language>en</language>
-                                                        <item>
+                                                                <item>
+            <title>v1.0.9</title>
+            <pubDate>Sun, 02 Aug 2026 19:10:18 +0000</pubDate>
+            <description><![CDATA[<ul>
+<li>STV updated their program web pages again, so the metadata retrieval ncode needed an update.</li>
+</ul>]]></description>
+            <sparkle:minimumSystemVersion>15.6.0</sparkle:minimumSystemVersion>
+            <enclosure
+                url="https://github.com/Ascoware/get-iplayer-automator-2/releases/download/v1.0.9/Get.iPlayer.Automator.2.v1.0.9.b202608021140.zip"
+                sparkle:version="202608021140"
+                sparkle:shortVersionString="1.0.9"
+                sparkle:edSignature="K6TYnVvVd+xdHwJZhXEdYagKJc2D0rSle8fF5dDrp0PNmGU08pz+R0oWmXE7p0YEkGW7WeFGwQCpqhesEHVUAw=="
+                length="120279165"
+                type="application/octet-stream" />
+        </item>
+        <item>
             <title>v1.0.8</title>
             <pubDate>Sun, 26 Jul 2026 03:14:49 +0000</pubDate>
             <description><![CDATA[<ul>
