@@ -167,7 +167,6 @@
 		7F0C179E2F7449E900E208A2 /* iTunes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iTunes.h; sourceTree = "<group>"; };
 		7F0C179F2F7449E900E208A2 /* MicrosoftEdge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosoftEdge.swift; sourceTree = "<group>"; };
 		7F0C17A02F7449E900E208A2 /* MicrosoftEdgeScripting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosoftEdgeScripting.swift; sourceTree = "<group>"; };
-		7F0C17A12F7449E900E208A2 /* NewSTVMetadataExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSTVMetadataExtractor.swift; sourceTree = "<group>"; };
 		7F0C17A22F7449E900E208A2 /* Safari.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Safari.swift; sourceTree = "<group>"; };
 		7F0C17A32F7449E900E208A2 /* SafariScripting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariScripting.swift; sourceTree = "<group>"; };
 		7F0C17A42F7449E900E208A2 /* SBApplicationProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SBApplicationProtocol.swift; sourceTree = "<group>"; };
@@ -345,7 +344,6 @@
 				7F0C179E2F7449E900E208A2 /* iTunes.h */,
 				7F0C179F2F7449E900E208A2 /* MicrosoftEdge.swift */,
 				7F0C17A02F7449E900E208A2 /* MicrosoftEdgeScripting.swift */,
-				7F0C17A12F7449E900E208A2 /* NewSTVMetadataExtractor.swift */,
 				7F0C17A22F7449E900E208A2 /* Safari.swift */,
 				7F0C17A32F7449E900E208A2 /* SafariScripting.swift */,
 				7F0C17A42F7449E900E208A2 /* SBApplicationProtocol.swift */,

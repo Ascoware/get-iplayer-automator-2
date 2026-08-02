@@ -114,7 +114,7 @@ class GetCurrentWebpage {
             }
         } else if url.hasPrefix("https://player.stv.tv/episode/") {
             do {
-                let show = try STVMetadataExtractor.getShowMetadata(html: pageSource)
+                let show = try await STVMetadataExtractor.getShowMetadata(html: pageSource)
                 if !show.pid.isEmpty {
                     programs.append(show)
                 }

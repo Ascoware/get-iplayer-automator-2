@@ -17,7 +17,7 @@ enum STVMetadataError: Error {
 
 class STVMetadataExtractor {
 
-    @MainActor static func getShowMetadata(html: String) throws -> Programme {
+    @MainActor static func getShowMetadata(html: String) async throws -> Programme {
         let longDateFormatter = ISO8601DateFormatter()
         longDateFormatter.timeZone = TimeZone(secondsFromGMT:0)
 
@@ -49,23 +49,31 @@ class STVMetadataExtractor {
                     let rawDesc = episodeInfo["summary"].string ?? pageProps["summary"].string ?? "None available"
                     newProgram.desc = rawDesc.filter { !$0.isNewline }
 
-                    // Supplement with playerApiCache if available (series/episode numbers and DRM check)
-                    let episodesKey = "/episodes/\(newProgram.pid)"
-                    if let showData = propsDict["initialReduxState"]?["playerApiCache"][episodesKey]["results"],
-                       !showData.isEmpty {
-                        let protectedMedia = showData["programme"]["drmEnabled"].boolValue
-                        if protectedMedia {
+                    // Series/episode numbers and the DRM flag used to be embedded in the
+                    // server-rendered page under initialReduxState.playerApiCache. STV now
+                    // gates that data behind login — the embedded entry comes back as
+                    // { success: false, reason: "…only available if you are logged in" } — so
+                    // both numbers stayed 0 and every download was named s01e01.
+                    // Fetch the same record anonymously from the public player API instead.
+                    let episodeGuid = episodeInfo["episodeGuid"].stringValue
+                    if let showData = await fetchEpisodeRecord(episodeGuid: episodeGuid) {
+                        if showData["programme"]["drmEnabled"].boolValue {
                             DDLogError("**** DRM protected media - bailing out")
                             throw STVMetadataError.drmProtectedError
                         }
 
-                        let seriesString = showData["playerSeries"]["name"].stringValue
-                        for item in seriesString.components(separatedBy: .whitespacesAndNewlines) {
-                            if let number = Int(item) {
-                                newProgram.seriesNum = number
-                            }
-                        }
+                        newProgram.seriesNum = seriesNumber(from: showData["playerSeries"]["name"].stringValue)
                         newProgram.episodeNum = showData["number"].intValue
+                    }
+
+                    // STV now prefixes episode titles with the episode index, e.g.
+                    // "1. Safe in Amsterdam". Use it as a fallback for the episode number, and
+                    // strip it so it doesn't duplicate the sNNeNN already in the filename.
+                    if let (leadingNumber, strippedTitle) = splitLeadingEpisodeNumber(newProgram.episode) {
+                        if newProgram.episodeNum == 0 {
+                            newProgram.episodeNum = leadingNumber
+                        }
+                        newProgram.episode = strippedTitle
                     }
 
                     newProgram.web = URL(string: pageProps["currentUrl"].stringValue)
@@ -147,7 +155,7 @@ class STVMetadataExtractor {
             }
 
             do {
-                let prog = try getShowMetadata(html: episodeHTML)
+                let prog = try await getShowMetadata(html: episodeHTML)
                 programmes.append(prog)
             } catch {
                 DDLogWarn("Failed to extract metadata from \(episodeURL): \(error)")
@@ -197,6 +205,49 @@ class STVMetadataExtractor {
             guard let permalink = $0["_permalink"].string else { return nil }
             return URL(string: permalink)
         }
+    }
+
+    /// Fetch a single episode's full record from the public STV player API. This carries the
+    /// series/episode numbers and DRM flag that STV no longer embeds in the page for logged-out
+    /// users. Returns the first result, or nil if the lookup fails.
+    private static func fetchEpisodeRecord(episodeGuid: String) async -> JSON? {
+        guard !episodeGuid.isEmpty,
+              var components = URLComponents(string: "https://player.api.stv.tv/v1/episodes") else {
+            return nil
+        }
+        components.queryItems = [URLQueryItem(name: "guid", value: episodeGuid)]
+
+        guard let apiURL = components.url else { return nil }
+        var request = URLRequest(url: apiURL)
+        request.setValue("Mozilla/5.0", forHTTPHeaderField: "User-Agent")
+
+        guard let (data, _) = try? await URLSession.shared.data(for: request) else {
+            DDLogWarn("Failed to fetch episode record for \(episodeGuid)")
+            return nil
+        }
+
+        return JSON(data)["results"].array?.first
+    }
+
+    /// Parse the numeric season from an STV series name such as "Series 4".
+    private static func seriesNumber(from name: String) -> Int {
+        for token in name.components(separatedBy: .whitespacesAndNewlines) {
+            if let number = Int(token) {
+                return number
+            }
+        }
+        return 0
+    }
+
+    /// STV prefixes episode titles with the episode index, e.g. "1. Safe in Amsterdam".
+    /// Returns the parsed number and the remaining title, or nil when there's no such prefix.
+    private static func splitLeadingEpisodeNumber(_ title: String) -> (number: Int, title: String)? {
+        let trimmed = title.trimmingCharacters(in: .whitespaces)
+        guard let dotRange = trimmed.range(of: ". ") else { return nil }
+        guard let number = Int(trimmed[trimmed.startIndex..<dotRange.lowerBound]) else { return nil }
+        let remainder = String(trimmed[dotRange.upperBound...]).trimmingCharacters(in: .whitespaces)
+        guard !remainder.isEmpty else { return nil }
+        return (number, remainder)
     }
 
 }
