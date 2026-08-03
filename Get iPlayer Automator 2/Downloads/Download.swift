@@ -33,7 +33,11 @@ class Download {
 
     var hdVideo: Bool = false
 
-    var currentExecution: Execution?
+    /// The shape of every streaming `run()` in the download subclasses: no stdin,
+    /// stdout consumed as a sequence, stderr merged into stdout.
+    typealias StreamingExecution = Execution<NoInput, SequenceOutput, CombinedErrorOutput>
+
+    var currentExecution: StreamingExecution?
 
     //Proxy Info
     //var proxy: HTTPProxy?

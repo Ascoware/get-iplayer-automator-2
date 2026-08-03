@@ -114,11 +114,12 @@ class STVDownload : Download {
                     "SSL_CERT_FILE": GetiPlayerArguments.shared.youtubeDLEnvironment["SSL_CERT_FILE"]
                 ]),
                 platformOptions: platformOptions,
-                error: .combinedWithOutput,
-                preferredBufferSize: 128
-            ) { execution, standardOutput in
+                input: .none,
+                output: .sequence,
+                error: .combinedWithOutput
+            ) { execution in
                 self.currentExecution = execution
-                for try await line in standardOutput.lines() {
+                for try await line in execution.standardOutput.strings() {
                     self.youtubeDLProgress(output: line)
                 }
             }
@@ -183,9 +184,10 @@ class STVDownload : Download {
                         let remaining = String(match).trimmingCharacters(in: .whitespaces)
                         self.show.progress = "\(remaining) remaining"
                     },
-            Matcher(identifier: .prefix("WARNING: Failed to download m3u8 information"), terminator: "\n") { _, _ in
-                self.show.progress = "Failed: Proxy"
-            }
+            Matcher(identifiers: [.prefix("WARNING: Failed to download m3u8 information")],
+                    terminators: ["\n", .end]) { _, _ in
+                        self.show.progress = "Failed: Proxy"
+                    }
 
         ])
     }

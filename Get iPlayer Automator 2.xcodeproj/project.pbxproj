@@ -43,7 +43,6 @@
 		7F0C17EF2F744B1D00E208A2 /* GetCurrentWebpage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C179D2F7449E900E208A2 /* GetCurrentWebpage.swift */; };
 		7F0C17F02F744B1D00E208A2 /* TVScripting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17A82F7449E900E208A2 /* TVScripting.swift */; };
 		7F0C17F12F744B1D00E208A2 /* STVMetadataExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17A62F7449E900E208A2 /* STVMetadataExtractor.swift */; };
-		7FABCA110000000000000002 /* ABCMetadataExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FABCA110000000000000001 /* ABCMetadataExtractor.swift */; };
 		7F0C17F32F744B1D00E208A2 /* SBApplicationProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17A42F7449E900E208A2 /* SBApplicationProtocol.swift */; };
 		7F0C17F42F744B1D00E208A2 /* SBObjectProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17A52F7449E900E208A2 /* SBObjectProtocol.swift */; };
 		7F0C17F52F744B1D00E208A2 /* MicrosoftEdgeScripting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17A02F7449E900E208A2 /* MicrosoftEdgeScripting.swift */; };
@@ -89,6 +88,7 @@
 		7FA2EFBA2A7CB8660049CE14 /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FA2EFB92A7CB8660049CE14 /* ScriptingBridge.framework */; };
 		7FA7B1C72A78CF6E00A8B6CF /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 7FA7B1C62A78CF6E00A8B6CF /* Collections */; };
 		7FA7B1C92A78CF6E00A8B6CF /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 7FA7B1C82A78CF6E00A8B6CF /* OrderedCollections */; };
+		7FABCA110000000000000002 /* ABCMetadataExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FABCA110000000000000001 /* ABCMetadataExtractor.swift */; };
 		7FE5EED92F90AC020079290B /* ProgramInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE5EED82F90AC020079290B /* ProgramInfoView.swift */; };
 		8F80337E49E54328896745BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F0C17962F7449E900E208A2 /* Assets.xcassets */; };
 		A1B2C3D4E5F647890ABCDEF0 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F647890ABCDEF1 /* ActivityView.swift */; };
@@ -172,7 +172,6 @@
 		7F0C17A42F7449E900E208A2 /* SBApplicationProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SBApplicationProtocol.swift; sourceTree = "<group>"; };
 		7F0C17A52F7449E900E208A2 /* SBObjectProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SBObjectProtocol.swift; sourceTree = "<group>"; };
 		7F0C17A62F7449E900E208A2 /* STVMetadataExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STVMetadataExtractor.swift; sourceTree = "<group>"; };
-		7FABCA110000000000000001 /* ABCMetadataExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABCMetadataExtractor.swift; sourceTree = "<group>"; };
 		7F0C17A72F7449E900E208A2 /* TV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TV.swift; sourceTree = "<group>"; };
 		7F0C17A82F7449E900E208A2 /* TVScripting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVScripting.swift; sourceTree = "<group>"; };
 		7F0C17AA2F7449E900E208A2 /* CachedProgramsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedProgramsViewModel.swift; sourceTree = "<group>"; };
@@ -212,6 +211,7 @@
 		7FA1B0012F9900000000AA01 /* Bundled Tool.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Bundled Tool.entitlements"; sourceTree = "<group>"; };
 		7FA1B0022F9900000000AA02 /* yt-dlp_macos.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "yt-dlp_macos.entitlements"; sourceTree = "<group>"; };
 		7FA2EFB92A7CB8660049CE14 /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = System/Library/Frameworks/ScriptingBridge.framework; sourceTree = SDKROOT; };
+		7FABCA110000000000000001 /* ABCMetadataExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABCMetadataExtractor.swift; sourceTree = "<group>"; };
 		7FAD2E792F763C02005E4303 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7FE5EED82F90AC020079290B /* ProgramInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramInfoView.swift; sourceTree = "<group>"; };
 		998CDC3F85714755A143A250 /* LegacyDataMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyDataMigrator.swift; sourceTree = "<group>"; };
@@ -518,6 +518,8 @@
 			dependencies = (
 			);
 			name = "Get iPlayer Programme";
+			packageProductDependencies = (
+			);
 			productName = "Get iPlayer Programme";
 			productReference = 7F5AFE01000000000000AA05 /* Get iPlayer Programme.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -530,7 +532,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 2650;
+				LastUpgradeCheck = 2660;
 				TargetAttributes = {
 					7F1E9D292A5D0427002C71A6 = {
 						CreatedOnToolsVersion = 14.3;
@@ -591,7 +593,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		7FCFB2662F78E27F00C76D03 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
+			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
@@ -716,6 +718,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -780,6 +783,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";

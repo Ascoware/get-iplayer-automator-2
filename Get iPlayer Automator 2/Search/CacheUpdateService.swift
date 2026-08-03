@@ -95,10 +95,11 @@ class CacheUpdateService {
                     "PERLIO": ":unix",
                     "PATH": GetiPlayerArguments.shared.perlEnvironmentPath
                 ]),
-                error: .combinedWithOutput,
-                preferredBufferSize: 128
-            ) { execution, standardOutput in
-                for try await line in standardOutput.lines() {
+                input: .none,
+                output: .sequence,
+                error: .combinedWithOutput
+            ) { execution in
+                for try await line in execution.standardOutput.strings() {
                     self.processOutput(line)
                 }
             }

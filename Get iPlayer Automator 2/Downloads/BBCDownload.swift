@@ -167,11 +167,12 @@ class BBCDownload: Download {
                     "PATH": GetiPlayerArguments.shared.perlEnvironmentPath
                 ]),
                 platformOptions: platformOptions,
-                error: .combinedWithOutput,
-                preferredBufferSize: 128
-            ) { execution, standardOutput in
+                input: .none,
+                output: .sequence,
+                error: .combinedWithOutput
+            ) { execution in
                 self.currentExecution = execution
-                for try await line in standardOutput.lines() {
+                for try await line in execution.standardOutput.strings() {
                     self.processGetiPlayerOutput(line)
                 }
             }
