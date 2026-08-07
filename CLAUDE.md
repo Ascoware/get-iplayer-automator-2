@@ -36,15 +36,18 @@ Get iPlayer Automator 2 is a macOS SwiftUI application for downloading BBC iPlay
 
 **Download System** (sequential — one download at a time):
 - `Programme.swift` — core model with `@Published var status: ProgramState`. `ProgramState` is a 14-state enum (`.new` → `.successful`/`.failed`/`.cancelled`). Conforms to `ObservableObject`, `Codable`, `Identifiable`, `Comparable`, `Hashable`.
-- `Download.swift` — base class holding a `CommandRunner` reference and preference access via `@Default`.
+- `Download.swift` — base class holding the current `Subprocess` execution (`currentExecution`, typealiased as `StreamingExecution`) and preference access via `@Default`. `cancel()` sends `.terminate` to the process group.
 - `BBCDownload.swift` — parses `get_iplayer` output line-by-line using the `Sweep` library for regex matching. Classifies failures via `failureKeyword` pattern (FileExists, ShowNotFound, proxy errors, etc.).
 - `ITVDownload.swift` — uses `yt-dlp` for non-BBC downloads, then calls AtomicParsley for metadata tagging.
 - `DownloadQueueViewModel.shared` — drives the queue via `startOneDownload()` → `await download.start()` → recursive call for next item. Persists queue as JSON in Application Support. Implements `DownloadQueueProviding` protocol. Optionally adds completed downloads to Music/TV app via ScriptingBridge.
 
-**Command Execution** (`Utilities/CommandRunner.swift`):
-- Async wrapper around `Process`. Streams output line-by-line via `AsyncThrowingStream`.
-- Uses `TerminationState` actor for thread-safe cancellation tracking.
-- Call `cancel()` to interrupt a running process.
+**Command Execution** — all subprocesses use the **swift-subprocess** package (`import Subprocess`); there is no wrapper type. Two shapes are in use:
+- *Streaming* (downloads, cache updates) — `run(.path(...), ..., input: .none, output: .sequence, error: .combinedWithOutput)` with a trailing closure that receives an `Execution`, stashes it in `currentExecution`, and iterates `execution.standardOutput.strings()`. Cancel by sending `.terminate` to the execution.
+- *Collected* (one-shot queries like `--info`, PVR search, `--pid-recursive-list`) — `run(..., output: .string(limit:), error: .string(limit:))`, then read `result.standardOutput`. Both streams are drained concurrently, so neither can deadlock on a full pipe.
+
+Environment is always `.inherit.updating([...])` with `HOME`, `PERL_UNICODE`, `PERLIO`, `PATH` for Perl invocations.
+
+Gotcha: as of swift-subprocess 0.5, `strings()` strips the trailing line separator, so `Sweep` matchers must not use `"\n"` as their terminator.
 
 **Paths to Binaries** (`GetiPlayerArguments.swift`):
 - Singleton providing absolute paths to bundled Perl, `yt-dlp`, AtomicParsley, ffmpeg.
@@ -86,6 +89,10 @@ Key enums in `Preference.swift`: `TVFormat` (fhd/hd/sd/web/mobile) and `RadioFor
 - `get_iplayer/` — Perl installation with `get_iplayer` script
 - `yt-dlp_macos/` — for non-BBC downloads
 - `utils/bin/` — AtomicParsley and ffmpeg for metadata tagging
+
+These are **not checked into git** — `make binaries` (driven by `Scripts/release.sh`) builds them at release time, so `Binaries/get_iplayer/` is gitignored and absent from a fresh clone.
+
+`get_iplayer_custom.patch` applies local modifications during that build. Notably, it changes match/episode listing lines from upstream's `<name> - <episode>, <channel>, <pid>` to **pipe**-separated `<name> - <episode>|<channel>|<pid>`. Always split get_iplayer output on `"|"`, never `","` — episode titles routinely contain commas. Check the patch before assuming upstream behavior, since the patched script isn't visible in the repo.
 
 ### Dependencies (Swift Package Manager via Xcode)
 
