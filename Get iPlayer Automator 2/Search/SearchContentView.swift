@@ -95,7 +95,7 @@ struct MainWindowView: View {
     /// shows unless the user opted to keep showing them.
     private var searchResults: [CachedProgramme] {
         guard !searchText.isEmpty else { return [] }
-        let all = cachedProgramsViewModel.dataFor(view: .all, searchText: searchText)
+        let all = cachedProgramsViewModel.allShows(searchText: searchText)
         guard !Defaults.shared.ShowDownloadedInSearch else { return all }
         let downloaded = downloadedPIDs
         return all.filter { !downloaded.contains($0.pid) }

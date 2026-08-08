@@ -39,9 +39,8 @@ class MockCachedProgramsViewModel: ProgramCacheProviding {
             timeadded: nil, radio: false, realPID: ""
         )
         mockPrograms = [program1, program2]
-        viewCounts = Dictionary(uniqueKeysWithValues: SearchViewType.allCases.compactMap { type in
-            guard type != .all else { return nil }
-            return (type, mockPrograms.count)
+        viewCounts = Dictionary(uniqueKeysWithValues: SearchViewType.allCases.map { type in
+            (type, mockPrograms.count)
         })
     }
 
@@ -50,6 +49,10 @@ class MockCachedProgramsViewModel: ProgramCacheProviding {
     }
 
     func dataFor(view: SearchViewType, searchText: String) -> [CachedProgramme] {
+        allShows(searchText: searchText)
+    }
+
+    func allShows(searchText: String) -> [CachedProgramme] {
         if searchText.isEmpty {
             return mockPrograms
         }

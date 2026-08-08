@@ -7,17 +7,9 @@
 
 import Foundation
 
+/// The sidebar's selectable views. Searching TV and radio together isn't a view
+/// type -- the main window does that through `allShows(searchText:)`.
 public enum SearchViewType: String, CaseIterable {
     case tv = "BBC TV"
     case radio = "BBC Radio"
-    case all = "All Shows"
-
-    func radio() -> Bool {
-        self == .radio || self == .all
-    }
-
-    func tv() -> Bool {
-        self == .tv || self == .all
-    }
-
 }

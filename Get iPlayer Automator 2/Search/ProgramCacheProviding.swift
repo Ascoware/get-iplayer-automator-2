@@ -15,5 +15,6 @@ protocol ProgramCacheProviding: AnyObject {
 
     func reloadCachedShows()
     func dataFor(view: SearchViewType, searchText: String) -> [CachedProgramme]
+    func allShows(searchText: String) -> [CachedProgramme]
     func findProgrammeFromPID(pid: String) -> CachedProgramme?
 }

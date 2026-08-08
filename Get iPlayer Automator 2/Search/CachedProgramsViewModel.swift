@@ -234,24 +234,26 @@ class CachedProgramsViewModel: ProgramCacheProviding {
         name.localizedCaseInsensitiveContains("news")
     }
 
+    /// Programmes for one sidebar view.
     public func dataFor(view: SearchViewType, searchText: String) -> [CachedProgramme] {
+        filter(view == .tv ? bbcTVShows : radioShows, searchText: searchText)
+    }
+
+    /// TV and radio together, for the main window's search field.
+    public func allShows(searchText: String) -> [CachedProgramme] {
+        filter(bbcTVShows + radioShows, searchText: searchText)
+    }
+
+    /// Applies the news, channel, and text filters. Every test dispatches on the
+    /// programme's own `radio` flag, so the same pass works for a single view and
+    /// for TV and radio combined.
+    private func filter(_ shows: [CachedProgramme], searchText: String) -> [CachedProgramme] {
         // Access filterRevision so the observation system tracks it as a dependency.
         _ = filterRevision
 
-        var filteredShows: [CachedProgramme]
-        switch view {
-        case .tv:
-            filteredShows = bbcTVShows
-        case .radio:
-            filteredShows = radioShows
-        case .all:
-            filteredShows = bbcTVShows + radioShows
-        }
+        var filteredShows = shows
 
-        // Filter out programs by category first.
-        // No view guard here: `tv()` and `radio()` are both true for `.all`, so guarding
-        // on them skipped both filters in the main search pane. The `show.radio` test
-        // inside each filter already picks out the right programmes for every view.
+        // Filter out programs by category first
         if ignoreAllTVNews {
             filteredShows = filteredShows.filter { show in
                 !(!show.radio && Self.isNews(show.name))
@@ -264,89 +266,8 @@ class CachedProgramsViewModel: ProgramCacheProviding {
             }
         }
 
-        if view.tv() || view == .all {
-            filteredShows = filteredShows.filter { show in
-                guard !show.radio else {
-                    return view == .all
-                }
-
-
-                if let channel = BBCNationalChannels(rawValue: show.channel) {
-                    switch channel {
-                    case .bbcOne:
-                        return showBBCOne
-                    case .bbcTwo:
-                        return showBBCTwo
-                    case .bbcThree:
-                        return showBBCThree
-                    case .bbcFour:
-                        return showBBCFour
-                    case .bbcNews:
-                        return showBBCNews
-                    case .bbcParliament:
-                        return showBBCParliament
-                    case .cbbc:
-                        return showCBBC
-                    case .cbeebies:
-                        return showCBeebies
-                    }
-                }
-
-                if let _ = BBCRegionalChannels(rawValue: show.channel) {
-                    return showRegionalTVStations
-                }
-
-                // Only option left is local TV.
-                return showLocalTVStations
-            }
-        }
-
-        if view.radio() {
-            filteredShows = filteredShows.filter { show in
-                guard show.radio else {
-                    return view == .all
-                }
-
-                if let channel = BBCRadioChannels(rawValue: show.channel) {
-                    switch channel {
-                    case .bbcRadio1:
-                        return showRadio1
-                    case .bbcRadio1Xtra:
-                        return showRadio1Xtra
-                    case .bbcRadio2:
-                        return showRadio2
-                    case .bbcRadio3:
-                        return showRadio3
-                    case .bbcRadio4:
-                        return showRadio4
-                    case .bbcRadio4Extra:
-                        return showRadio4Extra
-                    case .bbcRadio5Live:
-                        return showRadio5Live
-                    case .bbcRadio5LiveSports:
-                        return showRadio5LiveExtra
-                    case .bbcRadio6:
-                        return showRadio6Music
-                    case .bbcRadio6IndieForever:
-                        return showRadio6IndieForever
-                    case .bbcAsian:
-                        return showAsianNetwork
-                    case .bbcWorldService:
-                        return showWorldService
-                    case .cbeebiesRadio:
-                        return showCBeebiesRadio
-                    }
-                }
-
-                for region in regionalRadioChannels {
-                    if show.channel == region {
-                        return showRegionalRadioStations
-                    }
-                }
-
-                // Only option left is local radio
-                return showLocalRadioStations
-            }
+        filteredShows = filteredShows.filter { show in
+            show.radio ? showRadioChannel(show.channel) : showTVChannel(show.channel)
         }
 
         if !searchText.isEmpty {
@@ -358,6 +279,78 @@ class CachedProgramsViewModel: ProgramCacheProviding {
         }
 
         return filteredShows
+    }
+
+    /// Whether a TV programme's channel is enabled in Channels settings.
+    private func showTVChannel(_ channel: String) -> Bool {
+        if let channel = BBCNationalChannels(rawValue: channel) {
+            switch channel {
+            case .bbcOne:
+                return showBBCOne
+            case .bbcTwo:
+                return showBBCTwo
+            case .bbcThree:
+                return showBBCThree
+            case .bbcFour:
+                return showBBCFour
+            case .bbcNews:
+                return showBBCNews
+            case .bbcParliament:
+                return showBBCParliament
+            case .cbbc:
+                return showCBBC
+            case .cbeebies:
+                return showCBeebies
+            }
+        }
+
+        if BBCRegionalChannels(rawValue: channel) != nil {
+            return showRegionalTVStations
+        }
+
+        // Only option left is local TV.
+        return showLocalTVStations
+    }
+
+    /// Whether a radio programme's station is enabled in Channels settings.
+    private func showRadioChannel(_ channel: String) -> Bool {
+        if let channel = BBCRadioChannels(rawValue: channel) {
+            switch channel {
+            case .bbcRadio1:
+                return showRadio1
+            case .bbcRadio1Xtra:
+                return showRadio1Xtra
+            case .bbcRadio2:
+                return showRadio2
+            case .bbcRadio3:
+                return showRadio3
+            case .bbcRadio4:
+                return showRadio4
+            case .bbcRadio4Extra:
+                return showRadio4Extra
+            case .bbcRadio5Live:
+                return showRadio5Live
+            case .bbcRadio5LiveSports:
+                return showRadio5LiveExtra
+            case .bbcRadio6:
+                return showRadio6Music
+            case .bbcRadio6IndieForever:
+                return showRadio6IndieForever
+            case .bbcAsian:
+                return showAsianNetwork
+            case .bbcWorldService:
+                return showWorldService
+            case .cbeebiesRadio:
+                return showCBeebiesRadio
+            }
+        }
+
+        if regionalRadioChannels.contains(channel) {
+            return showRegionalRadioStations
+        }
+
+        // Only option left is local radio
+        return showLocalRadioStations
     }
 
     public func findProgrammeFromPID(pid: String) -> CachedProgramme? {

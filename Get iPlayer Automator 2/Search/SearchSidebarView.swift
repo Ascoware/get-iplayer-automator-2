@@ -15,10 +15,8 @@ struct SearchSidebarView: View {
         List(selection: $cachedProgramsViewModel.viewType) {
             Section("WHAT'S ON") {
                 ForEach(SearchViewType.allCases, id: \.self) { type in
-                    if type != .all {
-                        Text(type.rawValue)
-                            .badge(showTotals ? cachedProgramsViewModel.viewCounts[type, default: 0] : 0)
-                    }
+                    Text(type.rawValue)
+                        .badge(showTotals ? cachedProgramsViewModel.viewCounts[type, default: 0] : 0)
                 }
             }
         }
