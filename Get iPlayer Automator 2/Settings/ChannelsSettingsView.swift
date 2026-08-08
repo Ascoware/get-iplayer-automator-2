@@ -118,20 +118,24 @@ struct ChannelsSettingsView: View {
                             Text("BBC Radio 6 Music")
                         })
                     }
+                    // Both station names are too long for a single grid cell.
                     GridRow {
-                        // The station name is too long for a single grid cell.
+                        Toggle(isOn: $Radio5LiveSportsExtra, label: {
+                            Text("BBC Radio 5 Live Sports Extra")
+                        })
+                        .gridCellColumns(2)
                         Toggle(isOn: $Radio6IndieForever, label: {
                             Text("BBC Radio 6 Indie Forever")
                         })
                         .gridCellColumns(2)
+                    }
+                    GridRow {
                         Toggle(isOn: $BBCWorldService, label: {
                             Text("BBC World Service")
                         })
                         Toggle(isOn: $RadioAsianNetwork, label: {
                             Text("BBC Asian Network")
                         })
-                    }
-                    GridRow {
                         Toggle(isOn: $CBeebiesRadio, label: {
                             Text("CBeebies Radio")
                         })

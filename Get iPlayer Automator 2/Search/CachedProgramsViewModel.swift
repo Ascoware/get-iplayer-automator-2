@@ -78,7 +78,7 @@ class CachedProgramsViewModel: ProgramCacheProviding {
     @ObservationIgnored @Default(\.Radio6IndieForever) var showRadio6IndieForever
     @ObservationIgnored @Default(\.RadioAsianNetwork) var showAsianNetwork
     @ObservationIgnored @Default(\.BBCWorldService) var showWorldService
-    @ObservationIgnored @Default(\.CBeebies) var showCBeebiesRadio
+    @ObservationIgnored @Default(\.CBeebiesRadio) var showCBeebiesRadio
 
     enum BBCRadioChannels: String, CaseIterable {
         case bbcRadio1 = "BBC Radio 1"
@@ -189,6 +189,15 @@ class CachedProgramsViewModel: ProgramCacheProviding {
             }
 
             let elements = line.components(separatedBy: "|")
+
+            // A refresh interrupted mid-write (or a full disk) can leave a truncated
+            // final line. Skip short rows rather than trapping on a missing field --
+            // the bad cache is re-read on every launch, so a crash here never recovers.
+            guard elements.count >= 15 else {
+                DDLogWarn("Skipping malformed \(fileName) line with \(elements.count) fields: \(line)")
+                continue
+            }
+
             let availableDate = Self.dateFormatter.date(from: elements[8]) ?? Date()
             let expiresDate = Self.dateFormatter.date(from: elements[9])
             let timeAddedSecs = Double(elements[14]) ?? 0.0
@@ -218,6 +227,13 @@ class CachedProgramsViewModel: ProgramCacheProviding {
         return cachedPrograms
     }
 
+    /// Matches the promise made by the Channels settings labels -- "programmes with
+    /// \"news\" in the title". `hasSuffix("News")` missed Newsnight, Newsbeat and
+    /// BBC News at Ten, which are exactly the shows the setting exists to hide.
+    private static func isNews(_ name: String) -> Bool {
+        name.localizedCaseInsensitiveContains("news")
+    }
+
     public func dataFor(view: SearchViewType, searchText: String) -> [CachedProgramme] {
         // Access filterRevision so the observation system tracks it as a dependency.
         _ = filterRevision
@@ -232,16 +248,19 @@ class CachedProgramsViewModel: ProgramCacheProviding {
             filteredShows = bbcTVShows + radioShows
         }
 
-        // Filter out programs by category first
-        if ignoreAllTVNews && !view.radio() {
+        // Filter out programs by category first.
+        // No view guard here: `tv()` and `radio()` are both true for `.all`, so guarding
+        // on them skipped both filters in the main search pane. The `show.radio` test
+        // inside each filter already picks out the right programmes for every view.
+        if ignoreAllTVNews {
             filteredShows = filteredShows.filter { show in
-                !(!show.radio && show.name.hasSuffix("News"))
+                !(!show.radio && Self.isNews(show.name))
             }
         }
 
-        if ignoreAllRadioNews && !view.tv() {
+        if ignoreAllRadioNews {
             filteredShows = filteredShows.filter { show in
-                !(show.radio && show.name.hasSuffix("News"))
+                !(show.radio && Self.isNews(show.name))
             }
         }
 
@@ -301,7 +320,7 @@ class CachedProgramsViewModel: ProgramCacheProviding {
                     case .bbcRadio4:
                         return showRadio4
                     case .bbcRadio4Extra:
-                        return showRadio4
+                        return showRadio4Extra
                     case .bbcRadio5Live:
                         return showRadio5Live
                     case .bbcRadio5LiveSports:
@@ -315,7 +334,7 @@ class CachedProgramsViewModel: ProgramCacheProviding {
                     case .bbcWorldService:
                         return showWorldService
                     case .cbeebiesRadio:
-                        return showCBeebies
+                        return showCBeebiesRadio
                     }
                 }
 
