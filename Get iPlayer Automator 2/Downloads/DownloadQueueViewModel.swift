@@ -203,21 +203,19 @@ class DownloadQueueViewModel: DownloadQueueProviding {
             await withTaskGroup(of: (Int, Programme?).self) { group in
                 var nextIndex = 0
 
-                while nextIndex < min(Self.maxConcurrentMetadataFetches, needsFetch.count) {
+                func addNext() {
+                    guard nextIndex < needsFetch.count else { return }
                     let entry = needsFetch[nextIndex]
-                    group.addTask { (entry.offset, await self.fetchProgramme(pid: entry.pid)) }
                     nextIndex += 1
+                    group.addTask { (entry.offset, await self.fetchProgramme(pid: entry.pid)) }
                 }
+
+                for _ in 0..<Self.maxConcurrentMetadataFetches { addNext() }
 
                 // Keep the window full: start another fetch as each one lands.
                 while let (offset, programme) = await group.next() {
                     resolved[offset] = programme
-
-                    if nextIndex < needsFetch.count {
-                        let entry = needsFetch[nextIndex]
-                        group.addTask { (entry.offset, await self.fetchProgramme(pid: entry.pid)) }
-                        nextIndex += 1
-                    }
+                    addNext()
                 }
             }
 

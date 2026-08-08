@@ -63,8 +63,8 @@ class GetCurrentWebpage {
             }
         } else if url.hasPrefix("https://www.bbc.co.uk/programmes/") {
             // Search the page to see if it is an episode or a series page. If we don't find the PID inside
-            // a bbcProgrammes element, it's a series page and we can't use it (though we might want to try
-            // adding it with pid-recursive)
+            // a bbcProgrammes element it's a series page, so fall back to --pid-recursive-list to collect
+            // each episode.
             guard let htmlPage = try? HTML(html: pageSource, encoding: .utf8) else {
                 return
             }
@@ -319,12 +319,7 @@ class GetCurrentWebpage {
             let result = try await run(
                 .path(FilePath(GetiPlayerArguments.shared.perlBinaryPath)),
                 arguments: Arguments(args),
-                environment: .inherit.updating([
-                    "HOME": URL.homeDirectory.path(percentEncoded: false),
-                    "PERL_UNICODE": "AS",
-                    "PERLIO": ":unix",
-                    "PATH": GetiPlayerArguments.shared.perlEnvironmentPath
-                ]),
+                environment: .inherit.updating(GetiPlayerArguments.shared.perlEnvironment),
                 output: .string(limit: 1024 * 1024),
                 error: .string(limit: 1024 * 1024)
             )

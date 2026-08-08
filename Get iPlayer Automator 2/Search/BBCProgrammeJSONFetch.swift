@@ -63,8 +63,11 @@ class BBCProgrammeJSONFetch {
         return Self.programme(from: doc, pid: pid)
     }
 
-    /// Maps a decoded `programme` object onto a `Programme`. Split out from the fetch so the
-    /// mapping can be exercised against saved JSON without a network round trip.
+    private static let episodePartLetters = Array("abcdefghijklmnopqrstuvwxyz")
+    private static let iso8601 = ISO8601DateFormatter()
+
+    /// Maps a decoded `programme` object onto a `Programme`, kept separate from the fetch so
+    /// the mapping has no network dependency.
     static func programme(from doc: JSON, pid: String) -> Programme {
         let parent = doc["parent"]["programme"]
         let grandparent = parent["parent"]["programme"]
@@ -130,10 +133,9 @@ class BBCProgrammeJSONFetch {
 
         var episodePart = ""
         if subseriesPosition != 0 {
-            let letters = Array("abcdefghijklmnopqrstuvwxyz")
             let position = doc["position"].intValue
-            if position >= 1 && position <= letters.count {
-                episodePart = String(letters[position - 1])
+            if position >= 1 && position <= episodePartLetters.count {
+                episodePart = String(episodePartLetters[position - 1])
             }
         }
 
@@ -159,7 +161,7 @@ class BBCProgrammeJSONFetch {
         let firstBroadcast = doc["first_broadcast_date"].stringValue
         let available = firstBroadcast.isEmpty
             ? Date()
-            : (ISO8601DateFormatter().date(from: firstBroadcast) ?? Date())
+            : (iso8601.date(from: firstBroadcast) ?? Date())
 
         let programme = Programme()
         programme.status = .processedPID
@@ -189,18 +191,18 @@ class BBCProgrammeJSONFetch {
                             "sixteen", "seventeen", "eighteen", "nineteen"]
     static let tensWords = ["twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"]
 
+    private static let unitsAlt = unitWords.joined(separator: "|")
+    private static let teensAlt = teenWords.joined(separator: "|")
+    private static let tensAlt = tensWords.joined(separator: "|")
+
     /// Matches a number written either as digits or as words, up to 99.
     ///
     /// Deliberate deviation from get_iplayer: it lists the units before the teens, so its
     /// capture of "Series Seventeen" stops at "seven" and yields 7. Ordering the teens first
     /// captures the whole word and yields 17, which is what `convert_words_to_number` is
     /// built to return.
-    static var numberPattern: String {
-        let units = unitWords.joined(separator: "|")
-        let teens = teenWords.joined(separator: "|")
-        let tens = tensWords.joined(separator: "|")
-        return "(?:\\d+|\(teens)|\(units)|(?:\(tens))(?:(?:\\s+|-)?(?:\(units)))?)"
-    }
+    static let numberPattern =
+        "(?:\\d+|\(teensAlt)|\(unitsAlt)|(?:\(tensAlt))(?:(?:\\s+|-)?(?:\(unitsAlt)))?)"
 
     static func wordsToNumber(_ text: String) -> Int {
         let lowered = text.lowercased()
@@ -213,14 +215,15 @@ class BBCProgrammeJSONFetch {
 
         // A trailing unit or teen carries the ones place. The `$` anchor means "seventeen"
         // matches the teen rather than the "seven" inside it.
-        let units = unitWords.joined(separator: "|")
-        let teens = teenWords.joined(separator: "|")
-        if let word = firstMatch(in: lowered, pattern: "(?:\(teens)|\(units))$") {
+        //
+        // This stays a regex rather than summing a split on separators: `numberPattern` makes
+        // the separator between tens and units optional, so "twentyone" is a valid capture and
+        // a split would score it 0.
+        if let word = firstMatch(in: lowered, pattern: "(?:\(teensAlt)|\(unitsAlt))$") {
             number += wordValues[word] ?? 0
         }
 
-        let tens = tensWords.joined(separator: "|")
-        if let word = firstMatch(in: lowered, pattern: "^(\(tens))", group: 1) {
+        if let word = firstMatch(in: lowered, pattern: "^(\(tensAlt))", group: 1) {
             number += wordValues[word] ?? 0
         }
 
@@ -240,20 +243,19 @@ class BBCProgrammeJSONFetch {
 
     /// Finds the number following a keyword, e.g. "Series 4" or "Episode Two".
     static func number(in text: String, following keywordPattern: String) -> Int? {
-        guard let captured = firstMatch(in: text,
-                                        pattern: "\(keywordPattern)\\s+(\(numberPattern))",
-                                        caseInsensitive: true,
-                                        group: 1) else {
-            return nil
-        }
-        let value = wordsToNumber(captured)
-        return value != 0 ? value : nil
+        number(in: text, capturedBy: "\(keywordPattern)\\s+(\(numberPattern))")
     }
 
     /// Matches an episode title that opens with its own number, e.g. "03. Something".
     static func leadingNumber(in episode: String) -> Int? {
-        guard let captured = firstMatch(in: episode,
-                                        pattern: "^(\(numberPattern))\\.\\s+",
+        number(in: episode, capturedBy: "^(\(numberPattern))\\.\\s+")
+    }
+
+    /// Shared tail for the two lookups above: take capture group 1, convert it, and treat a
+    /// zero result as "no number here" so the caller keeps whatever it already had.
+    private static func number(in text: String, capturedBy pattern: String) -> Int? {
+        guard let captured = firstMatch(in: text,
+                                        pattern: pattern,
                                         caseInsensitive: true,
                                         group: 1) else {
             return nil
