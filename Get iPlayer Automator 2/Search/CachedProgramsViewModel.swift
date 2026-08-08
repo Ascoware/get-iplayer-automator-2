@@ -75,6 +75,7 @@ class CachedProgramsViewModel: ProgramCacheProviding {
     @ObservationIgnored @Default(\.Radio5Live) var showRadio5Live
     @ObservationIgnored @Default(\.Radio5LiveSportsExtra) var showRadio5LiveExtra
     @ObservationIgnored @Default(\.Radio6Music) var showRadio6Music
+    @ObservationIgnored @Default(\.Radio6IndieForever) var showRadio6IndieForever
     @ObservationIgnored @Default(\.RadioAsianNetwork) var showAsianNetwork
     @ObservationIgnored @Default(\.BBCWorldService) var showWorldService
     @ObservationIgnored @Default(\.CBeebies) var showCBeebiesRadio
@@ -89,6 +90,7 @@ class CachedProgramsViewModel: ProgramCacheProviding {
         case bbcRadio5Live = "BBC Radio 5 live"
         case bbcRadio5LiveSports = "BBC Radio 5 live sports extra"
         case bbcRadio6 = "BBC Radio 6 Music"
+        case bbcRadio6IndieForever = "BBC Radio 6 Indie Forever"
         case bbcAsian = "BBC Asian Network"
         case bbcWorldService = "BBC World Service"
         case cbeebiesRadio = "CBeebies Radio"
@@ -122,7 +124,7 @@ class CachedProgramsViewModel: ProgramCacheProviding {
         "ShowRegionalTVStations", "ShowLocalTVStations",
         "ShowRegionalRadioStations", "ShowLocalRadioStations",
         "Radio1", "Radio2", "Radio3", "Radio4", "Radio4Extra",
-        "Radio6Music", "BBCWorldService", "Radio5Live",
+        "Radio6Music", "Radio6IndieForever", "BBCWorldService", "Radio5Live",
         "Radio5LiveSportsExtra", "Radio1Xtra", "RadioAsianNetwork",
         "CBeebiesRadio", "IgnoreAllTVNews", "IgnoreAllRadioNews",
         "ShowDownloadedInSearch"
@@ -306,6 +308,8 @@ class CachedProgramsViewModel: ProgramCacheProviding {
                         return showRadio5LiveExtra
                     case .bbcRadio6:
                         return showRadio6Music
+                    case .bbcRadio6IndieForever:
+                        return showRadio6IndieForever
                     case .bbcAsian:
                         return showAsianNetwork
                     case .bbcWorldService:

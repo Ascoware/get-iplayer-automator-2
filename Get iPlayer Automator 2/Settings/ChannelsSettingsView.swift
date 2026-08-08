@@ -23,6 +23,7 @@ struct ChannelsSettingsView: View {
     @Default(\.Radio4) var Radio4
     @Default(\.Radio4Extra) var Radio4Extra
     @Default(\.Radio6Music) var Radio6Music
+    @Default(\.Radio6IndieForever) var Radio6IndieForever
     @Default(\.BBCWorldService) var BBCWorldService
     @Default(\.Radio5Live) var Radio5Live
     @Default(\.Radio5LiveSportsExtra) var Radio5LiveSportsExtra
@@ -118,12 +119,19 @@ struct ChannelsSettingsView: View {
                         })
                     }
                     GridRow {
+                        // The station name is too long for a single grid cell.
+                        Toggle(isOn: $Radio6IndieForever, label: {
+                            Text("BBC Radio 6 Indie Forever")
+                        })
+                        .gridCellColumns(2)
                         Toggle(isOn: $BBCWorldService, label: {
                             Text("BBC World Service")
                         })
                         Toggle(isOn: $RadioAsianNetwork, label: {
                             Text("BBC Asian Network")
                         })
+                    }
+                    GridRow {
                         Toggle(isOn: $CBeebiesRadio, label: {
                             Text("CBeebies Radio")
                         })
