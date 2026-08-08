@@ -20,6 +20,7 @@ protocol DownloadQueueProviding: AnyObject {
     func addToQueue(programs: [Programme])
     func addToQueue(program: Programme)
     func addToQueue(pid: String)
+    func addToQueue(pids: [String]) async
     func addToQueueFromPVR(pid: String)
     func removeFromQueue(pid: String)
     func movePrograms(fromOffsets: IndexSet, toOffset: Int)

@@ -146,19 +146,84 @@ class DownloadQueueViewModel: DownloadQueueProviding {
         }
     }
 
+    /// Number of metadata fetches allowed in flight at once. A series page can yield well over
+    /// a hundred PIDs, and we shouldn't open that many connections to the BBC at once.
+    private static let maxConcurrentMetadataFetches = 5
+
+    /// Resolves a PID to a `Programme`, preferring the direct JSON fetch.
+    ///
+    /// `BBCProgrammeJSONFetch` covers every field we keep in a single request. `get_iplayer
+    /// --info` is the fallback for the cases it can't handle — a PID that isn't an episode or
+    /// clip, a geoblocked programme, or a transient HTTP failure.
+    private func fetchProgramme(pid: String) async -> Programme? {
+        do {
+            return try await BBCProgrammeJSONFetch(pid: pid).getProgramme()
+        } catch {
+            DDLogError("JSON metadata fetch failed for \(pid) (\(error)) — falling back to get_iplayer --info")
+            return await ProgrammeMetadataFetch(pid: pid).getProgramme()
+        }
+    }
+
     public func addToQueue(pid: String) {
         if let cached = cacheProvider.findProgrammeFromPID(pid: pid) {
             addToQueue(program: cached.toQueueItem())
         } else {
-            let fetcher = ProgrammeMetadataFetch(pid: pid)
             Task {
                 processPIDRunning = true
-                if let program = await fetcher.getProgramme() {
+                if let program = await fetchProgramme(pid: pid) {
                     addToQueue(program: program)
                 }
                 processPIDRunning = false
             }
         }
+    }
+
+    /// Adds many PIDs at once, resolving uncached ones concurrently.
+    ///
+    /// Adding each PID individually spawned an unbounded `Task` per programme, so a series
+    /// page fired ~170 overlapping metadata fetches and left `processPIDRunning` being set and
+    /// cleared by all of them at once.
+    public func addToQueue(pids: [String]) async {
+        guard !pids.isEmpty else { return }
+
+        var resolved = [Programme?](repeating: nil, count: pids.count)
+        var needsFetch: [(offset: Int, pid: String)] = []
+
+        for (offset, pid) in pids.enumerated() {
+            if let cached = cacheProvider.findProgrammeFromPID(pid: pid) {
+                resolved[offset] = cached.toQueueItem()
+            } else {
+                needsFetch.append((offset, pid))
+            }
+        }
+
+        if !needsFetch.isEmpty {
+            processPIDRunning = true
+
+            await withTaskGroup(of: (Int, Programme?).self) { group in
+                var nextIndex = 0
+
+                func addNext() {
+                    guard nextIndex < needsFetch.count else { return }
+                    let entry = needsFetch[nextIndex]
+                    nextIndex += 1
+                    group.addTask { (entry.offset, await self.fetchProgramme(pid: entry.pid)) }
+                }
+
+                for _ in 0..<Self.maxConcurrentMetadataFetches { addNext() }
+
+                // Keep the window full: start another fetch as each one lands.
+                while let (offset, programme) = await group.next() {
+                    resolved[offset] = programme
+                    addNext()
+                }
+            }
+
+            processPIDRunning = false
+        }
+
+        // Queue in the order the PIDs arrived, regardless of which fetches finished first.
+        addToQueue(programs: resolved.compactMap { $0 })
     }
 
     public func addToQueueFromPVR(pid: String) {
@@ -168,10 +233,9 @@ class DownloadQueueViewModel: DownloadQueueProviding {
             program.progress = "Added by Series-Link"
             addToQueue(program: program)
         } else {
-            let fetcher = ProgrammeMetadataFetch(pid: pid)
             Task {
                 processPIDRunning = true
-                if let program = await fetcher.getProgramme() {
+                if let program = await fetchProgramme(pid: pid) {
                     program.status = .addedByPVR
                     addToQueue(program: program)
                 }
@@ -185,27 +249,18 @@ class DownloadQueueViewModel: DownloadQueueProviding {
         await scanner.getCurrentWebpage()
 
         // Add BBC programs by PID (looked up via cache or metadata fetch)
-        for pid in scanner.programIDs {
-            addToQueue(pid: pid)
-        }
+        await addToQueue(pids: scanner.programIDs)
 
         // Add STV programs directly (already have full metadata)
-        for program in scanner.programs {
-            addToQueue(program: program)
-        }
+        addToQueue(programs: scanner.programs)
     }
 
     public func processExtensionPayload() async {
         let scanner = GetCurrentWebpage()
         await scanner.processExtensionPayload()
 
-        for pid in scanner.programIDs {
-            addToQueue(pid: pid)
-        }
-
-        for program in scanner.programs {
-            addToQueue(program: program)
-        }
+        await addToQueue(pids: scanner.programIDs)
+        addToQueue(programs: scanner.programs)
     }
 
     func nextDownloadableShow() -> Programme? {

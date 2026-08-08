@@ -54,6 +54,7 @@
 		7F0C17FB2F744B3400E208A2 /* SearchSidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17B22F7449E900E208A2 /* SearchSidebarView.swift */; };
 		7F0C17FC2F744B3400E208A2 /* SearchContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17B12F7449E900E208A2 /* SearchContentViewModel.swift */; };
 		7F0C17FD2F744B3400E208A2 /* ProgrammeMetadataFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17AF2F7449E900E208A2 /* ProgrammeMetadataFetch.swift */; };
+		7F0C18AA2F744B3400E208A2 /* BBCProgrammeJSONFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C18AB2F7449E900E208A2 /* BBCProgrammeJSONFetch.swift */; };
 		7F0C17FE2F744B3400E208A2 /* SearchContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17B02F7449E900E208A2 /* SearchContentView.swift */; };
 		7F0C17FF2F744B3400E208A2 /* SearchViewType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17B42F7449E900E208A2 /* SearchViewType.swift */; };
 		7F0C18002F744B3400E208A2 /* CachedProgramsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17AA2F7449E900E208A2 /* CachedProgramsViewModel.swift */; };
@@ -180,6 +181,7 @@
 		7F0C17AD2F7449E900E208A2 /* MockCachedProgramsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCachedProgramsViewModel.swift; sourceTree = "<group>"; };
 		7F0C17AE2F7449E900E208A2 /* ProgramCacheProviding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramCacheProviding.swift; sourceTree = "<group>"; };
 		7F0C17AF2F7449E900E208A2 /* ProgrammeMetadataFetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammeMetadataFetch.swift; sourceTree = "<group>"; };
+		7F0C18AB2F7449E900E208A2 /* BBCProgrammeJSONFetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBCProgrammeJSONFetch.swift; sourceTree = "<group>"; };
 		7F0C17B02F7449E900E208A2 /* SearchContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContentView.swift; sourceTree = "<group>"; };
 		7F0C17B12F7449E900E208A2 /* SearchContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContentViewModel.swift; sourceTree = "<group>"; };
 		7F0C17B22F7449E900E208A2 /* SearchSidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSidebarView.swift; sourceTree = "<group>"; };
@@ -359,6 +361,7 @@
 		7F0C17B72F7449E900E208A2 /* Search */ = {
 			isa = PBXGroup;
 			children = (
+				7F0C18AB2F7449E900E208A2 /* BBCProgrammeJSONFetch.swift */,
 				7F0C17AA2F7449E900E208A2 /* CachedProgramsViewModel.swift */,
 				7F0C17AB2F7449E900E208A2 /* CacheUpdateService.swift */,
 				7F0C17AC2F7449E900E208A2 /* GridView.swift */,
@@ -672,6 +675,7 @@
 				7F0C17FB2F744B3400E208A2 /* SearchSidebarView.swift in Sources */,
 				7F0C17FC2F744B3400E208A2 /* SearchContentViewModel.swift in Sources */,
 				7F0C17FD2F744B3400E208A2 /* ProgrammeMetadataFetch.swift in Sources */,
+				7F0C18AA2F744B3400E208A2 /* BBCProgrammeJSONFetch.swift in Sources */,
 				7F0C17FE2F744B3400E208A2 /* SearchContentView.swift in Sources */,
 				7F0C17FF2F744B3400E208A2 /* SearchViewType.swift in Sources */,
 				7F0C18002F744B3400E208A2 /* CachedProgramsViewModel.swift in Sources */,

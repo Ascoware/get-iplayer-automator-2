@@ -25,6 +25,9 @@ class CachedProgramsViewModel: ProgramCacheProviding {
     private var bbcTVShows: [CachedProgramme] = []
     private var radioShows: [CachedProgramme] = []
 
+    /// PID lookup index over `bbcTVShows` + `radioShows`, rebuilt whenever the caches reload.
+    private var programmesByPID: [String: CachedProgramme] = [:]
+
     @ObservationIgnored @Default(\.IgnoreAllTVNews) var ignoreAllTVNews
     @ObservationIgnored @Default(\.IgnoreAllRadioNews) var ignoreAllRadioNews
     @ObservationIgnored @Default(\.ShowRegionalTVStations) var showRegionalTVStations
@@ -118,18 +121,6 @@ class CachedProgramsViewModel: ProgramCacheProviding {
     ];
 
 
-    private static let channelFilterKeys: Set<String> = [
-        "BBCOne", "BBCTwo", "BBCThree", "BBCFour",
-        "CBBC", "CBeebies", "BBCNews", "BBCParliament",
-        "ShowRegionalTVStations", "ShowLocalTVStations",
-        "ShowRegionalRadioStations", "ShowLocalRadioStations",
-        "Radio1", "Radio2", "Radio3", "Radio4", "Radio4Extra",
-        "Radio6Music", "Radio6IndieForever", "BBCWorldService", "Radio5Live",
-        "Radio5LiveSportsExtra", "Radio1Xtra", "RadioAsianNetwork",
-        "CBeebiesRadio", "IgnoreAllTVNews", "IgnoreAllRadioNews",
-        "ShowDownloadedInSearch"
-    ]
-
     public init() {
         defaultsCancellable = NotificationCenter.default
             .publisher(for: UserDefaults.didChangeNotification)
@@ -151,6 +142,18 @@ class CachedProgramsViewModel: ProgramCacheProviding {
         let shows = readCaches()
         bbcTVShows = shows[0]
         radioShows = shows[1]
+
+        // Adding a series page looks up one PID per episode, so a linear scan of both arrays
+        // per lookup gets expensive. Index them once instead. The `== nil` guard reproduces the
+        // old lookup order: TV wins over radio, and the first match wins within an array.
+        programmesByPID = [:]
+        programmesByPID.reserveCapacity(bbcTVShows.count + radioShows.count)
+        for show in bbcTVShows where programmesByPID[show.pid] == nil {
+            programmesByPID[show.pid] = show
+        }
+        for show in radioShows where programmesByPID[show.pid] == nil {
+            programmesByPID[show.pid] = show
+        }
     }
 
     public func readCaches() -> [[CachedProgramme]] {
@@ -354,7 +357,6 @@ class CachedProgramsViewModel: ProgramCacheProviding {
     }
 
     public func findProgrammeFromPID(pid: String) -> CachedProgramme? {
-        return bbcTVShows.first { $0.pid == pid }
-            ?? radioShows.first { $0.pid == pid }
+        return programmesByPID[pid]
     }
 }

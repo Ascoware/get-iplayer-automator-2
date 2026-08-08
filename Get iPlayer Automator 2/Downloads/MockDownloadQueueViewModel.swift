@@ -34,6 +34,10 @@ class MockDownloadQueueViewModel: DownloadQueueProviding {
         // Mock: do nothing for PID-based adds
     }
 
+    func addToQueue(pids: [String]) async {
+        // Mock: do nothing for PID-based adds
+    }
+
     func addToQueueFromPVR(pid: String) {
         // Mock: do nothing
     }

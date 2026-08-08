@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import Subprocess
 
 class GetiPlayerArguments {
 
@@ -33,10 +34,13 @@ class GetiPlayerArguments {
         return "--profile-dir=\(FileManager.default.applicationSupportDirectory)"
     }
 
-    var perlEnvironment: [String : String] {
-        var environment = [String : String]()
+    /// Environment for every bundled-Perl invocation, shaped for `Subprocess.run(environment:)`.
+    /// `Subprocess.Environment` is qualified because SwiftUI exports its own `Environment`.
+    var perlEnvironment: [Subprocess.Environment.Key : String?] {
+        var environment = [Subprocess.Environment.Key : String?]()
         environment["HOME"] = URL.homeDirectory.path(percentEncoded: false)
         environment["PERL_UNICODE"] = "AS"
+        environment["PERLIO"] = ":unix"
         environment["PATH"] = GetiPlayerArguments.shared.perlEnvironmentPath
         return environment
     }

@@ -11,6 +11,8 @@ import SwiftyJSON
 import Kanna
 import CocoaLumberjackSwift
 import SwiftUI
+import Subprocess
+import System
 
 @MainActor
 class GetCurrentWebpage {
@@ -61,8 +63,8 @@ class GetCurrentWebpage {
             }
         } else if url.hasPrefix("https://www.bbc.co.uk/programmes/") {
             // Search the page to see if it is an episode or a series page. If we don't find the PID inside
-            // a bbcProgrammes element, it's a series page and we can't use it (though we might want to try
-            // adding it with pid-recursive)
+            // a bbcProgrammes element it's a series page, so fall back to --pid-recursive-list to collect
+            // each episode.
             guard let htmlPage = try? HTML(html: pageSource, encoding: .utf8) else {
                 return
             }
@@ -109,7 +111,7 @@ class GetCurrentWebpage {
             }
 
             if !foundPID {
-                let programs = searchForPIDs(url: url)
+                let programs = await searchForPIDs(url: url)
                 programIDs += programs
             }
         } else if url.hasPrefix("https://player.stv.tv/episode/") {
@@ -297,12 +299,7 @@ class GetCurrentWebpage {
         await extractMetadata(url: url, tabTitle: title, pageSource: html)
     }
 
-    private func searchForPIDs(url: String) -> [String] {
-        let task = Process()
-        let pipe = Pipe()
-        let errorPipe = Pipe();
-        
-        task.launchPath = GetiPlayerArguments.shared.perlBinaryPath
+    private func searchForPIDs(url: String) async -> [String] {
         let args = [
             GetiPlayerArguments.shared.getiPlayerPath,
             GetiPlayerArguments.shared.noWarningArg,
@@ -311,37 +308,51 @@ class GetCurrentWebpage {
             url,
             GetiPlayerArguments.shared.profileDirArg
         ]
-        
-        for arg in args {
-            DDLogVerbose("\(arg)");
-        }
-        
-        task.arguments = args
-        task.standardOutput = pipe
-        task.standardError = errorPipe
-        
-        var envVariableDictionary = [String : String]()
-        envVariableDictionary["HOME"] = NSString("~").expandingTildeInPath
-        envVariableDictionary["PERL_UNICODE"] = "AS"
-        envVariableDictionary["PERLIO"] = ":unix"
-        envVariableDictionary["PATH"] = GetiPlayerArguments.shared.perlEnvironmentPath
-        task.environment = envVariableDictionary
-        task.launch()
 
-        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        for arg in args {
+            DDLogVerbose("\(arg)")
+        }
+
+        var lines: [String] = []
+
+        do {
+            let result = try await run(
+                .path(FilePath(GetiPlayerArguments.shared.perlBinaryPath)),
+                arguments: Arguments(args),
+                environment: .inherit.updating(GetiPlayerArguments.shared.perlEnvironment),
+                output: .string(limit: 1024 * 1024),
+                error: .string(limit: 1024 * 1024)
+            )
+
+            // The episode list goes to stdout; stderr only carries warnings and progress.
+            lines = (result.standardOutput ?? "").components(separatedBy: .newlines)
+
+            if let errorOutput = result.standardError?.trimmingCharacters(in: .whitespacesAndNewlines),
+               !errorOutput.isEmpty {
+                DDLogInfo("get_iplayer --pid-recursive-list stderr: \(errorOutput)")
+            }
+        } catch {
+            DDLogError("Failed to run get_iplayer --pid-recursive-list: \(error)")
+            return []
+        }
 
         var foundPrograms = [String]()
 
-        if let stringData = String(data: data, encoding: .utf8) {
-            let lines = stringData.components(separatedBy: .newlines)
+        for line in lines {
+            if line.isEmpty || line.hasPrefix("Episodes:") || line.hasPrefix("INFO:") {
+                continue
+            }
 
-            for line in lines {
-                if line.isEmpty || line.hasPrefix("Episodes:") || line.hasPrefix("INFO:") {
-                    continue
-                }
+            // Each match is emitted as "<name> - <episode>|<channel>|<pid>".
+            let outputParts = line.components(separatedBy: "|")
 
-                let outputParts = line.components(separatedBy:",")
-                let pid = outputParts[2].trimmingCharacters(in: .whitespaces)
+            if outputParts.count != 3 {
+                DDLogError("*** Invalid output from --pid-recursive-list. Expected 3 elements, got \(outputParts.count): \(line)")
+                continue
+            }
+
+            let pid = outputParts[2].trimmingCharacters(in: .whitespaces)
+            if !pid.isEmpty {
                 foundPrograms.append(pid)
             }
         }
