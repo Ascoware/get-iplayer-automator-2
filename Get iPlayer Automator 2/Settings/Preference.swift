@@ -155,8 +155,11 @@ public class Defaults: ObservableObject {
     @AppStorage("BBCNews") public var BBCNews = false
     @AppStorage("BBCParliament") public var BBCParliament = false
     @AppStorage("Radio1") public var Radio1 = true
+    @AppStorage("Radio1Anthems") public var Radio1Anthems = true
+    @AppStorage("Radio1Dance") public var Radio1Dance = true
     @AppStorage("Radio2") public var Radio2 = true
     @AppStorage("Radio3") public var Radio3 = true
+    @AppStorage("Radio3Unwind") public var Radio3Unwind = true
     @AppStorage("Radio4") public var Radio4 = true
     @AppStorage("Radio4Extra") public var Radio4Extra = true
     @AppStorage("Radio6Music") public var Radio6Music = true

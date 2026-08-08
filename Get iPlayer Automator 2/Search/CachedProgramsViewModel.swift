@@ -70,9 +70,12 @@ class CachedProgramsViewModel: ProgramCacheProviding {
     }
 
     @ObservationIgnored @Default(\.Radio1) var showRadio1
+    @ObservationIgnored @Default(\.Radio1Anthems) var showRadio1Anthems
+    @ObservationIgnored @Default(\.Radio1Dance) var showRadio1Dance
     @ObservationIgnored @Default(\.Radio1Xtra) var showRadio1Xtra
     @ObservationIgnored @Default(\.Radio2) var showRadio2
     @ObservationIgnored @Default(\.Radio3) var showRadio3
+    @ObservationIgnored @Default(\.Radio3Unwind) var showRadio3Unwind
     @ObservationIgnored @Default(\.Radio4) var showRadio4
     @ObservationIgnored @Default(\.Radio4Extra) var showRadio4Extra
     @ObservationIgnored @Default(\.Radio5Live) var showRadio5Live
@@ -85,9 +88,12 @@ class CachedProgramsViewModel: ProgramCacheProviding {
 
     enum BBCRadioChannels: String, CaseIterable {
         case bbcRadio1 = "BBC Radio 1"
+        case bbcRadio1Anthems = "BBC Radio 1 Anthems"
+        case bbcRadio1Dance = "BBC Radio 1 Dance"
         case bbcRadio1Xtra = "BBC Radio 1Xtra"
         case bbcRadio2 = "BBC Radio 2"
         case bbcRadio3 = "BBC Radio 3"
+        case bbcRadio3Unwind = "BBC Radio 3 Unwind"
         case bbcRadio4 = "BBC Radio 4"
         case bbcRadio4Extra = "BBC Radio 4 Extra"
         case bbcRadio5Live = "BBC Radio 5 live"
@@ -321,12 +327,18 @@ class CachedProgramsViewModel: ProgramCacheProviding {
             switch channel {
             case .bbcRadio1:
                 return showRadio1
+            case .bbcRadio1Anthems:
+                return showRadio1Anthems
+            case .bbcRadio1Dance:
+                return showRadio1Dance
             case .bbcRadio1Xtra:
                 return showRadio1Xtra
             case .bbcRadio2:
                 return showRadio2
             case .bbcRadio3:
                 return showRadio3
+            case .bbcRadio3Unwind:
+                return showRadio3Unwind
             case .bbcRadio4:
                 return showRadio4
             case .bbcRadio4Extra:

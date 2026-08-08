@@ -18,8 +18,11 @@ struct ChannelsSettingsView: View {
     @Default(\.BBCNews) var BBCNews
     @Default(\.BBCParliament) var BBCParliament
     @Default(\.Radio1) var Radio1
+    @Default(\.Radio1Anthems) var Radio1Anthems
+    @Default(\.Radio1Dance) var Radio1Dance
     @Default(\.Radio2) var Radio2
     @Default(\.Radio3) var Radio3
+    @Default(\.Radio3Unwind) var Radio3Unwind
     @Default(\.Radio4) var Radio4
     @Default(\.Radio4Extra) var Radio4Extra
     @Default(\.Radio6Music) var Radio6Music
@@ -118,24 +121,40 @@ struct ChannelsSettingsView: View {
                             Text("BBC Radio 6 Music")
                         })
                     }
-                    // Both station names are too long for a single grid cell.
+                    // These station names don't fit a single grid cell, so they take two.
                     GridRow {
-                        Toggle(isOn: $Radio5LiveSportsExtra, label: {
-                            Text("BBC Radio 5 Live Sports Extra")
+                        Toggle(isOn: $Radio1Anthems, label: {
+                            Text("BBC Radio 1 Anthems")
                         })
                         .gridCellColumns(2)
-                        Toggle(isOn: $Radio6IndieForever, label: {
-                            Text("BBC Radio 6 Indie Forever")
+                        Toggle(isOn: $Radio1Dance, label: {
+                            Text("BBC Radio 1 Dance")
                         })
                         .gridCellColumns(2)
                     }
                     GridRow {
+                        Toggle(isOn: $Radio3Unwind, label: {
+                            Text("BBC Radio 3 Unwind")
+                        })
+                        .gridCellColumns(2)
+                        Toggle(isOn: $Radio5LiveSportsExtra, label: {
+                            Text("BBC Radio 5 Live Sports Extra")
+                        })
+                        .gridCellColumns(2)
+                    }
+                    GridRow {
+                        Toggle(isOn: $Radio6IndieForever, label: {
+                            Text("BBC Radio 6 Indie Forever")
+                        })
+                        .gridCellColumns(2)
                         Toggle(isOn: $BBCWorldService, label: {
                             Text("BBC World Service")
                         })
                         Toggle(isOn: $RadioAsianNetwork, label: {
                             Text("BBC Asian Network")
                         })
+                    }
+                    GridRow {
                         Toggle(isOn: $CBeebiesRadio, label: {
                             Text("CBeebies Radio")
                         })
