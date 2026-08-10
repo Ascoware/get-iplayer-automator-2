@@ -59,6 +59,13 @@ struct GetiPlayerAutomatorApp: App {
             )
         }
         .windowToolbarStyle(.unified)
+        // Required for this window to open at launch. Once any scene declares an
+        // explicit launch behavior — the Activity window below asks for
+        // `.presented` — SwiftUI presents only the scenes that opt in, and this
+        // one was silently dropped. The app then launched showing nothing but the
+        // Activity panel, and the main window had to be reopened from the Window
+        // menu every time. With no scene declaring a behavior at all, both open.
+        .defaultLaunchBehavior(.presented)
         .commands {
             SearchWindowMenus(cacheUpdateService: cacheUpdateService, updaterViewModel: updaterViewModel)
         }
