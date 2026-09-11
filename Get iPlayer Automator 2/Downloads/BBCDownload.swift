@@ -149,6 +149,7 @@ class BBCDownload: Download {
 
         show.status = .downloadingProgram
         show.complete = false
+        show.downloadPercent = 0.0
         show.progress = "Downloading..."
 
         var platformOptions = PlatformOptions()
@@ -251,7 +252,8 @@ class BBCDownload: Download {
         let lines = output.components(separatedBy: .newlines)
 
         // Parse each line individually.
-        for line in lines {
+        for outputLine in lines {
+            let line = outputLine.trimmingCharacters(in: .whitespaces)
             if line.isEmpty {
                 continue
             }
@@ -264,6 +266,9 @@ class BBCDownload: Download {
                 DDLogInfo("\(line)")
             }
 
+            // Output already in the pipe must not reactivate a cancelled download.
+            guard show.status != .cancelled else { continue }
+
             line.scan(using: [
                 // Subtitle path extraction
                 Matcher(identifier: "INFO: Downloading Subtitles to '", terminator: ".srt'") { match, _ in
@@ -273,7 +278,9 @@ class BBCDownload: Download {
                 // Download path extraction
                 Matcher(identifier: "INFO: Wrote file ", terminator: .end) { match, _ in
                     self.show.downloadPath = String(match).trimmingCharacters(in: .whitespacesAndNewlines)
-                    self.show.status = .finishedProgramDownload
+                    self.show.status = .downloadingProgram
+                    self.show.downloadPercent = 0.0
+                    self.show.progress = "Finishing download..."
                 },
                 // Available qualities (failure case)
                 Matcher(identifier: "INFO: Available qualities:", terminator: .end) { match, _ in
@@ -286,11 +293,6 @@ class BBCDownload: Download {
                     if availableVersions.contains("audiodescribed") || availableVersions.contains("signed") {
                         self.failureKeyword = "AudioDescribedOnly"
                     }
-                },
-                // ETA parsing
-                Matcher(identifier: "ETA:", terminator: " (") { match, _ in
-                    let etaStr = String(match).trimmingCharacters(in: .whitespaces)
-                    self.show.progress = "\(etaStr) remaining"
                 }
             ])
 
@@ -304,9 +306,16 @@ class BBCDownload: Download {
                     failureKeyword = "Download_Directory_Permissions"
                 }
             } else if line.hasPrefix("INFO: Finished downloading") {
+                // The patched get_iplayer emits this after EACH stream, including
+                // DASH audio before video. Only process exit completes the programme.
                 show.downloadPercent = 0.0
-                show.status = .finishedProgramDownload
-                show.progress = ""
+                show.status = .downloadingProgram
+                show.progress = "Processing download..."
+            } else if line.hasPrefix("INFO: Converting to ") {
+                // ffmpeg does not provide a percentage through --log-progress.
+                show.downloadPercent = 0.0
+                show.status = .downloadingProgram
+                show.progress = String(line.dropFirst("INFO: ".count)) + "..."
             } else if line.hasPrefix("WARNING: Use --overwrite") {
                 failureKeyword = "FileExists"
             } else if line.hasPrefix("ERROR: Failed to get version pid") {
@@ -314,19 +323,32 @@ class BBCDownload: Download {
             } else if line.hasPrefix("WARNING: If you use a VPN") || line.hasSuffix("blocked by the BBC") {
                 failureKeyword = "proxy"
             } else if line.hasPrefix("INFO: Downloading thumbnail") {
+                show.downloadPercent = 0.0
                 show.status = .downloadingThumbnail
                 show.progress = "Downloading Thumbnail..."
             } else if line.hasPrefix("INFO: Tagging") {
+                show.downloadPercent = 0.0
                 show.status = .tagging
                 show.progress = "Tagging with metadata..."
             } else if line.hasSuffix("[audio+video]") || line.hasSuffix("[audio]") || line.hasSuffix("[video]") {
-                // Parse download percentage from progress lines
-                // Line format: " 40.9%   999.23 MB / ~2440.24 MB ... ETA: 00:03:56 ... [audio+video]"
-                let trimmedLine = line.trimmingCharacters(in: .whitespaces)
-                if let percentIndex = trimmedLine.firstIndex(of: "%") {
-                    let percentStr = String(trimmedLine[..<percentIndex])
-                    if let percentage = Double(percentStr) {
+                // Percentages and ETAs describe the current stream, not the whole
+                // programme. This handles both normal and verbose progress output.
+                if let percentIndex = line.firstIndex(of: "%") {
+                    let percentStr = String(line[..<percentIndex])
+                    if let percentage = Double(percentStr), percentage.isFinite {
+                        show.status = .downloadingProgram
                         show.downloadPercent = percentage
+                        let stream = line.hasSuffix("[audio+video]") ? ""
+                            : line.hasSuffix("[audio]") ? " audio" : " video"
+                        show.progress = "Downloading\(stream)..."
+                        line.scan(using: [
+                            Matcher(identifier: "ETA:", terminator: " (") { match, _ in
+                                let eta = String(match).trimmingCharacters(in: .whitespaces)
+                                if !eta.isEmpty && eta != "--:--:--" {
+                                    self.show.progress = "Downloading\(stream): \(eta) remaining"
+                                }
+                            }
+                        ])
                     }
                 }
             }
