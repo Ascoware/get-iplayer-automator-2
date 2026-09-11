@@ -11,11 +11,16 @@ struct DownloadProgressView: View {
     var program: Programme
 
     var body: some View {
-        if program.downloadPercent > 0.0 {
-            ProgressView(value: program.downloadPercent, total: 100)
-                .progressViewStyle(.circular)
-                .controlSize(.small)
+        Group {
+            if program.downloadPercent > 0.0 {
+                ProgressView(value: program.downloadPercent, total: 100)
+            } else if program.status == .downloadingProgram
+                        || program.status == .downloadingThumbnail
+                        || program.status == .tagging {
+                ProgressView()
+            }
         }
+        .progressViewStyle(.circular)
+        .controlSize(.small)
     }
 }
-
