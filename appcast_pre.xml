@@ -4,7 +4,20 @@
         <title>Get iPlayer Automator 2</title>
         <description>Most recent changes with links to updates.</description>
         <language>en</language>
-                                                                        <item>
+                                                                                <item>
+            <title>v1.0.12</title>
+            <pubDate>Fri, 11 Sep 2026 19:11:20 +0000</pubDate>
+            <description><![CDATA[<p>Pa- Refactored parsing of BBC download progress to correctly handle full HD downloads and their two separate streams.</p>]]></description>
+            <sparkle:minimumSystemVersion>15.6.0</sparkle:minimumSystemVersion>
+            <enclosure
+                url="https://github.com/Ascoware/get-iplayer-automator-2/releases/download/v1.0.12/Get.iPlayer.Automator.2.v1.0.12.b202609111205.zip"
+                sparkle:version="202609111205"
+                sparkle:shortVersionString="1.0.12"
+                sparkle:edSignature="0nAlhQxTt80V/icZXrCzzP3y7ycqV50TX+RP/CzflYF5W6su3BQjyRIiI4/kg5F8lQtVza8BF7D7TWBzxXchAw=="
+                length="120969473"
+                type="application/octet-stream" />
+        </item>
+        <item>
             <title>v1.0.11</title>
             <pubDate>Fri, 14 Aug 2026 02:47:00 +0000</pubDate>
             <description><![CDATA[<ul>
