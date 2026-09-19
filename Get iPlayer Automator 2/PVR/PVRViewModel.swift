@@ -111,8 +111,15 @@ class PVRViewModel {
                     .compactMap { $0 }
                     .joined(separator: "\n")
                 outputLines = allOutput.components(separatedBy: .newlines).filter { !$0.isEmpty }
+                // A failed search is not evidence that a series has stopped airing.
+                guard result.terminationStatus.isSuccess,
+                      !outputLines.contains(where: { $0.hasPrefix("ERROR:") }) else {
+                    DDLogError("PVR search failed for '\(s.showName)'; keeping its series-link entry")
+                    continue
+                }
             } catch {
                 DDLogError("PVR search failed: \(error)")
+                continue
             }
 
             guard let index = series.firstIndex(where: { $0.id == s.id }) else { continue }
@@ -122,6 +129,13 @@ class PVRViewModel {
             } else if foundAny {
                 series[index].lastFound = Date()
                 foundAnyOverall = true
+            } else if Defaults.shared.deleteOldSeriesLink {
+                let retentionDays = Defaults.shared.deleteOldSeriesLinkDuration
+                let age = Date().timeIntervalSince(series[index].lastFound)
+                if retentionDays > 0, age >= Double(retentionDays) * 86400 {
+                    toRemove.insert(s.id)
+                    DDLogInfo("Removing stale series-link entry: \(s.showName) (no matches for at least \(retentionDays) days)")
+                }
             }
         }
 
