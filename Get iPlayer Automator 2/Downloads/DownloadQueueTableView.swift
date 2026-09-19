@@ -21,6 +21,7 @@ struct DownloadQueueTableView: View {
     @Binding var selection: Set<String>
     @State private var enteredPID: String = ""
     @State private var draggingPID: String?
+    @FocusState private var isTableFocused: Bool
 
     var body: some View {
         VStack {
@@ -95,6 +96,11 @@ struct DownloadQueueTableView: View {
                 .width(min: 80, ideal: 150)
             }
             .alternatingRowBackgrounds(.disabled)
+            .focused($isTableFocused)
+            // Transfer keyboard focus without replacing the table's row-selection gesture.
+            .simultaneousGesture(TapGesture().onEnded {
+                isTableFocused = true
+            })
             .onDeleteCommand {
                 for pid in selection {
                     downloadQueueViewModel.removeFromQueue(pid: pid)
