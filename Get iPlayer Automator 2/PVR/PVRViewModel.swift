@@ -17,6 +17,10 @@ import System
 class PVRViewModel {
 
     var series: [Series] = []
+    // Preserve the saved entry order until the user chooses a column to sort.
+    var sortOrder: [KeyPathComparator<Series>] = [] {
+        didSet { save() }
+    }
     private(set) var isChecking = false
     private(set) var currentSeriesName: String?
 
@@ -71,13 +75,15 @@ class PVRViewModel {
             currentSeriesName = nil
         }
 
-        var toRemove: [Series] = []
+        var toRemove: Set<UUID> = []
         var foundAnyOverall = false
 
-        for index in series.indices {
-            let s = series[index]
+        // Header sorting can reorder the live array while a search is suspended.
+        let seriesToCheck = series
+        for s in seriesToCheck {
+            guard series.contains(where: { $0.id == s.id }) else { continue }
             guard !s.showName.isEmpty else {
-                toRemove.append(s)
+                toRemove.insert(s.id)
                 continue
             }
 
@@ -107,9 +113,10 @@ class PVRViewModel {
                 DDLogError("PVR search failed: \(error)")
             }
 
+            guard let index = series.firstIndex(where: { $0.id == s.id }) else { continue }
             let (valid, foundAny) = processSearchOutput(lines: outputLines, series: s)
             if !valid {
-                toRemove.append(s)
+                toRemove.insert(s.id)
             } else if foundAny {
                 series[index].lastFound = Date()
                 foundAnyOverall = true
@@ -117,7 +124,7 @@ class PVRViewModel {
         }
 
         if !toRemove.isEmpty {
-            series.removeAll { toRemove.contains($0) }
+            series.removeAll { toRemove.contains($0.id) }
         }
         save()
 
@@ -215,6 +222,9 @@ class PVRViewModel {
     }
 
     func save() {
+        if !sortOrder.isEmpty {
+            series.sort(using: sortOrder)
+        }
         do {
             let data = try JSONEncoder().encode(series)
             try data.write(to: seriesFileURL, options: .atomic)
@@ -227,6 +237,9 @@ class PVRViewModel {
         do {
             let data = try Data(contentsOf: seriesFileURL)
             series = try JSONDecoder().decode([Series].self, from: data)
+            if !sortOrder.isEmpty {
+                series.sort(using: sortOrder)
+            }
             DDLogVerbose("PVRViewModel: loaded \(series.count) series")
         } catch {
             DDLogVerbose("PVRViewModel: no existing series file or load error: \(error.localizedDescription)")

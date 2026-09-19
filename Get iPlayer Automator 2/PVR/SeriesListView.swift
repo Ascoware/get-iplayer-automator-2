@@ -37,8 +37,8 @@ struct SeriesListView: View {
     }
 
     private var seriesTable: some View {
-        Table(pvrViewModel.series, selection: $selection) {
-            TableColumn("Show") { series in
+        Table(pvrViewModel.series, selection: $selection, sortOrder: $pvrViewModel.sortOrder) {
+            TableColumn("Show", value: \.showName) { series in
                 // Bind directly into the array element via the index.
                 if let index = pvrViewModel.series.firstIndex(where: { $0.id == series.id }) {
                     TextField("Show name", text: $pvrViewModel.series[index].showName)
@@ -46,7 +46,7 @@ struct SeriesListView: View {
                         .onSubmit { pvrViewModel.save() }
                 }
             }
-            TableColumn("Channel") { series in
+            TableColumn("Channel", value: \.tvNetwork) { series in
                 if let index = pvrViewModel.series.firstIndex(where: { $0.id == series.id }) {
                     TextField("Any (wildcard)", text: $pvrViewModel.series[index].tvNetwork)
                         .textFieldStyle(.plain)
@@ -55,7 +55,7 @@ struct SeriesListView: View {
                 }
             }
             .width(min: 80, ideal: 150)
-            TableColumn("Last Checked") { series in
+            TableColumn("Last Checked", value: \.lastFound) { series in
                 Text(series.lastFound, style: .date)
                     .foregroundStyle(.secondary)
             }
