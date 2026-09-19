@@ -59,6 +59,7 @@ struct GetiPlayerAutomatorApp: App {
             )
         }
         .windowToolbarStyle(.unified)
+        .defaultLaunchBehavior(.presented)
         .commands {
             SearchWindowMenus(cacheUpdateService: cacheUpdateService, updaterViewModel: updaterViewModel)
         }
