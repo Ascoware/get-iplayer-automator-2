@@ -187,6 +187,9 @@ public class Defaults: ObservableObject {
     @AppStorage("searchSortColumn") public var searchSortColumn: String = "available"
     @AppStorage("searchSortAscending") public var searchSortAscending: Bool = true
 
+    @AppStorage("pvrSortColumn") public var pvrSortColumn: String = ""
+    @AppStorage("pvrSortAscending") public var pvrSortAscending: Bool = true
+
     public static let shared = Defaults()
 }
 

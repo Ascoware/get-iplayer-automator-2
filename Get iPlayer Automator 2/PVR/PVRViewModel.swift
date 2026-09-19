@@ -17,9 +17,11 @@ import System
 class PVRViewModel {
 
     var series: [Series] = []
-    // Preserve the saved entry order until the user chooses a column to sort.
-    var sortOrder: [KeyPathComparator<Series>] = [] {
-        didSet { save() }
+    var sortOrder: [KeyPathComparator<Series>] = PVRViewModel.savedSortOrder() {
+        didSet {
+            saveSortOrder()
+            save()
+        }
     }
     private(set) var isChecking = false
     private(set) var currentSeriesName: String?
@@ -215,6 +217,32 @@ class PVRViewModel {
     }
 
     // MARK: - Persistence
+
+    private static func savedSortOrder() -> [KeyPathComparator<Series>] {
+        let defaults = Defaults.shared
+        let order: SortOrder = defaults.pvrSortAscending ? .forward : .reverse
+        switch defaults.pvrSortColumn {
+        case "showName": return [KeyPathComparator(\Series.showName, order: order)]
+        case "tvNetwork": return [KeyPathComparator(\Series.tvNetwork, order: order)]
+        case "lastFound": return [KeyPathComparator(\Series.lastFound, order: order)]
+        default: return [] // Preserve file order until a sort column is chosen.
+        }
+    }
+
+    private func saveSortOrder() {
+        let defaults = Defaults.shared
+        guard let comparator = sortOrder.first else {
+            defaults.pvrSortColumn = ""
+            return
+        }
+        switch comparator.keyPath {
+        case \Series.showName: defaults.pvrSortColumn = "showName"
+        case \Series.tvNetwork: defaults.pvrSortColumn = "tvNetwork"
+        case \Series.lastFound: defaults.pvrSortColumn = "lastFound"
+        default: defaults.pvrSortColumn = ""
+        }
+        defaults.pvrSortAscending = comparator.order == .forward
+    }
 
     private var seriesFileURL: URL {
         let appSupport = FileManager.default.applicationSupportDirectory
