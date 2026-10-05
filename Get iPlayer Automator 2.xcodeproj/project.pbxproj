@@ -54,7 +54,6 @@
 		7F0C17FB2F744B3400E208A2 /* SearchSidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17B22F7449E900E208A2 /* SearchSidebarView.swift */; };
 		7F0C17FC2F744B3400E208A2 /* SearchContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17B12F7449E900E208A2 /* SearchContentViewModel.swift */; };
 		7F0C17FD2F744B3400E208A2 /* ProgrammeMetadataFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17AF2F7449E900E208A2 /* ProgrammeMetadataFetch.swift */; };
-		7F0C18AA2F744B3400E208A2 /* BBCProgrammeJSONFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C18AB2F7449E900E208A2 /* BBCProgrammeJSONFetch.swift */; };
 		7F0C17FE2F744B3400E208A2 /* SearchContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17B02F7449E900E208A2 /* SearchContentView.swift */; };
 		7F0C17FF2F744B3400E208A2 /* SearchViewType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17B42F7449E900E208A2 /* SearchViewType.swift */; };
 		7F0C18002F744B3400E208A2 /* CachedProgramsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17AA2F7449E900E208A2 /* CachedProgramsViewModel.swift */; };
@@ -77,6 +76,7 @@
 		7F0C18112F744B4A00E208A2 /* FileManager+DirectoryLocations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17C02F7449E900E208A2 /* FileManager+DirectoryLocations.swift */; };
 		7F0C18142F744BA800E208A2 /* Sweep in Frameworks */ = {isa = PBXBuildFile; productRef = 7F0C18132F744BA800E208A2 /* Sweep */; };
 		7F0C18172F744BCF00E208A2 /* Subprocess in Frameworks */ = {isa = PBXBuildFile; productRef = 7F0C18162F744BCF00E208A2 /* Subprocess */; };
+		7F0C18AA2F744B3400E208A2 /* BBCProgrammeJSONFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C18AB2F7449E900E208A2 /* BBCProgrammeJSONFetch.swift */; };
 		7F2668EB2AAAE00A00049C93 /* DefaultsWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 7F2668EA2AAAE00A00049C93 /* DefaultsWrapper */; };
 		7F560C1D2F82167C00A30F18 /* CachedProgramme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F560C1C2F82167C00A30F18 /* CachedProgramme.swift */; };
 		7F5AFE01000000000000BB01 /* SafariExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F5AFE01000000000000AA01 /* SafariExtensionHandler.swift */; };
@@ -181,7 +181,6 @@
 		7F0C17AD2F7449E900E208A2 /* MockCachedProgramsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCachedProgramsViewModel.swift; sourceTree = "<group>"; };
 		7F0C17AE2F7449E900E208A2 /* ProgramCacheProviding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramCacheProviding.swift; sourceTree = "<group>"; };
 		7F0C17AF2F7449E900E208A2 /* ProgrammeMetadataFetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammeMetadataFetch.swift; sourceTree = "<group>"; };
-		7F0C18AB2F7449E900E208A2 /* BBCProgrammeJSONFetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBCProgrammeJSONFetch.swift; sourceTree = "<group>"; };
 		7F0C17B02F7449E900E208A2 /* SearchContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContentView.swift; sourceTree = "<group>"; };
 		7F0C17B12F7449E900E208A2 /* SearchContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContentViewModel.swift; sourceTree = "<group>"; };
 		7F0C17B22F7449E900E208A2 /* SearchSidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSidebarView.swift; sourceTree = "<group>"; };
@@ -203,6 +202,7 @@
 		7F0C17C52F7449E900E208A2 /* Get_iPlayer_Automator_2.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Get_iPlayer_Automator_2.entitlements; sourceTree = "<group>"; };
 		7F0C17C62F7449E900E208A2 /* GetiPlayerAutomator-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GetiPlayerAutomator-Bridging-Header.h"; sourceTree = "<group>"; };
 		7F0C17C72F7449E900E208A2 /* GetiPlayerAutomatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetiPlayerAutomatorApp.swift; sourceTree = "<group>"; };
+		7F0C18AB2F7449E900E208A2 /* BBCProgrammeJSONFetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBCProgrammeJSONFetch.swift; sourceTree = "<group>"; };
 		7F1E9D2A2A5D0427002C71A6 /* Get iPlayer Automator 2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Get iPlayer Automator 2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F560C1C2F82167C00A30F18 /* CachedProgramme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedProgramme.swift; sourceTree = "<group>"; };
 		7F5AFE01000000000000AA01 /* SafariExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariExtensionHandler.swift; sourceTree = "<group>"; };
@@ -615,7 +615,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "IDENTITY=\"Developer ID Application: Scott Kovatch (L8BMU8WLEC)\"\nTOOL_ENTITLEMENTS=\"${SRCROOT}/Get iPlayer Automator 2/Bundled Tool.entitlements\"\nYTDLP_ENTITLEMENTS=\"${SRCROOT}/Get iPlayer Automator 2/yt-dlp_macos.entitlements\"\n\nfor (( i=0; i<$SCRIPT_INPUT_FILE_COUNT; i++))\ndo\n    FILE_VAR=\"SCRIPT_INPUT_FILE_$i\"\n    FILE=\"${!FILE_VAR}\"\n\n    # Skip entitlements files (listed as dependencies, not binaries to sign)\n    if [[ \"$FILE\" == *.entitlements ]]; then\n        continue\n    fi\n\n    ENTITLEMENTS=\"$TOOL_ENTITLEMENTS\"\n    if [[ \"$(basename \"$FILE\")\" == \"yt-dlp_macos\" ]]; then\n        ENTITLEMENTS=\"$YTDLP_ENTITLEMENTS\"\n    fi\n\n    codesign --force --options runtime --entitlements \"$ENTITLEMENTS\" --sign \"$IDENTITY\" \"$FILE\"\ndone\n";
+			shellScript = "# Pinned by SHA-1 hash, not common name: the keychain can hold more than\n# one valid \\\"Developer ID Application: Scott Kovatch (L8BMU8WLEC)\\\" cert\n# at once (e.g. during a renewal overlap), which makes `codesign --sign\n# \\\"<name>\\\"` fail with \\\"ambiguous\\\" and silently skip hardened-runtime\n# signing of these tools. Update this hash when the cert is rotated:\n# `security find-identity -v -p codesigning`.\nIDENTITY=\"F435BE969EC9A2D1E2EE2D331E83D0BE37C1BD78\"\nTOOL_ENTITLEMENTS=\"${SRCROOT}/Get iPlayer Automator 2/Bundled Tool.entitlements\"\nYTDLP_ENTITLEMENTS=\"${SRCROOT}/Get iPlayer Automator 2/yt-dlp_macos.entitlements\"\n\nfor (( i=0; i<$SCRIPT_INPUT_FILE_COUNT; i++))\ndo\n    FILE_VAR=\"SCRIPT_INPUT_FILE_$i\"\n    FILE=\"${!FILE_VAR}\"\n\n    # Skip entitlements files (listed as dependencies, not binaries to sign)\n    if [[ \"$FILE\" == *.entitlements ]]; then\n        continue\n    fi\n\n    ENTITLEMENTS=\"$TOOL_ENTITLEMENTS\"\n    if [[ \"$(basename \"$FILE\")\" == \"yt-dlp_macos\" ]]; then\n        ENTITLEMENTS=\"$YTDLP_ENTITLEMENTS\"\n    fi\n\n    codesign --force --options runtime --entitlements \"$ENTITLEMENTS\" --sign \"$IDENTITY\" \"$FILE\"\ndone\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

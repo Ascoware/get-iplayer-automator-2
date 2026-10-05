@@ -75,6 +75,36 @@ if [ ! -d "Product/${PROJECT_NAME}/${PROJECT_NAME}.app" ]; then
     exit 1
 fi
 
+# ── Re-sign bundled tools (hardened runtime) ───────────────────────────────
+# Belt-and-suspenders re-sign of the loose tool binaries, in case the
+# project's own "ShellScript" build phase (which does this during archive)
+# ever silently fails — e.g. if the keychain holds more than one valid
+# "Developer ID Application: Scott Kovatch (L8BMU8WLEC)" cert at once (a
+# renewal overlap), `codesign --sign "<name>"` errors as "ambiguous" and
+# Xcode falls back to its own generic signing with no hardened runtime.
+# Identity is pinned by SHA-1 hash to sidestep that ambiguity; update it
+# when the cert is rotated: `security find-identity -v -p codesigning`.
+IDENTITY="F435BE969EC9A2D1E2EE2D331E83D0BE37C1BD78"
+APP_PATH="$PROJECT_DIR/Product/${PROJECT_NAME}/${PROJECT_NAME}.app"
+TOOL_ENTITLEMENTS="$PROJECT_DIR/$PROJECT_NAME/Bundled Tool.entitlements"
+YTDLP_ENTITLEMENTS="$PROJECT_DIR/$PROJECT_NAME/yt-dlp_macos.entitlements"
+APP_ENTITLEMENTS="$PROJECT_DIR/$PROJECT_NAME/Get_iPlayer_Automator_2.entitlements"
+
+for TOOL in \
+    "$APP_PATH/Contents/Resources/get_iplayer/perl/bin/perl" \
+    "$APP_PATH/Contents/Resources/get_iplayer/utils/bin/ffmpeg" \
+    "$APP_PATH/Contents/Resources/get_iplayer/utils/bin/AtomicParsley"
+do
+    codesign --force --options runtime --entitlements "$TOOL_ENTITLEMENTS" --sign "$IDENTITY" "$TOOL"
+done
+codesign --force --options runtime --entitlements "$YTDLP_ENTITLEMENTS" --sign "$IDENTITY" \
+    "$APP_PATH/Contents/Resources/yt-dlp_macos/yt-dlp_macos"
+
+# Re-sign the app itself to re-seal Resources after modifying nested binaries.
+codesign --force --options runtime --entitlements "$APP_ENTITLEMENTS" --sign "$IDENTITY" "$APP_PATH"
+
+codesign --verify --deep --strict --verbose=2 "$APP_PATH"
+
 # Commit the bumped version on the same SHA the release tag will point at.
 if [ -n "$NEW_VERSION" ]; then
     git add Version.xcconfig
