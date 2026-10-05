@@ -2,5 +2,5 @@
 // stays in sync. Edited by Scripts/release.sh — keep this format
 // (one setting per line, no trailing inline comments) so the sed scripts work.
 
-MARKETING_VERSION = 1.0.12
-CURRENT_PROJECT_VERSION = 202609111205
+MARKETING_VERSION = 1.0.13
+CURRENT_PROJECT_VERSION = 202610041826
