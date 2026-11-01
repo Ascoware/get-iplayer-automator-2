@@ -61,7 +61,14 @@ class DownloadHistoryViewModel {
     func save() -> Bool {
         // Merge removals into the latest history, preserving downloads completed
         // while this window was open.
-        historyModel.readDownloadHistory()
+        guard historyModel.readDownloadHistory() else {
+            let alert = NSAlert()
+            alert.messageText = "Could not read download history"
+            alert.informativeText = "Your changes have not been saved. Please check the log for details."
+            alert.addButton(withTitle: "OK")
+            alert.runModal()
+            return false
+        }
         let original = historyModel.downloadHistory
         let ids = Set(original.filter { pendingRemovals.contains($0.entryString) }.map(\.id))
         historyModel.removeEntries(ids)

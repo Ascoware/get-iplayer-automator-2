@@ -19,7 +19,7 @@ class STVDownload : Download {
     @Default(\.maxSTVResolution) var maxSTVResolution: TVFormat
     @Default(\.maxABCResolution) var maxABCResolution: TVFormat
 
-    private var failureMessage: String?
+    private var finalHTTP403Error = false
 
     /// The yt-dlp downloader is shared across non-BBC providers; pick the
     /// resolution preference that matches the programme's provider.
@@ -33,7 +33,7 @@ class STVDownload : Download {
     }
 
     override func start() async {
-        failureMessage = nil
+        finalHTTP403Error = false
         show.progress = "Initialising..."
         show.complete = false
         show.downloadPercent = 0.0
@@ -157,7 +157,7 @@ class STVDownload : Download {
             return
         }
 
-        if terminationStatus?.isSuccess == true && failureMessage == nil {
+        if terminationStatus?.isSuccess == true {
             show.complete = true
             show.status = .finishedProgramDownload
             if tagDownloads {
@@ -170,7 +170,7 @@ class STVDownload : Download {
             show.status = .finishedTagging
 
         } else {
-            fail(failureMessage ?? "Failed")
+            fail(finalHTTP403Error ? "Failed: STV returned HTTP 403. See the log for details." : "Failed")
         }
 
     }
@@ -192,20 +192,11 @@ class STVDownload : Download {
 
         DDLogInfo("\(output)")
 
-        // Ignore buffered progress after aborting so it cannot hide the failure.
-        guard failureMessage == nil, show.status != .cancelled, !Task.isCancelled else { return }
+        guard show.status != .cancelled, !Task.isCancelled else { return }
 
-        if show.type == .stv && output.contains("[download] Got error: HTTP Error 403:") {
-            let message = "Failed: Blocked by STV (HTTP 403). Check DNS configuration."
-            failureMessage = message
-            show.progress = message
-            show.status = .failed
-            do {
-                try currentExecution?.send(signal: .terminate, toProcessGroup: true)
-            } catch {
-                DDLogError("Failed to stop yt-dlp after HTTP 403: \(error)")
-            }
-            return
+        // Record a terminal error, but let yt-dlp retry transient failures.
+        if show.type == .stv && output.contains("ERROR:") && output.contains("HTTP Error 403") {
+            finalHTTP403Error = true
         }
 
         output.scan(using: [

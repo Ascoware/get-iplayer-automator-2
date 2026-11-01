@@ -48,8 +48,9 @@ class MockDownloadHistoryModel: DownloadHistoryProviding {
         downloadHistory = [entry1, entry2, entry3]
     }
     
-    func readDownloadHistory() {
-        // No-op for mock
+    @discardableResult
+    func readDownloadHistory() -> Bool {
+        true
     }
     
     func removeEntries(_ entries: Set<UUID>) {

@@ -12,7 +12,7 @@ import OrderedCollections
 protocol DownloadHistoryProviding: AnyObject {
     var downloadHistory: OrderedSet<DownloadHistoryEntry> { get set }
     
-    func readDownloadHistory()
+    @discardableResult func readDownloadHistory() -> Bool
     func removeEntries(_ entries: Set<UUID>)
     @discardableResult func writeHistory() -> Bool
     func addToHistory(programs: [Programme])
