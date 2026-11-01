@@ -20,8 +20,19 @@ struct DownloadQueueTableView: View {
 
     @Binding var selection: Set<String>
     @State private var enteredPID: String = ""
-    @State private var draggingPID: String?
+    @State private var draggingPIDs: Set<String> = []
     @FocusState private var isTableFocused: Bool
+
+    // Table caches its cell content. Read the binding in each cell's body so
+    // ending a drag invalidates the appearance even when queue data is unchanged.
+    private struct DragAppearance: ViewModifier {
+        let pid: String
+        @Binding var draggingPIDs: Set<String>
+
+        func body(content: Content) -> some View {
+            content.opacity(draggingPIDs.contains(pid) ? 0.4 : 1.0)
+        }
+    }
 
     var body: some View {
         VStack {
@@ -29,31 +40,32 @@ struct DownloadQueueTableView: View {
                 TableColumn("") { program in
                     DragHandleCell(
                         program: program,
+                        selection: $selection,
                         downloadQueue: downloadQueueViewModel,
-                        draggingPID: $draggingPID
+                        draggingPIDs: $draggingPIDs
                     )
-                    .opacity(draggingPID == program.pid ? 0.4 : 1.0)
+                    .modifier(DragAppearance(pid: program.pid, draggingPIDs: $draggingPIDs))
                 }
                 .width(24)
 
                 TableColumn("PID") { program in
                     Text(program.pid)
                         .frame(minHeight: queueRowContentHeight, maxHeight: .infinity)
-                        .opacity(draggingPID == program.pid ? 0.4 : 1.0)
+                        .modifier(DragAppearance(pid: program.pid, draggingPIDs: $draggingPIDs))
                 }
                 .width(min: 60, ideal: 80, max: 120)
 
                 TableColumn("Status") { program in
                     DownloadStatusImage(program: program)
                         .frame(maxWidth: .infinity, minHeight: queueRowContentHeight, maxHeight: .infinity)
-                        .opacity(draggingPID == program.pid ? 0.4 : 1.0)
+                        .modifier(DragAppearance(pid: program.pid, draggingPIDs: $draggingPIDs))
                 }
                 .width(min: 20, ideal: 30, max: 40)
 
                 TableColumn("Progress") { program in
                     DownloadProgressView(program: program)
                         .frame(minHeight: queueRowContentHeight, maxHeight: .infinity)
-                        .opacity(draggingPID == program.pid ? 0.4 : 1.0)
+                        .modifier(DragAppearance(pid: program.pid, draggingPIDs: $draggingPIDs))
                 }
                 .width(min: 20, ideal: 30, max: 40)
 
@@ -61,7 +73,7 @@ struct DownloadQueueTableView: View {
                     Text(program.name)
                         .lineLimit(1)
                         .frame(minHeight: queueRowContentHeight, maxHeight: .infinity)
-                        .opacity(draggingPID == program.pid ? 0.4 : 1.0)
+                        .modifier(DragAppearance(pid: program.pid, draggingPIDs: $draggingPIDs))
                 }
                 .width(min: 100, ideal: 200)
 
@@ -69,21 +81,21 @@ struct DownloadQueueTableView: View {
                     Text(program.episode)
                         .lineLimit(1)
                         .frame(minHeight: queueRowContentHeight, maxHeight: .infinity)
-                        .opacity(draggingPID == program.pid ? 0.4 : 1.0)
+                        .modifier(DragAppearance(pid: program.pid, draggingPIDs: $draggingPIDs))
                 }
                 .width(min: 80, ideal: 150)
 
                 TableColumn("Available") { program in
                     Text(program.available, format: .dateTime.day().month(.abbreviated).year())
                         .frame(minHeight: queueRowContentHeight, maxHeight: .infinity)
-                        .opacity(draggingPID == program.pid ? 0.4 : 1.0)
+                        .modifier(DragAppearance(pid: program.pid, draggingPIDs: $draggingPIDs))
                 }
                 .width(min: 80, ideal: 100, max: 120)
 
                 TableColumn("Channel") { program in
                     Text(program.channel)
                         .frame(minHeight: queueRowContentHeight, maxHeight: .infinity)
-                        .opacity(draggingPID == program.pid ? 0.4 : 1.0)
+                        .modifier(DragAppearance(pid: program.pid, draggingPIDs: $draggingPIDs))
                 }
                 .width(min: 60, ideal: 100, max: 150)
 
@@ -91,7 +103,7 @@ struct DownloadQueueTableView: View {
                     DownloadMessageView(program: program)
                         .lineLimit(1)
                         .frame(minHeight: queueRowContentHeight, maxHeight: .infinity)
-                        .opacity(draggingPID == program.pid ? 0.4 : 1.0)
+                        .modifier(DragAppearance(pid: program.pid, draggingPIDs: $draggingPIDs))
                 }
                 .width(min: 80, ideal: 150)
             }
@@ -147,22 +159,17 @@ struct DownloadQueueTableView: View {
 
 struct DragHandleCell: View {
     let program: Programme
+    @Binding var selection: Set<String>
     let downloadQueue: any DownloadQueueProviding
-    @Binding var draggingPID: String?
+    @Binding var draggingPIDs: Set<String>
 
     var body: some View {
-        Image(systemName: "line.3.horizontal")
-            .foregroundStyle(.secondary)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .contentShape(Rectangle())
-            .onDrag {
-                draggingPID = program.pid
-                return NSItemProvider(object: program.pid as NSString)
-            }
+        QueueDragHandle(pid: program.pid, selection: $selection, draggingPIDs: $draggingPIDs)
+            .frame(maxWidth: .infinity, minHeight: queueRowContentHeight, maxHeight: .infinity)
             .onDrop(of: [.text], delegate: DownloadQueueDropDelegate(
                 targetPID: program.pid,
                 downloadQueue: downloadQueue,
-                draggingPID: $draggingPID
+                draggingPIDs: $draggingPIDs
             ))
     }
 }
@@ -170,28 +177,30 @@ struct DragHandleCell: View {
 struct DownloadQueueDropDelegate: DropDelegate {
     let targetPID: String
     let downloadQueue: any DownloadQueueProviding
-    @Binding var draggingPID: String?
+    @Binding var draggingPIDs: Set<String>
 
     func performDrop(info: DropInfo) -> Bool {
-        draggingPID = nil
+        draggingPIDs = []
         return true
     }
 
     func dropEntered(info: DropInfo) {
-        guard let draggingPID = draggingPID,
-              draggingPID != targetPID,
-              let fromIndex = downloadQueue.downloadQueue.firstIndex(where: { $0.pid == draggingPID }),
+        guard !draggingPIDs.isEmpty,
+              !draggingPIDs.contains(targetPID),
               let toIndex = downloadQueue.downloadQueue.firstIndex(where: { $0.pid == targetPID }) else {
             return
         }
 
-        withAnimation {
-            downloadQueue.movePrograms(fromOffsets: IndexSet(integer: fromIndex), toOffset: toIndex > fromIndex ? toIndex + 1 : toIndex)
-        }
-    }
+        // Resolve offsets against the current queue on each hover, since earlier
+        // hover events may already have moved the block.
+        let offsets = IndexSet(downloadQueue.downloadQueue.indices.filter {
+            draggingPIDs.contains(downloadQueue.downloadQueue[$0].pid)
+        })
+        guard let firstIndex = offsets.first else { return }
 
-    func dropExited(info: DropInfo) {
-        // Clear dragging state when drag leaves the table area
+        withAnimation {
+            downloadQueue.movePrograms(fromOffsets: offsets, toOffset: toIndex > firstIndex ? toIndex + 1 : toIndex)
+        }
     }
 
     func dropUpdated(info: DropInfo) -> DropProposal? {
@@ -199,7 +208,7 @@ struct DownloadQueueDropDelegate: DropDelegate {
     }
 
     func validateDrop(info: DropInfo) -> Bool {
-        info.hasItemsConforming(to: [.text])
+        !draggingPIDs.isEmpty && info.hasItemsConforming(to: [.text])
     }
 }
 

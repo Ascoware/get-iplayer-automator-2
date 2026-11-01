@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A76036E12FF0100000000001 /* QueueDragHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76036E12FF0100000000002 /* QueueDragHandle.swift */; };
 		03F0F0289A7E45F6AEE5D636 /* LegacyDataMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998CDC3F85714755A143A250 /* LegacyDataMigrator.swift */; };
 		4812E1AF24974D7EBD551D56 /* LegacyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B32E8783B44715A9B2F9AA /* LegacyModels.swift */; };
 		7F0C17D02F744AC100E208A2 /* GetiPlayerAutomatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0C17C72F7449E900E208A2 /* GetiPlayerAutomatorApp.swift */; };
@@ -129,6 +130,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A76036E12FF0100000000002 /* QueueDragHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueDragHandle.swift; sourceTree = "<group>"; };
 		7F0000000000000000000001 /* Version.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Version.xcconfig; sourceTree = "<group>"; };
 		7F0C17752F7449E900E208A2 /* DownloadHistoryEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadHistoryEntry.swift; sourceTree = "<group>"; };
 		7F0C17762F7449E900E208A2 /* DownloadHistoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadHistoryModel.swift; sourceTree = "<group>"; };
@@ -284,6 +286,7 @@
 				7F0C177F2F7449E900E208A2 /* DownloadProgressView.swift */,
 				7F0C17802F7449E900E208A2 /* DownloadQueueProviding.swift */,
 				7F0C17812F7449E900E208A2 /* DownloadQueueTableView.swift */,
+				A76036E12FF0100000000002 /* QueueDragHandle.swift */,
 				7F0C17822F7449E900E208A2 /* DownloadQueueToolbar.swift */,
 				7F0C17832F7449E900E208A2 /* DownloadQueueView.swift */,
 				7F0C17842F7449E900E208A2 /* DownloadQueueViewModel.swift */,
@@ -657,6 +660,7 @@
 				7F0C17D82F744AE700E208A2 /* DownloadQueueToolbar.swift in Sources */,
 				7F0C17D92F744AE700E208A2 /* DownloadQueueViewModel.swift in Sources */,
 				7F0C17DA2F744AE700E208A2 /* DownloadQueueTableView.swift in Sources */,
+				A76036E12FF0100000000001 /* QueueDragHandle.swift in Sources */,
 				7F0C17DB2F744AE700E208A2 /* STVDownload.swift in Sources */,
 				7F0C17DC2F744AE700E208A2 /* DownloadQueueView.swift in Sources */,
 				7F0C17DD2F744AE700E208A2 /* BBCDownload.swift in Sources */,
