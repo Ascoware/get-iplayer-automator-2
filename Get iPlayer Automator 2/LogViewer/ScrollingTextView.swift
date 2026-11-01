@@ -25,15 +25,13 @@ struct ScrollingTextView: NSViewRepresentable {
 
     private static let monospacedFont = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
 
-    /// NSTextView subclass that opts out of Edit menu revalidation so that
-    /// appending log text does not cause repeated menu item churn.
+    /// Enable selection commands while keeping editing commands disabled in the log.
     private class LogTextView: NSTextView {
         override func validateUserInterfaceItem(_ item: any NSValidatedUserInterfaceItem) -> Bool {
-//            let action = item.action
-//            // Allow copy and select-all; reject everything else (undo, redo, cut, paste, delete…)
-//            if action == #selector(copy(_:)) || action == #selector(selectAll(_:)) {
-//                return super.validateUserInterfaceItem(item)
-//            }
+            let action = item.action
+            if action == #selector(copy(_:)) || action == #selector(selectAll(_:)) {
+                return super.validateUserInterfaceItem(item)
+            }
             return false
         }
     }

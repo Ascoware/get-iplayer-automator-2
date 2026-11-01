@@ -34,7 +34,8 @@ class DownloadQueueViewModel: DownloadQueueProviding {
     var downloadQueue: [Programme] = []
 
     public var isDownloading: Bool {
-        return currentDownload != nil && !downloadsCancelled
+        // Keep Start disabled until the cancelled task and subprocess have finished.
+        return currentDownload != nil
     }
 
     var retryTimerActive = false
@@ -48,8 +49,8 @@ class DownloadQueueViewModel: DownloadQueueProviding {
     private var retryTask: Task<Void, Never>?
 
     public func addToQueue(programs: [Programme]) {
-        let existingPIDs = Set(downloadQueue.map(\.pid))
-        let newPrograms = programs.filter { !existingPIDs.contains($0.pid) }
+        var existingPIDs = Set(downloadQueue.map(\.pid))
+        let newPrograms = programs.filter { existingPIDs.insert($0.pid).inserted }
         downloadQueue.append(contentsOf: newPrograms)
         saveAppData()
     }
@@ -73,6 +74,7 @@ class DownloadQueueViewModel: DownloadQueueProviding {
     }
 
     public func startDownloads() {
+        guard currentDownload == nil else { return }
         cancelRetryTimer()
         downloadsCancelled = false
         downloadQueue.removeAll { p in
@@ -115,34 +117,36 @@ class DownloadQueueViewModel: DownloadQueueProviding {
         self.activeDownload = download
 
         currentDownload = Task {
-            await download.start()
-            self.activeDownload = nil
-
-            // Don't process results or continue if cancelled
-            guard !downloadsCancelled else { return }
-
-            if currProgram.status == .finishedProgramDownload || currProgram.status == .finishedTagging {
-                if addToTV {
-                    currProgram.status = .addingToLibrary
-                    await addToITunes(show: currProgram)
-                } else {
-                    currProgram.status = .successful
-                }
-            }
-
-            if currProgram.successful {
-                if currProgram.type.usesYtDlp {
-                    historyModel.addToHistory(programs: [currProgram])
-                } else {
-                    historyModel.readDownloadHistory()
-                }
-            }
-
+            await finishDownload(download, program: currProgram)
+            activeDownload = nil
             currentDownload = nil
 
-            // Only continue to the next download if downloads weren't cancelled
-            guard !downloadsCancelled else { return }
+            guard !Task.isCancelled, !downloadsCancelled else { return }
             startOneDownload()
+        }
+    }
+
+    private func finishDownload(_ download: Download, program: Programme) async {
+        guard !Task.isCancelled else { return }
+        await download.start()
+        guard !Task.isCancelled, !downloadsCancelled else { return }
+
+        if program.status == .finishedProgramDownload || program.status == .finishedTagging {
+            if addToTV {
+                program.status = .addingToLibrary
+                await addToITunes(show: program)
+            } else {
+                program.status = .successful
+            }
+        }
+
+        guard !Task.isCancelled, !downloadsCancelled else { return }
+        if program.successful {
+            if program.type.usesYtDlp {
+                historyModel.addToHistory(programs: [program])
+            } else {
+                historyModel.readDownloadHistory()
+            }
         }
     }
 
@@ -277,9 +281,7 @@ class DownloadQueueViewModel: DownloadQueueProviding {
         downloadsCancelled = true
         cancelRetryTimer()
         activeDownload?.cancel()
-        activeDownload = nil
         currentDownload?.cancel()
-        currentDownload = nil
     }
 
     public func cancelRetryTimer() {
@@ -366,7 +368,12 @@ class DownloadQueueViewModel: DownloadQueueProviding {
         }
 
         // Wait for the app to be ready to receive Apple Events
-        try? await Task.sleep(for: .seconds(2))
+        do {
+            try await Task.sleep(for: .seconds(2))
+        } catch {
+            return
+        }
+        guard !Task.isCancelled else { return }
 
         if ext == "mov" || ext == "mp4" || ext == "mp3" || ext == "m4a" {
             let track = iTunes.add?(fileToAdd, to: nil)

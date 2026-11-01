@@ -18,7 +18,7 @@ struct LogView: View {
             ScrollingTextView(entries: logger.entries, clearID: logger.clearID, handle: handle)
 
             HStack {
-                Button("Copy to Clipboard") {
+                Button("Copy Entire Log") {
                     let pb = NSPasteboard.general
                     pb.declareTypes([.string], owner: nil)
                     pb.setString(handle.plainText, forType: .string)

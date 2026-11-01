@@ -186,12 +186,15 @@ class ProgrammeMetadataFetch {
 
             if !sizePairs.isEmpty {
                 for sizePair in sizePairs {
-                    let components = sizePair.components(separatedBy: "=")
+                    let components = sizePair.split(separator: "=", maxSplits: 1, omittingEmptySubsequences: false)
+                    guard components.count == 2,
+                          !components[0].trimmingCharacters(in: .whitespaces).isEmpty,
+                          !components[1].trimmingCharacters(in: .whitespaces).isEmpty else { continue }
                     let mode = components[0]
                     let size = components[1]
                     var info: [String : String] = [:]
-                    info["mode"] = mode
-                    info["size"] = size
+                    info["mode"] = String(mode)
+                    info["size"] = String(size)
                     info["group"] = group
                     info["version"] = version == default_version ? "default" : version
                     modePairs.append(info)

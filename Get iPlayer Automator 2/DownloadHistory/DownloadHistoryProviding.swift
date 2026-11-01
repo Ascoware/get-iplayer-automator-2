@@ -14,6 +14,6 @@ protocol DownloadHistoryProviding: AnyObject {
     
     func readDownloadHistory()
     func removeEntries(_ entries: Set<UUID>)
-    func writeHistory()
+    @discardableResult func writeHistory() -> Bool
     func addToHistory(programs: [Programme])
 }

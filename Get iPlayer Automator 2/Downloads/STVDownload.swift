@@ -19,6 +19,8 @@ class STVDownload : Download {
     @Default(\.maxSTVResolution) var maxSTVResolution: TVFormat
     @Default(\.maxABCResolution) var maxABCResolution: TVFormat
 
+    private var failureMessage: String?
+
     /// The yt-dlp downloader is shared across non-BBC providers; pick the
     /// resolution preference that matches the programme's provider.
     var maxResolution: TVFormat {
@@ -31,20 +33,39 @@ class STVDownload : Download {
     }
 
     override func start() async {
+        failureMessage = nil
         show.progress = "Initialising..."
+        show.complete = false
+        show.downloadPercent = 0.0
+
+        guard !Task.isCancelled else {
+            finishCancellation()
+            return
+        }
 
         DDLogInfo("Downloading \(show.name)")
 
         //Create Download Path
         self.createDownloadPath()
 
-        guard let youtubeDLFolder = Bundle.main.path(forResource: "yt-dlp_macos", ofType:nil),
-              let url = show.web?.absoluteString else {
+        guard let youtubeDLFolder = Bundle.main.path(forResource: "yt-dlp_macos", ofType:nil) else {
+            fail("Failed: yt-dlp is missing from the app bundle.")
+            return
+        }
+        guard let url = show.web,
+              let scheme = url.scheme?.lowercased(),
+              ["http", "https"].contains(scheme),
+              let host = url.host, !host.isEmpty else {
+            fail("Failed: Programme URL is missing or invalid.")
             return
         }
 
         let youtubeDLBinary = youtubeDLFolder + "/yt-dlp_macos"
-        var args: [String] = [url,
+        guard FileManager.default.isExecutableFile(atPath: youtubeDLBinary) else {
+            fail("Failed: yt-dlp is missing or cannot be executed.")
+            return
+        }
+        var args: [String] = [url.absoluteString,
                               "--user-agent",
                               "Mozilla/5.0",
                               "-o",
@@ -131,30 +152,61 @@ class STVDownload : Download {
         currentExecution = nil
         show.downloadPercent = 0.0
 
-        if terminationStatus?.isSuccess == true {
+        guard !Task.isCancelled, show.status != .cancelled else {
+            finishCancellation()
+            return
+        }
+
+        if terminationStatus?.isSuccess == true && failureMessage == nil {
             show.complete = true
             show.status = .finishedProgramDownload
             if tagDownloads {
                 await tagDownloadWithMetadata()
             }
+            guard !Task.isCancelled, show.status != .cancelled else {
+                finishCancellation()
+                return
+            }
             show.status = .finishedTagging
 
         } else {
-            show.complete = true
-            show.status = .failed
-            show.progress = "Failed"
-
-            if show.status == .cancelled {
-                show.progress = "Cancelled by user"
-                show.status = .cancelled
-            }
+            fail(failureMessage ?? "Failed")
         }
 
+    }
+
+    private func fail(_ message: String) {
+        show.complete = true
+        show.status = .failed
+        show.progress = message
+        DDLogError("\(message)")
+    }
+
+    private func finishCancellation() {
+        show.complete = true
+        show.status = .cancelled
+        show.progress = "Cancelled by user"
     }
 
     func youtubeDLProgress(output: String) {
 
         DDLogInfo("\(output)")
+
+        // Ignore buffered progress after aborting so it cannot hide the failure.
+        guard failureMessage == nil, show.status != .cancelled, !Task.isCancelled else { return }
+
+        if show.type == .stv && output.contains("[download] Got error: HTTP Error 403:") {
+            let message = "Failed: Blocked by STV (HTTP 403). Check DNS configuration."
+            failureMessage = message
+            show.progress = message
+            show.status = .failed
+            do {
+                try currentExecution?.send(signal: .terminate, toProcessGroup: true)
+            } catch {
+                DDLogError("Failed to stop yt-dlp after HTTP 403: \(error)")
+            }
+            return
+        }
 
         output.scan(using: [
             Matcher(identifiers: ["subtitles to:"],
@@ -289,6 +341,7 @@ class STVDownload : Download {
             DDLogError("AtomicParsley failed: \(error)")
         }
 
+        guard !Task.isCancelled, show.status != .cancelled else { return }
         show.status = .finishedTagging
     }
 

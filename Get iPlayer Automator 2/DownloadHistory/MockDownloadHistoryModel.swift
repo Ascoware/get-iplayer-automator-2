@@ -58,8 +58,9 @@ class MockDownloadHistoryModel: DownloadHistoryProviding {
         }
     }
     
-    func writeHistory() {
-        // No-op for mock
+    @discardableResult
+    func writeHistory() -> Bool {
+        true
     }
     
     func addToHistory(programs: [Programme]) {

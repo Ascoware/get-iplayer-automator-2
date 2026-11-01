@@ -16,7 +16,14 @@ import System
 @Observable
 class PVRViewModel {
 
-    var series: [Series] = []
+    var series: [Series] = [] {
+        didSet {
+            guard !isSaving, oldValue != series else { return }
+            scheduleSave()
+        }
+    }
+    @ObservationIgnored private var saveTask: Task<Void, Never>?
+    @ObservationIgnored private var isSaving = false
     var sortOrder: [KeyPathComparator<Series>] = PVRViewModel.savedSortOrder() {
         didSet {
             saveSortOrder()
@@ -263,8 +270,12 @@ class PVRViewModel {
         return URL(filePath: appSupport).appending(path: seriesFileName)
     }
 
-    func save() {
-        if !sortOrder.isEmpty {
+    func save(sort: Bool = true) {
+        saveTask?.cancel()
+        saveTask = nil
+        isSaving = true
+        defer { isSaving = false }
+        if sort, !sortOrder.isEmpty {
             series.sort(using: sortOrder)
         }
         do {
@@ -272,6 +283,19 @@ class PVRViewModel {
             try data.write(to: seriesFileURL, options: .atomic)
         } catch {
             DDLogError("PVRViewModel: failed to save series: \(error.localizedDescription)")
+        }
+    }
+
+    private func scheduleSave() {
+        saveTask?.cancel()
+        saveTask = Task { [weak self] in
+            do {
+                try await Task.sleep(for: .milliseconds(400))
+            } catch {
+                return
+            }
+            // Don't move the row under the user's cursor while they are typing.
+            self?.save(sort: false)
         }
     }
 

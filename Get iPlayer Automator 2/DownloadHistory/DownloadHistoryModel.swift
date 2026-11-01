@@ -32,6 +32,7 @@ class DownloadHistoryModel: DownloadHistoryProviding {
             DDLogError("History file missing!")
             return
         }
+        defer { try? historyFile.close() }
 
         let historyFileData = historyFile.readDataToEndOfFile()
 
@@ -49,6 +50,10 @@ class DownloadHistoryModel: DownloadHistoryProviding {
             }
 
             let components = line.components(separatedBy: "|")
+            guard components.count >= 7, !components[0].isEmpty else {
+                DDLogWarn("Skipping malformed download history row: \(line)")
+                continue
+            }
             let progType = ProgrammeType(rawValue: components[3])
 
             let historyEntry = DownloadHistoryEntry(
@@ -65,7 +70,6 @@ class DownloadHistoryModel: DownloadHistoryProviding {
         }
 
         downloadHistory = newHistory
-        try? historyFile.close()
         DDLogVerbose("End read history")
     }
 
@@ -77,7 +81,8 @@ class DownloadHistoryModel: DownloadHistoryProviding {
         }
     }
 
-    public func writeHistory() {
+    @discardableResult
+    public func writeHistory() -> Bool {
         DDLogVerbose("Write History to File")
 
         var historyString = ""
@@ -92,6 +97,7 @@ class DownloadHistoryModel: DownloadHistoryProviding {
             do {
                 try historyData.write(to: newHistoryFile, options: [.atomic])
                 try _ = FileManager.default.replaceItemAt(historyFileURL, withItemAt: newHistoryFile, options: [.usingNewMetadataOnly])
+                return true
             } catch {
                 let alert = NSAlert()
                 alert.informativeText = "Please submit a bug report saying that the history file could not be written to."
@@ -100,6 +106,7 @@ class DownloadHistoryModel: DownloadHistoryProviding {
                 alert.runModal()
             }
         }
+        return false
     }
 
     public func addToHistory(programs: [Programme]) {
