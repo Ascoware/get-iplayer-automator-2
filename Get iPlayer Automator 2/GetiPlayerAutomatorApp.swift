@@ -36,6 +36,7 @@ struct GetiPlayerAutomatorApp: App {
 
         appDelegate.downloadQueueViewModel = queue
         appDelegate.cacheUpdateService = cacheService
+        appDelegate.pvrViewModel = pvr
 
         Task { @MainActor in
             queue.loadAppData()

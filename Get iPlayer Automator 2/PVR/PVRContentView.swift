@@ -27,6 +27,7 @@ struct PVRContentView: View {
                 seriesSelection: $seriesSelection
             )
         }
+        .onDisappear { pvrViewModel.save() }
     }
 }
 

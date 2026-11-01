@@ -17,11 +17,13 @@ class DownloadHistoryViewModel {
     
     var selection: Set<DownloadHistoryEntry.ID> = []
     var sortOrder = [KeyPathComparator(\DownloadHistoryEntry.show)]
-    var isDirty = false
+    private var pendingRemovals: Set<String> = []
+    var isDirty: Bool { !pendingRemovals.isEmpty }
     var isShowingDiscardChanges = false
     
     var tableData: OrderedSet<DownloadHistoryEntry> {
-        return historyModel.downloadHistory
+        // Use the persisted record, since history reloads currently assign new UUIDs.
+        return historyModel.downloadHistory.filter { !pendingRemovals.contains($0.entryString) }
     }
     
     var sortedTableData: [DownloadHistoryEntry] {
@@ -39,7 +41,7 @@ class DownloadHistoryViewModel {
     }
     
     var canRemove: Bool {
-        return selection.count > 0
+        return !selectedEntries.isEmpty
     }
     
     var canSave: Bool {
@@ -51,14 +53,32 @@ class DownloadHistoryViewModel {
     }
     
     func removeSelected() {
-        historyModel.removeEntries(selection)
+        pendingRemovals.formUnion(selectedEntries.map(\.entryString))
         selection = []
-        isDirty = true
     }
     
-    func save() {
-        historyModel.writeHistory()
-        isDirty = false
+    @discardableResult
+    func save() -> Bool {
+        // Merge removals into the latest history, preserving downloads completed
+        // while this window was open.
+        guard historyModel.readDownloadHistory() else {
+            let alert = NSAlert()
+            alert.messageText = "Could not read download history"
+            alert.informativeText = "Your changes have not been saved. Please check the log for details."
+            alert.addButton(withTitle: "OK")
+            alert.runModal()
+            return false
+        }
+        let original = historyModel.downloadHistory
+        let ids = Set(original.filter { pendingRemovals.contains($0.entryString) }.map(\.id))
+        historyModel.removeEntries(ids)
+        guard historyModel.writeHistory() else {
+            historyModel.downloadHistory = original
+            return false
+        }
+        pendingRemovals = []
+        selection = []
+        return true
     }
     
     func handleWindowClose() -> Bool {
@@ -69,8 +89,9 @@ class DownloadHistoryViewModel {
         return true
     }
     
-    func saveAndDismiss() {
-        save()
+    func discardChanges() {
+        pendingRemovals = []
+        selection = []
         isShowingDiscardChanges = false
     }
     

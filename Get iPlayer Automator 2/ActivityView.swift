@@ -24,7 +24,7 @@ struct ActivityView: View {
     }
 
     private var hasActivity: Bool {
-        cacheUpdateService.isUpdating || pvrViewModel.isChecking || currentDownload != nil
+        cacheUpdateService.isUpdating || cacheUpdateService.lastError != nil || pvrViewModel.isChecking || currentDownload != nil
     }
 
     var body: some View {
@@ -41,6 +41,11 @@ struct ActivityView: View {
                     title: "Updating Programme Index",
                     detail: cacheUpdateService.currentProgress
                 )
+            }
+
+            if let error = cacheUpdateService.lastError {
+                Label(error, systemImage: "exclamationmark.triangle")
+                    .foregroundStyle(.red)
             }
 
             if pvrViewModel.isChecking {

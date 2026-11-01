@@ -19,6 +19,8 @@ class STVDownload : Download {
     @Default(\.maxSTVResolution) var maxSTVResolution: TVFormat
     @Default(\.maxABCResolution) var maxABCResolution: TVFormat
 
+    private var finalHTTP403Error = false
+
     /// The yt-dlp downloader is shared across non-BBC providers; pick the
     /// resolution preference that matches the programme's provider.
     var maxResolution: TVFormat {
@@ -31,20 +33,39 @@ class STVDownload : Download {
     }
 
     override func start() async {
+        finalHTTP403Error = false
         show.progress = "Initialising..."
+        show.complete = false
+        show.downloadPercent = 0.0
+
+        guard !Task.isCancelled else {
+            finishCancellation()
+            return
+        }
 
         DDLogInfo("Downloading \(show.name)")
 
         //Create Download Path
         self.createDownloadPath()
 
-        guard let youtubeDLFolder = Bundle.main.path(forResource: "yt-dlp_macos", ofType:nil),
-              let url = show.web?.absoluteString else {
+        guard let youtubeDLFolder = Bundle.main.path(forResource: "yt-dlp_macos", ofType:nil) else {
+            fail("Failed: yt-dlp is missing from the app bundle.")
+            return
+        }
+        guard let url = show.web,
+              let scheme = url.scheme?.lowercased(),
+              ["http", "https"].contains(scheme),
+              let host = url.host, !host.isEmpty else {
+            fail("Failed: Programme URL is missing or invalid.")
             return
         }
 
         let youtubeDLBinary = youtubeDLFolder + "/yt-dlp_macos"
-        var args: [String] = [url,
+        guard FileManager.default.isExecutableFile(atPath: youtubeDLBinary) else {
+            fail("Failed: yt-dlp is missing or cannot be executed.")
+            return
+        }
+        var args: [String] = [url.absoluteString,
                               "--user-agent",
                               "Mozilla/5.0",
                               "-o",
@@ -131,30 +152,52 @@ class STVDownload : Download {
         currentExecution = nil
         show.downloadPercent = 0.0
 
+        guard !Task.isCancelled, show.status != .cancelled else {
+            finishCancellation()
+            return
+        }
+
         if terminationStatus?.isSuccess == true {
             show.complete = true
             show.status = .finishedProgramDownload
             if tagDownloads {
                 await tagDownloadWithMetadata()
             }
+            guard !Task.isCancelled, show.status != .cancelled else {
+                finishCancellation()
+                return
+            }
             show.status = .finishedTagging
 
         } else {
-            show.complete = true
-            show.status = .failed
-            show.progress = "Failed"
-
-            if show.status == .cancelled {
-                show.progress = "Cancelled by user"
-                show.status = .cancelled
-            }
+            fail(finalHTTP403Error ? "Failed: STV returned HTTP 403. See the log for details." : "Failed")
         }
 
+    }
+
+    private func fail(_ message: String) {
+        show.complete = true
+        show.status = .failed
+        show.progress = message
+        DDLogError("\(message)")
+    }
+
+    private func finishCancellation() {
+        show.complete = true
+        show.status = .cancelled
+        show.progress = "Cancelled by user"
     }
 
     func youtubeDLProgress(output: String) {
 
         DDLogInfo("\(output)")
+
+        guard show.status != .cancelled, !Task.isCancelled else { return }
+
+        // Record a terminal error, but let yt-dlp retry transient failures.
+        if show.type == .stv && output.contains("ERROR:") && output.contains("HTTP Error 403") {
+            finalHTTP403Error = true
+        }
 
         output.scan(using: [
             Matcher(identifiers: ["subtitles to:"],
@@ -289,6 +332,7 @@ class STVDownload : Download {
             DDLogError("AtomicParsley failed: \(error)")
         }
 
+        guard !Task.isCancelled, show.status != .cancelled else { return }
         show.status = .finishedTagging
     }
 

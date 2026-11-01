@@ -22,22 +22,23 @@ class DownloadHistoryModel: DownloadHistoryProviding {
         }
     }
 
-    public func readDownloadHistory() {
+    @discardableResult
+    public func readDownloadHistory() -> Bool {
         DDLogVerbose("Read History")
-        downloadHistory = []
-
-        let historyFilePath = FileManager.default.applicationSupportDirectory.appending("download_history")
+        let historyFilePath = URL(filePath: FileManager.default.applicationSupportDirectory, directoryHint: .isDirectory)
+            .appending(path: "download_history")
         DDLogInfo("Opening \(historyFilePath)")
-        guard let historyFile = FileHandle(forReadingAtPath: historyFilePath) else {
-            DDLogError("History file missing!")
-            return
+        let historyFileData: Data
+        do {
+            historyFileData = try Data(contentsOf: historyFilePath)
+        } catch {
+            DDLogError("Could not read history file: \(error)")
+            return false
         }
 
-        let historyFileData = historyFile.readDataToEndOfFile()
-
-        guard let historyFileInfo = String(data:historyFileData, encoding:.utf8) else {
+        guard let historyFileInfo = String(data: historyFileData, encoding: .utf8) else {
             DDLogError("Error reading history file")
-            return
+            return false
         }
 
         let historyEntries = historyFileInfo.components(separatedBy: .newlines)
@@ -49,6 +50,10 @@ class DownloadHistoryModel: DownloadHistoryProviding {
             }
 
             let components = line.components(separatedBy: "|")
+            guard components.count >= 7, !components[0].isEmpty else {
+                DDLogWarn("Skipping malformed download history row: \(line)")
+                continue
+            }
             let progType = ProgrammeType(rawValue: components[3])
 
             let historyEntry = DownloadHistoryEntry(
@@ -65,8 +70,8 @@ class DownloadHistoryModel: DownloadHistoryProviding {
         }
 
         downloadHistory = newHistory
-        try? historyFile.close()
         DDLogVerbose("End read history")
+        return true
     }
 
     public func removeEntries(_ entries: Set<UUID>) {
@@ -77,7 +82,8 @@ class DownloadHistoryModel: DownloadHistoryProviding {
         }
     }
 
-    public func writeHistory() {
+    @discardableResult
+    public func writeHistory() -> Bool {
         DDLogVerbose("Write History to File")
 
         var historyString = ""
@@ -92,6 +98,7 @@ class DownloadHistoryModel: DownloadHistoryProviding {
             do {
                 try historyData.write(to: newHistoryFile, options: [.atomic])
                 try _ = FileManager.default.replaceItemAt(historyFileURL, withItemAt: newHistoryFile, options: [.usingNewMetadataOnly])
+                return true
             } catch {
                 let alert = NSAlert()
                 alert.informativeText = "Please submit a bug report saying that the history file could not be written to."
@@ -100,10 +107,11 @@ class DownloadHistoryModel: DownloadHistoryProviding {
                 alert.runModal()
             }
         }
+        return false
     }
 
     public func addToHistory(programs: [Programme]) {
-        readDownloadHistory()
+        guard readDownloadHistory() else { return }
 
         var newEntries: [DownloadHistoryEntry] = []
 

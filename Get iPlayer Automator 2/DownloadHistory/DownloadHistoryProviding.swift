@@ -12,8 +12,8 @@ import OrderedCollections
 protocol DownloadHistoryProviding: AnyObject {
     var downloadHistory: OrderedSet<DownloadHistoryEntry> { get set }
     
-    func readDownloadHistory()
+    @discardableResult func readDownloadHistory() -> Bool
     func removeEntries(_ entries: Set<UUID>)
-    func writeHistory()
+    @discardableResult func writeHistory() -> Bool
     func addToHistory(programs: [Programme])
 }

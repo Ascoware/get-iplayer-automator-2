@@ -30,6 +30,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     var downloadQueueViewModel: DownloadQueueViewModel? = nil
     var cacheUpdateService: CacheUpdateService? = nil
+    var pvrViewModel: PVRViewModel? = nil
     private var allowedToNotify = false
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -137,6 +138,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // Save queue data
         downloadQueueViewModel?.saveAppData()
+        pvrViewModel?.save()
 
         CFNotificationCenterRemoveObserver(
             CFNotificationCenterGetDarwinNotifyCenter(),

@@ -41,10 +41,6 @@ struct CachedProgramme: Identifiable, Hashable, Comparable {
         }
     }
 
-    static func == (lhs: CachedProgramme, rhs: CachedProgramme) -> Bool {
-        lhs.pid == rhs.pid
-    }
-
     static func < (lhs: CachedProgramme, rhs: CachedProgramme) -> Bool {
         lhs.name < rhs.name
     }

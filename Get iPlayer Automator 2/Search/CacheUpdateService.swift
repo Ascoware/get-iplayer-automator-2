@@ -20,6 +20,7 @@ class CacheUpdateService {
 
     var currentProgress: String = ""
     var isUpdating: Bool = false
+    private(set) var lastError: String?
     private var cacheWasUpdated = false
 
     @ObservationIgnored @Default(\.cacheExpiryTime) var cacheExpiryTime
@@ -58,6 +59,7 @@ class CacheUpdateService {
         }
 
         isUpdating = true
+        lastError = nil
         var refreshSucceeded = false
 
         let cacheRefreshSeconds = Int(cacheExpiryTime) * 3600
@@ -86,7 +88,7 @@ class CacheUpdateService {
         }
 
         do {
-            _ = try await run(
+            let result = try await run(
                 .path(FilePath(GetiPlayerArguments.shared.perlBinaryPath)),
                 arguments: Arguments(args),
                 environment: .inherit.updating([
@@ -103,8 +105,15 @@ class CacheUpdateService {
                     self.processOutput(line)
                 }
             }
-            refreshSucceeded = true
+            refreshSucceeded = result.terminationStatus.isSuccess
+            if !refreshSucceeded {
+                currentProgress = "Cache update failed. See the log for details."
+                lastError = currentProgress
+                DDLogError("Cache update failed: \(result.terminationStatus)")
+            }
         } catch {
+            currentProgress = "Cache update failed. See the log for details."
+            lastError = currentProgress
             DDLogError("Cache update failed: \(error)")
         }
 
